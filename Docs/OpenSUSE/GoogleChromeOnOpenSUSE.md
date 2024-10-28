@@ -39,4 +39,4 @@ Install Google Chrome itself:
 zypper install google-chrome-stable
 ```
 
-There is a script you can download and execute to install, found [Here](''): 
+There is a script you can download and execute to install, found [Here]('https://github.com/Sprunglesonthehub/Sprunglesonthehub.github.io/blob/main/scripts/googlechromeinstall.sh'): 
