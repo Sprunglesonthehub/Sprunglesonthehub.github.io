@@ -18,4 +18,10 @@ And now when you want to sign packages, just run:
 makepkg --sign
 ```
 
+If you want to verify who signed the package, run the following:
+
+```
+gpg --verify [package name].sig [package name]
+```
+
 Thanks for reading, I hope this wasn't to hard ;)
