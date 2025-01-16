@@ -1,6 +1,6 @@
 # Dell Precision Workstations Sleep issue workaround
 
-Are you getting tired of your machine not waking up from sleep? Well, do to their BIOS/UEFI implementation not being very good, 
+Are you getting tired of your machine not waking up from sleep? Well, due to their BIOS/UEFI implementation not being very good, 
 the CPU S3, S4, and S5 sleep state don't work properly unless you are on Ubuntu 14.04 and RHEL 7, which are both no longer supported. For these
 devices, the workaround is to disable the suspend altogether. Here is how you do so:
 
