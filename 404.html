@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Backup Site - Sprungles.org</title>
+    <meta http-equiv="refresh" content="3; url=https://sprungles.gitlab.io">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4a148c, #880e4f); /* Darker purple to deep pink gradient */
+            color: #fce4ec; /* Light pink text for good contrast */
+            text-align: center;
+            overflow: hidden;
+        }
+        .error-container {
+            background-color: rgba(0, 0, 0, 0.4); /* Darker, semi-transparent background for the text box */
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
+            padding: 30px;
+            margin-bottom: 30px; /* Space between the text container and the image */
+            backdrop-filter: blur(5px); /* Optional: A subtle blur effect behind the container */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle light border */
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 250px; /* Adjust size of character as needed */
+            height: auto;
+            border-radius: 10px; /* Slightly rounded corners for the image */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6); /* Shadow for the image to make it pop */
+            animation: float 3s ease-in-out infinite; /* Simple floating animation */
+        }
+        a {
+            color: #f48fb1; /* A contrasting pink for the link */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+        }
+        a:hover {
+            color: #ffb3e6; /* Lighter pink on hover */
+            text-decoration: underline;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Oops! Page Not Found</h1>
+        <p>Redirecting you to our backup site at sprungles.gitlab.io in 3 seconds...</p>
+        <p>If you're not redirected automatically, please <a href="https://sprungles.gitlab.io">click here</a>.</p>
+    </div>
+    <img src="cutie.png" alt="Cute character for 404 page">
+</body>
+</html>
