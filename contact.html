@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprungles // Digital Nexus - Contact & Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Root Variables (Cyber/Futuristic Palette) --- */
+        :root {
+            --color-bg-dark: #0A0418; /* Near-black indigo */
+            --color-text-light: #C0C0D0; /* Muted silver */
+            --color-accent-blue: #00BFFF; /* Deep Sky Blue (Primary) */
+            --color-accent-pink: #FF69B4; /* Hot Pink (Secondary) */
+            --color-accent-purple: #8A2BE2; /* Blue Violet (Highlight) */
+            --color-glow-primary: rgba(0, 191, 255, 0.4);
+            --color-glow-secondary: rgba(255, 105, 180, 0.4);
+            --color-border-subtle: rgba(138, 43, 226, 0.2);
+            --color-card-bg: rgba(15, 8, 30, 0.7); /* Slightly transparent dark */
+            --color-card-border: rgba(0, 191, 255, 0.3);
+            --color-shadow-deep: rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- Global Resets & Body --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace; /* Monospaced for tech feel */
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            line-height: 1.6;
+            font-size: 17px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+            background-image:
+                radial-gradient(circle at 5% 5%, rgba(0, 191, 255, 0.05) 1px, transparent 0),
+                radial-gradient(circle at 95% 95%, rgba(255, 105, 180, 0.05) 1px, transparent 0);
+            background-size: 30px 30px;
+            animation: backgroundGridShift 60s linear infinite alternate;
+        }
+
+        @keyframes backgroundGridShift {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 60px 60px, -60px -60px; }
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); filter: blur(5px); }
+            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+
+        @keyframes glowBorder {
+            0% { box-shadow: 0 0 10px var(--color-accent-blue), 0 0 20px var(--color-accent-purple); }
+            50% { box-shadow: 0 0 20px var(--color-accent-blue), 0 0 40px var(--color-accent-pink); }
+            100% { box-shadow: 0 0 10px var(--color-accent-blue), 0 0 20px var(--color-accent-purple); }
+        }
+
+        @keyframes textGlitch {
+            0% { text-shadow: 2px 0 0 var(--color-accent-pink), -2px 0 0 var(--color-accent-blue); transform: translateX(0); }
+            20% { text-shadow: -2px 0 0 var(--color-accent-pink), 2px 0 0 var(--color-accent-blue); transform: translateX(-1px); }
+            40% { text-shadow: 1px 0 0 var(--color-accent-blue), -1px 0 0 var(--color-accent-pink); transform: translateX(1px); }
+            60% { text-shadow: -1px 0 0 var(--color-accent-blue), 1px 0 0 var(--color-accent-pink); transform: translateX(-1px); }
+            80% { text-shadow: 2px 0 0 var(--color-accent-pink), -2px 0 0 var(--color-accent-blue); transform: translateX(0); }
+            100% { text-shadow: 0 0 0 transparent; transform: translateX(0); }
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg-dark); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--color-accent-blue), var(--color-accent-pink));
+            border-radius: 5px;
+            border: 1px solid var(--color-accent-purple);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--color-accent-pink), var(--color-accent-blue)); }
+
+        /* --- Main Page Container --- */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-card-border);
+            border-radius: 12px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 30px var(--color-shadow-deep);
+            animation: fadeInScale 1s ease-out;
+            position: relative;
+            overflow: hidden;
+            animation: glowBorder 8s infinite alternate; /* Main container glow */
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 191, 255, 0.05), transparent 30%, rgba(255, 105, 180, 0.05) 70%, transparent);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        /* --- Header --- */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-heading {
+            font-family: 'Orbitron', sans-serif; /* More futuristic font */
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--color-accent-blue);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px var(--color-accent-blue), 0 0 25px var(--color-accent-purple);
+        }
+
+        .sub-heading {
+            font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+            color: var(--color-text-light);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .sub-heading strong {
+            color: var(--color-accent-pink);
+            text-shadow: 0 0 8px var(--color-accent-pink);
+        }
+
+        .sub-heading a {
+            color: var(--color-accent-blue);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--color-accent-blue);
+            transition: all 0.2s ease;
+        }
+
+        .sub-heading a:hover {
+            color: #FFFFFF;
+            border-bottom-color: var(--color-accent-pink);
+            text-shadow: 0 0 10px var(--color-accent-blue);
+        }
+
+        /* --- Content Sections --- */
+        .content-section {
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: var(--color-accent-pink);
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px var(--color-accent-pink);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-blue), transparent);
+            border-radius: 1px;
+        }
+
+        .section-description {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--color-text-light);
+            line-height: 1.5;
+        }
+
+        /* --- Info Cards Grid --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 10px 0;
+        }
+
+        .info-card {
+            background-color: rgba(25, 15, 50, 0.8); /* Darker card background */
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-pink));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease-out;
+        }
+
+        .info-card:hover::before { transform: scaleX(1); }
+
+        .info-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px var(--color-shadow-deep), 0 0 15px var(--color-glow-primary);
+            border-color: var(--color-accent-blue);
+        }
+
+        .card-icon {
+            font-size: 2.8em;
+            color: var(--color-accent-blue);
+            margin-bottom: 15px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            text-shadow: 0 0 10px var(--color-glow-primary);
+        }
+
+        .info-card:hover .card-icon {
+            color: var(--color-accent-pink);
+            transform: rotate(5deg) scale(1.1);
+            text-shadow: 0 0 15px var(--color-glow-secondary);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            color: var(--color-accent-pink);
+            margin-bottom: 10px;
+            letter-spacing: 0.03em;
+            text-shadow: 0 0 8px var(--color-glow-secondary);
+        }
+
+        .card-description {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            line-height: 1.4;
+            max-width: 250px; /* Constrain text width in card */
+        }
+
+        .card-link {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05em;
+            padding: 8px 15px;
+            border: 1px solid var(--color-accent-purple);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            word-break: break-all;
+            display: inline-block; /* Ensures padding and border work */
+        }
+
+        .card-link:hover {
+            background-color: var(--color-accent-purple);
+            color: #FFFFFF;
+            text-shadow: 0 0 10px #FFFFFF;
+            box-shadow: 0 0 15px var(--color-accent-purple);
+            border-color: var(--color-accent-pink);
+        }
+
+        /* --- Navigation Links --- */
+        .navigation-links {
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 20px;
+        }
+
+        .navigation-links a {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-purple));
+            color: #FFFFFF;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px var(--color-glow-primary);
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            border: 1px solid transparent;
+        }
+
+        .navigation-links a:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-accent-blue));
+            box-shadow: 0 6px 20px var(--color-glow-secondary);
+            border-color: var(--color-text-light);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            color: rgba(192, 192, 208, 0.6); /* Muted light text */
+            font-size: 0.85em;
+            letter-spacing: 0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer strong {
+            color: var(--color-accent-pink);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 800px) {
+            .container { padding: 40px 30px; }
+            .main-heading { font-size: clamp(2rem, 8vw, 3.5rem); letter-spacing: 0.06em; }
+            .sub-heading { font-size: clamp(1rem, 2.5vw, 1.2rem); }
+            .section-title { font-size: 1.6em; margin-bottom: 25px; }
+            .info-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+            .info-card { padding: 20px; }
+            .card-icon { font-size: 2.5em; }
+            .card-title { font-size: 1.2em; }
+            .card-description { font-size: 0.85em; }
+            .card-link { font-size: 1em; padding: 6px 12px; }
+            .navigation-links a { padding: 10px 20px; font-size: 0.95em; margin: 0 8px;}
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 15px; font-size: 16px; }
+            .container { padding: 30px 20px; border-radius: 8px; }
+            .main-heading { font-size: clamp(1.8rem, 9vw, 3rem); letter-spacing: 0.05em; }
+            .sub-heading { font-size: clamp(0.9rem, 3.5vw, 1.1rem); }
+            .section-title { font-size: 1.4em; margin-bottom: 20px; }
+            .info-grid { grid-template-columns: 1fr; gap: 18px; } /* Single column on very small screens */
+            .info-card { padding: 18px; }
+            .card-icon { font-size: 2.2em; }
+            .card-title { font-size: 1.1em; }
+            .card-description { font-size: 0.8em; }
+            .card-link { font-size: 0.9em; padding: 5px 10px; }
+            .navigation-links { margin-top: 40px; }
+            .navigation-links a { display: block; margin: 8px 0; }
+            .footer { font-size: 0.75em; padding-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header-section">
+            <h1 class="main-heading">Sprungles // Digital Nexus</h1>
+            <p class="sub-heading">
+                Greetings, fellow cyber-traveler. As a dedicated architect within the <strong class="highlight">ArttulOS Project</strong>, I thrive on open collaboration and the crafting of elegant digital solutions. This portal serves as your gateway to my work and direct communication channels.
+            </p>
+        </header>
+
+        <section class="content-section">
+            <h2 class="section-title">Engage Protocols</h2>
+            <p class="section-description">
+                For project inquiries, technical discussions, or collaborative ventures, utilize my secure communication channels.
+            </p>
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="card-icon">💬</span> <h3 class="card-title">Matrix Direct Comms</h3>
+                    <p class="card-description">
+                        Optimal for real-time discussions, quick queries, and informal collaboration. My most responsive channel.
+                    </p>
+                    <a href="https://matrix.to/#/@sprungles:matrix.org" target="_blank" class="card-link">@sprungles:matrix.org</a>
+                </div>
+                <div class="info-card">
+                    <span class="card-icon">📧</span> <h3 class="card-title">Secure Mail Drop</h3>
+                    <p class="card-description">
+                        For detailed proposals, formal correspondence, or sensitive communications requiring encryption.
+                    </p>
+                    <a href="mailto:sprungles.me@proton.me" class="card-link">sprungles.me@proton.me</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2 class="section-title">Code Archives</h2>
+            <p class="section-description">
+                Access my open-source contributions and personal projects across various platforms. Explore the architecture.
+            </p>
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="card-icon">🐙</span> <h3 class="card-title">GitHub Repository</h3>
+                    <p class="card-description">
+                        Primary public code repository. Discover collaborative efforts and personal ventures here.
+                    </p>
+                    <a href="https://github.com/sprunglesonthehub" target="_blank" class="card-link">github.com/sprunglesonthehub</a>
+                </div>
+                <div class="info-card">
+                    <span class="card-icon">🦊</span> <h3 class="card-title">GitLab Mirror</h3>
+                    <p class="card-description">
+                        Alternative repository for certain projects, ensuring redundancy and platform preference.
+                    </p>
+                    <a href="https://gitlab.com/sprungles" target="_blank" class="card-link">gitlab.com/sprungles</a>
+                </div>
+                <div class="info-card">
+                    <span class="card-icon">🏠</span> <h3 class="card-title">Self-Hosted Gitea</h3>
+                    <p class="card-description">
+                        Direct access to my personal Gitea instance for niche projects and experimental code.
+                    </p>
+                    <a href="https://darrengames.ddns.net:2500/sprungles" target="_blank" class="card-link">darrengames.ddns.net:2500/sprungles</a>
+                </div>
+                <div class="info-card">
+                    <span class="card-icon">✍️</span> <h3 class="card-title">Digital Dispatches (Blog)</h3>
+                    <p class="card-description">
+                        Personal chronicles, technical insights, and updates on my ongoing digital explorations.
+                    </p>
+                    <a href="https://www.blogger.com/blog/posts/4408630306827296278?hl=en&tab=jj" target="_blank" class="card-link">My Blogger Chronicles</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="navigation-links">
+            <a href="index.html">Return to Index Protocol</a>
+            <a href="404.html">Access Anomaly Report (404 Page)</a>
+        </div>
+
+        <footer class="footer">
+            <p>
+                &copy; <script>document.write(new Date().getFullYear())</script> Natalie "Sprungles" Spiva.
+                <br> All systems nominal. Initiating collaboration protocols.
+            </p>
+        </footer>
+    </div>
+
+</body>
+</html>
