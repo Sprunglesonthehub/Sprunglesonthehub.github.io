@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital Chronicles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=FreeSerif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Root Variables from index.html --- */
+        :root {
+            --color-dark-bg: #0D071A; /* Deepest Indigo/Purple */
+            --color-light-text: #E0D8FF; /* Lighter, slightly cooler lavender */
+            --color-accent-pink: #F72585; /* Vibrant Pink */
+            --color-accent-purple: #A020F0; /* Brighter Purple */
+            --color-dark-purple: #7209B7; /* Darker Purple */
+            --color-highlight-glow: #FFABE1; /* Light Pink Glow */
+            --color-card-bg: rgba(20, 12, 38, 0.85); /* Slightly more opaque card background for readability */
+            --color-card-border: rgba(114, 9, 183, 0.6); /* Slightly more opaque card border */
+            --color-input-bg: rgba(25, 15, 45, 0.75);
+        }
+
+        /* --- Global Resets & Base Styles --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'FreeSerif', serif;
+            background-color: var(--color-dark-bg);
+            color: var(--color-light-text);
+            line-height: 1.7;
+            font-size: 17px;
+            padding: 20px;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(247, 37, 133, 0.03) 1px, transparent 0),
+                radial-gradient(circle at 15px 15px, rgba(114, 9, 183, 0.03) 1px, transparent 0);
+            background-size: 30px 30px;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--color-dark-bg); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--color-accent-pink), var(--color-accent-purple), var(--color-dark-purple));
+            border-radius: 6px;
+            border: 1px solid rgba(255, 171, 225, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #FF00FF, var(--color-accent-pink));
+        }
+
+        /* --- Container --- */
+        .blog-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Blog Header --- */
+        .blog-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--color-accent-pink);
+        }
+
+        .blog-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #FFFFFF;
+            text-shadow: 0 0 8px rgba(255,255,255,0.1), 0 0 15px rgba(247,37,133,0.7), 0 0 25px rgba(247,37,133,0.5);
+            margin-bottom: 10px;
+        }
+
+        .blog-header p {
+            font-size: 1.1rem;
+            color: var(--color-highlight-glow);
+            text-shadow: 0 0 5px rgba(180,112,253,0.5);
+        }
+
+        /* Styles for the back-to-home link */
+        .blog-header .back-to-home-link-container {
+            margin-top: 20px; /* Adds space below the subtitle */
+        }
+
+        .blog-header .back-to-home-link {
+            font-family: 'Orbitron', sans-serif; /* Matches other prominent text */
+            font-size: 1rem; 
+            color: var(--color-light-text);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid var(--color-accent-purple);
+            border-radius: 8px;
+            display: inline-block;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .blog-header .back-to-home-link:hover,
+        .blog-header .back-to-home-link:focus {
+            background-color: var(--color-accent-pink);
+            color: #FFFFFF;
+            border-color: var(--color-accent-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4); /* Soft pink glow */
+        }
+        /* End of styles for back-to-home link */
+
+        /* --- Blog Post Styling --- */
+        .blog-post {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-card-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(13,7,26,0.5), inset 0 0 10px rgba(247,37,133,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(247,37,133,0.2), inset 0 0 15px rgba(114,9,183,0.1);
+        }
+
+        .blog-post h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-accent-pink);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--color-accent-purple);
+            padding-bottom: 8px;
+        }
+        .blog-post h2 a {
+            color: var(--color-accent-pink);
+            text-decoration: none;
+        }
+        .blog-post h2 a:hover {
+            color: var(--color-highlight-glow);
+            text-shadow: 0 0 5px var(--color-accent-pink);
+        }
+
+        .blog-post .post-meta {
+            font-size: 0.9em;
+            color: var(--color-highlight-glow);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .blog-post .post-content p {
+            margin-bottom: 18px;
+            font-size: 1.1em;
+            line-height: 1.75;
+        }
+
+        .blog-post .post-content strong {
+            color: var(--color-accent-pink);
+            font-weight: bold;
+        }
+
+        .blog-post .post-content a {
+            color: var(--color-highlight-glow);
+            font-weight: bold;
+            border-bottom: 1px dashed var(--color-accent-pink);
+            text-decoration: none;
+            transition: color 0.2s ease, border-bottom-color 0.2s ease;
+        }
+
+        .blog-post .post-content a:hover {
+            color: #FFFFFF;
+            border-bottom-color: var(--color-accent-purple);
+        }
+
+        .blog-post .post-content pre {
+            background-color: rgba(13,7,26,0.8); /* Darker background for code blocks */
+            border: 1px solid var(--color-card-border);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: #C5C8C6; /* Light grey for code text */
+        }
+        .blog-post .post-content code {
+           font-family: 'Courier New', Courier, monospace;
+           background-color: rgba(var(--color-dark-purple-rgb), 0.2); /* Use RGB for opacity */
+           padding: 2px 4px;
+           border-radius: 3px;
+           color: var(--color-highlight-glow);
+        }
+
+
+        /* --- "Add New Post" Area Styling (Informational Placeholder) --- */
+        .add-post-guide {
+            background-color: var(--color-card-bg);
+            border: 1px dashed var(--color-accent-purple);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .add-post-guide h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .add-post-guide p {
+            font-size: 1em;
+            color: var(--color-light-text);
+            margin-bottom: 10px;
+        }
+         .add-post-guide code {
+            background-color: rgba(0,0,0,0.3);
+            color: var(--color-highlight-glow);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+
+        /* --- Footer --- */
+        .blog-footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            background: linear-gradient(to top, var(--color-dark-bg) 20%, rgba(18,10,32,0.5) 70%, transparent);
+            color: var(--color-light-text);
+            font-size: 0.95em;
+            border-top: 2px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(90deg, var(--color-dark-bg), var(--color-accent-pink) 40%, var(--color-accent-pink) 60%, var(--color-dark-bg));
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body { font-size: 16px; }
+            .blog-container { margin: 20px auto; padding: 0 10px;}
+            .blog-post { padding: 20px; }
+            .blog-post h2 { font-size: 1.6em; }
+            .blog-post .post-content p { font-size: 1em; }
+        }
+
+         @media (max-width: 480px) {
+            .blog-header h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+            .blog-header p { font-size: 1rem; }
+            .blog-post h2 { font-size: 1.4em; }
+         }
+
+    </style>
+</head>
+<body>
+
+    <div class="blog-container">
+        <header class="blog-header">
+            <h1>My Digital Sanctuary</h1>
+            <p>The Life of Living with Mental Illness.</p>
+            <div class="back-to-home-link-container">
+                <a href="index.html" class="back-to-home-link">← Return to Main Site</a>
+            </div>
+        </header>
+
+        <section class="add-post-guide">
+            <h3>How to Add a New Blog Post</h3>
+            <p>What makes me qualified? Well, you are here, aren't you? Keep reading at let me know what you think. You can reach me over on <a href="https://matrix.to/#/%23mentalhealtharttulos:matrix.org">Matrix.</a></p>
+            <p>I am ordinarily objective about my documentation. I will do my best to try to be that way with my posts here. Each post I make will be backed by sites and references, so consider this a database of knowledge.</p>
+            <p>Many people I am involved with in one way or another suffer from some level of mental health issues. But more importantly I struggle with mental health issues myself, and have for most of my life.</p>
+            <p>If you feel as if this is going to be a strong topic, you are <strong>absolutely correct</strong>. Why are we talking abou this? Well, because the mental health care system in the United States is absolute garbage and doesn't properly teach the public on how to talk to, or tolerate, the average person with mental health concerns. <strong>date</strong>, and <strong>content</strong> within the new copied block.</p>
+            <p>When it comes to living with Schizophrenia, and Bipolar 1, it may be hard, but I don't look for sympathy from others for it. Why? It's just a label at the end of the day. Have you taken a moment to consider if anything has changed in the last year, or even in the last three years, or do you remember?</p>
+            <p>Sorry if I scared you a bit there. Memory problems are part of the results of constant (or many) manic episodes a lot of them time. And the average population (including mental professional care) say "that is enough of an existence". For me, that never has been nore will be, enough.</p>
+            <p>What do I strive for? I want real independence. Not that I want to drive, or go out to eat alone; no. I want the ability to make my own decisions in regards to my health. The ability to say "That medication provides to many side effects, let's try something else", or heck, even offer the ability have natural alternatives as well. That works for some.</p>
+            <p>So maybe by offering guidance here, we can work together to provide the resources for each other to get the information we need to find the answers we are wanting, because doctors are not going to provide that for <strong>US</strong>. We have to remember that we are the most important one, as we are the ones who live the life with something of which we never asked for.</p>
+            <p>So if I haven't scared you off yet, please stick around! I will make sure to have informational resources, as well as other feedback/summaries of which you can read for more information on ways to treat mental health, and information you can take to your doctor.</p>
+            <p><i>Warning: I am not a mental health professional, just somebody who has lived a life of hardship and want to avoid that for many. Love you all! </i></p>
+        </section>
+
+        <main id="blog-posts-list">
+            <!-- TEMPLATE FOR A NEW BLOG POST - COPY FROM HERE -->
+            <article class="blog-post">
+                <h2><a href="#">You have learned that you struggle with mental health challenges.</a></h2>
+                <p class="post-meta">Published on: <time datetime="2025-06-03">June 03, 2025</time></p>
+                <div class="post-content">
+                    <p>
+                        So, you are probably in a similar boat that I was in when I was 17. I learned that I had Bipolar 1 disorder, which explained a lot of my behavioral problems, but it all happened after a crisis event. You aren't only scared about what happened, but you are afraid of the future,
+                        as there are so many horror stories from the internet of what happens when you go on psychiatric medications. Let's stop us there for a second. I'm not going to beat around the bush. The next year, or maybe longer, is going to be hard, but I know you are strong. You may be lucky
+                        and find the right medication for you that works right away. You might not. It's a learning process. The best thing you can do is learn about yourself, learn how to <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/jpm.12243"> read your own behavioral patterns </a>. Why is this important?
+                        Bipolar, and many other psychiatric conditions come with some level of behavioral changes (or involuntary mood swings, etc). If you are able to learn how it feels when you are about to explode, cry, get angry, etc, you can prepare for the wave that is about to come. Before doing any of this, just find a therapist.
+                        Many therapists don't accept insurance like medicaid, medicare, etc. But, here is a list for those who need a <a href="https://locator.apa.org/">>resource</a> to find a therapist, or a psychologist. Why is this important? Many of us with some kind of behavioral illness struggle with life skills, interacting with others, and much more.
+                        By having somebody there to help assist us with everyday life functioning, we are setting ourselves up for success. Also, it means that we are reaching out for the help we need, which encourages them to be more likely to accept us as a patient. Also remember that there are other things that happen in a psychologist, pscyhiatrist, or therapist's office
+                        including treatments like cognitive behavioral therapy, and many others, that may help us learn to live with our condition. This is <strong>NOT</strong> giving up on ourselves. This is giving ourselves <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1600-0447.2004.00411.x">the ability to succeed</a>, as our lives are simply harder than the average persons. And we are given the cards we are dealt.
+                    </p>
+                    <p>
+                       This is going to be the first of a million of these explanations, so please, if you are so inclined, head back here tomorrow. Please remember to take care of yourself, in all the ways you can.
+                       Can shower? Okay. Then wash your hair. Can't eat? Have a snack instead. Do what you can, love yourself, and stay safe.
+                       With warm Regards, and remember I'm someone just like you, Natalie Spiva.
+                    </p>
+            </article>
+            <!-- END OF BLOG POST TEMPLATE -->
+
+
+        </main>
+
+        <footer class="blog-footer">
+            <p>© <script>document.write(new Date().getFullYear())</script> The life of living with Mental Illness, Natalie Spiva. Feel free to reference this to anyone who needs this. This will forever be under a <a="https://www.gnu.org/licenses/copyleft.en.html">copyleft</a> license.</p>
+            <p>Powered by static HTML for simplicy and scraping. Feel free to use as a reference. Love you all, and remember to make people's lives better!</p>
+        </footer>
+    </div>
+
+</body>
+</html>

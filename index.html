@@ -582,7 +582,7 @@
             border: 2px solid var(--color-accent-purple);
             border-radius: 15px;
             padding: 40px;
-            max-width: 500px;
+            max-width: 600px; /* Increased max-width for more content */
             width: 90%;
             text-align: center;
             box-shadow: 0 0 25px var(--color-accent-pink), inset 0 0 10px var(--color-light-text);
@@ -591,6 +591,8 @@
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease; /* Bounce transition */
             animation: modalPulseBorder 2s infinite alternate; /* Pulsing border */
+            overflow-y: auto; /* Allow vertical scrolling */
+            max-height: 80vh; /* Max height before scrolling */
         }
 
         .modal-overlay.visible .modal-content {
@@ -616,7 +618,25 @@
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 30px;
+            text-align: left; /* Align text to left for better readability of structured content */
         }
+        .modal-message h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-highlight-glow);
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--color-accent-purple);
+        }
+        .modal-message h4:first-child {
+            margin-top: 0;
+        }
+        .modal-message p {
+            margin-bottom: 12px;
+            font-size: 1em; /* Slightly smaller for sub-paragraphs */
+        }
+
 
         .modal-close-button {
             background: linear-gradient(90deg, var(--color-dark-purple), var(--color-accent-purple));
@@ -630,6 +650,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             letter-spacing: 0.5px;
+            margin-top: 10px; /* Add some space above the close button if content is long */
         }
 
         .modal-close-button:hover {
@@ -640,27 +661,54 @@
         }
 
 
-        /* --- New "Not Rendering Right?" Button Styles --- */
-        .rendering-issue-button {
-            display: block; /* Make it a block element to take full width and for margin auto */
-            margin: 40px auto 20px auto; /* Center it with top/bottom margin */
+        /* --- Page Utility Button Styles (common for rendering-issue and sprungles-info) --- */
+        .page-utility-button { /* This class is now only for the "Rendering Anomalies" button */
+            display: block;
+            margin: 40px auto 20px auto;
             padding: 15px 30px;
-            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-accent-purple)); /* Gradient background */
-            color: #FFFFFF; /* White text */
+            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-accent-purple));
+            color: #FFFFFF;
             font-size: 1.15em;
             font-weight: bold;
             text-decoration: none;
-            border: none; /* No default border */
-            border-radius: 8px; /* Rounded corners */
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(247,37,133,0.4); /* Soft shadow */
-            transition: all 0.3s ease; /* Smooth transitions for hover effects */
-            width: fit-content; /* Fit content width */
+            box-shadow: 0 5px 15px rgba(247,37,133,0.4);
+            transition: all 0.3s ease;
+            width: fit-content;
         }
-        .rendering-issue-button:hover {
-            transform: translateY(-3px); /* Lift effect on hover */
-            box-shadow: 0 8px 20px rgba(247,37,133,0.6); /* Enhanced shadow */
-            background: linear-gradient(90deg, #FF00FF, var(--color-accent-pink)); /* Change gradient on hover */
+        .page-utility-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(247,37,133,0.6);
+            background: linear-gradient(90deg, #FF00FF, var(--color-accent-pink));
+        }
+
+        /* --- Fixed "Why Sprungles?" Button --- */
+        #fixed-sprungles-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001; /* Above navbar, below modal */
+            background: linear-gradient(135deg, var(--color-accent-pink), var(--color-accent-purple));
+            color: var(--color-light-text);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9em;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px; /* More rounded for a fixed "pill" shape */
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(var(--color-shadow-accent), 0.5);
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        #fixed-sprungles-button:hover,
+        #fixed-sprungles-button:focus {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px var(--color-shadow-accent);
+            background: linear-gradient(135deg, var(--color-highlight-glow), var(--color-accent-pink));
+            color: var(--color-dark-bg);
         }
 
 
@@ -669,29 +717,35 @@
             body {font-size:16px;} .hero {min-height:85vh;} .section-title {font-size:2.6em;}
             .nav-links li {margin:0 10px;}
             .nav-links a {font-size:1.05em; padding:10px 10px;}
-            .skills-grid, .repo-grid {grid-template-columns:1fr; gap:30px;} /* Apply to repo-grid too */
-            .skill-card, .repo-card {padding:30px;} /* Apply to repo-card too */
+            .skills-grid, .repo-grid {grid-template-columns:1fr; gap:30px;}
+            .skill-card, .repo-card {padding:30px;}
             .section-content p {font-size:1.12em;}
             .content-section::before,.content-section::after {width:20px;height:20px;}
             .doc-tab-button, a.doc-tab-link {font-size: 1em; padding: 10px 15px;}
-            .rendering-issue-button { font-size: 1em; padding: 12px 25px; margin: 30px auto 15px auto;}
-            .modal-content { padding: 30px; }
+            .page-utility-button { font-size: 1em; padding: 12px 25px; margin: 30px auto 15px auto;}
+            #fixed-sprungles-button { font-size: 0.8em; padding: 7px 12px; top: 15px; right: 15px; }
+            .modal-content { padding: 30px; max-height: 75vh; }
             .modal-title { font-size: 1.5em; }
             .modal-message { font-size: 1em; }
+            .modal-message h4 { font-size: 1.15em; }
+            .modal-message p { font-size: 0.95em; }
         }
         @media (max-width:480px){
             .hero-title {font-size:clamp(2.4rem,11vw,4rem);}
             .hero-subtitle {font-size:clamp(1rem,4.5vw,1.3rem);}
             .section-title {font-size:2.2em;letter-spacing:2.5px;}
             .nav-links {flex-direction:column;padding:15px 0;} .nav-links li {margin:10px 0;}
-            .skill-card h3, .repo-card h3 {font-size:1.6em;} /* Apply to repo-card too */
+            .skill-card h3, .repo-card h3 {font-size:1.6em;}
             .list-item-card {padding:20px 25px;}
             .doc-tabs { flex-direction: column; align-items: stretch;}
             .doc-tab-button, a.doc-tab-link { margin: 8px 0; }
-            .rendering-issue-button { font-size: 0.9em; padding: 10px 20px; }
-            .modal-content { padding: 20px; }
+            .page-utility-button { font-size: 0.9em; padding: 10px 20px; }
+            #fixed-sprungles-button { font-size: 0.75em; padding: 6px 10px; top: 10px; right: 10px; }
+            .modal-content { padding: 20px; max-height: 70vh; }
             .modal-title { font-size: 1.3em; }
             .modal-message { font-size: 0.9em; }
+            .modal-message h4 { font-size: 1.1em; }
+            .modal-message p { font-size: 0.9em; }
         }
 
     </style>
@@ -710,6 +764,7 @@
     <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-4">
     <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-5">
 
+    <button id="fixed-sprungles-button" onclick="showSprunglesInfo();">Sprungles?</button>
 
     <header class="hero">
         <h1 class="hero-title">
@@ -727,7 +782,9 @@
                 <li><a href="#about" class="active">Oneself</a></li>
                 <li><a href="#skills">Proficiencies</a></li>
                 <li><a href="#projects">Endeavors</a></li>
-                <li><a href="#repositories">Code Hubs</a></li> <li><a href="#documentation">Archives</a></li>
+                <li><a href="#repositories">Code Hubs</a></li>
+                <li><a href="#documentation">Archives</a></li>
+                <li><a href="blog.html">Chronicles</a></li>
                 <li><a href="#contact">Communique</a></li>
             </ul>
         </div>
@@ -960,31 +1017,31 @@
             </div>
         </section>
 
-        <button onclick="showCustomModal('Rendering Anomalies?', 'If anything doesn\'t seem to be rendering properly, please ensure your browser is up-to-date and supports modern CSS features, or try a different browser. Clear your cache if persistent issues arise!');" class="rendering-issue-button">
+        <button onclick="showCustomModal('Rendering Anomalies?', 'If anything doesn\'t seem to be rendering properly, please ensure your browser is up-to-date and supports modern CSS features, or try a different browser. Clear your cache if persistent issues arise!');" class="page-utility-button">
             Experiencing Rendering Anomalies? (Click for Diagnostics)
         </button>
     </main>
 
     <footer class="footer">
         <p>
-            &copy; <script>document.write(new Date().getFullYear())</script> Natalie "Sprungles" Spiva. All systems nominal. Initiating collaboration protocols.
+            © <script>document.write(new Date().getFullYear())</script> Natalie "Sprungles" Spiva. All systems nominal. Initiating collaboration protocols.
         </p>
     </footer>
 
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
             <h3 class="modal-title" id="modalTitle"></h3>
-            <p class="modal-message" id="modalMessage"></p>
-            <button class="modal-close-button" onclick="hideCustomModal()">Close</button>
+            <div class="modal-message" id="modalMessage"></div>
+            <button class="modal-close-button" onclick="hideCustomModal()">Understood</button>
         </div>
     </div>
 
 
     <script>
         // Function to show the custom modal
-        function showCustomModal(title, message) {
+        function showCustomModal(title, messageHTML) {
             document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalMessage').innerHTML = messageHTML; // Use innerHTML
             document.getElementById('customModal').classList.add('visible');
         }
 
@@ -993,21 +1050,55 @@
             document.getElementById('customModal').classList.remove('visible');
         }
 
+        // Function to show Sprungles info
+        function showSprunglesInfo() {
+            const title = "The Meaning of Sprungles";
+            const messageContent = `
+                <h4>For Mental Health:</h4>
+                <p>Think about your mind – it's definitely dynamic, with thoughts and feelings always popping up. Sometimes it can feel a bit chaotic in there, right?</p>
+                <p>But "Sprungles" also hints at being able to bounce back (that's the manageable part), like finding ways to deal with those busy thoughts and feelings.</p>
+
+                <h4>For Code (like computer programming):</h4>
+                <p>Software is super dynamic; it's always being updated and doing new things.</p>
+                <p>And let's be honest, code can get chaotic sometimes with bugs that "spring" up and cause trouble.</p>
+                <p>But programmers can work through it, fix those bugs, and manage the code to make cool stuff.</p>
+
+                <h4>For Privacy:</h4>
+                <p>Our personal information is constantly flowing – very dynamic.</p>
+                <p>If we're not careful, it can feel chaotic, like our data could leak out everywhere.</p>
+                <p>So, "Sprungles" could be about how we try to manage that flow – like using tools to protect our info, maybe by "jumbling it up" (encrypting it) so only we can understand it, and keeping it secure.</p>
+            `;
+            showCustomModal(title, messageContent);
+        }
+
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+                const href = this.getAttribute('href');
+                // If it's an internal link (starts with #), scroll smoothly
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({
+                        behavior: 'smooth'
+                    });
 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-
-                // Update active class
-                document.querySelectorAll('.nav-links a').forEach(link => {
-                    link.classList.remove('active');
-                });
-                this.classList.add('active');
+                    // Update active class for internal links
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+                // If it's an external link (like blog.html), let the browser handle it
+                // but remove active class from all other links
+                else {
+                     document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    // Optionally, you could add an 'active' class to the blog link itself
+                    // if you want it to appear active when clicked, though it will be lost on page load.
+                    // this.classList.add('active');
+                }
             });
         });
 
@@ -1024,7 +1115,7 @@
                 navbar.classList.remove('scrolled');
             }
 
-            // Active link highlighting
+            // Active link highlighting for internal links
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop - navbar.offsetHeight - 50; // Adjust for navbar height
@@ -1035,9 +1126,12 @@
             });
 
             navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
+                // Only apply active state logic to internal links
+                if (link.getAttribute('href').startsWith('#')) {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
                 }
             });
 
@@ -1113,6 +1207,9 @@
                     docContentPanes.forEach(pane => {
                         pane.classList.remove('active');
                     });
+                    // Make sure the first internal tab button and pane are active again if user navigates away and then back
+                    if (docTabButtons.length > 0) docTabButtons[0].classList.add('active');
+                    if (docContentPanes.length > 0) docContentPanes[0].classList.add('active');
                     return; // Let the browser navigate
                 }
 
@@ -1135,8 +1232,18 @@
 
             // Initialize active tab for documentation on page load
             // Only activate the first *internal* tab, which is ArttulOS
-            docTabButtons[0].classList.add('active');
-            docContentPanes[0].classList.add('active');
+            if (docTabButtons.length > 0 && docContentPanes.length > 0) { // Ensure elements exist
+                docTabButtons[0].classList.add('active');
+                docContentPanes[0].classList.add('active');
+            }
+        }
+         // Set initial active nav link if not blog page
+        if (!window.location.pathname.endsWith('blog.html')) {
+            const firstNavLink = document.querySelector('.nav-links a[href="#about"]');
+            if (firstNavLink) {
+                navLinks.forEach(link => link.classList.remove('active')); // Clear all first
+                firstNavLink.classList.add('active');
+            }
         }
     }
     window.addEventListener('load', initializePage);
