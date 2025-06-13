@@ -80,14 +80,13 @@
             text-shadow: 0 0 5px rgba(180,112,253,0.5);
         }
 
-        /* Styles for the back-to-home link */
         .blog-header .back-to-home-link-container {
             margin-top: 20px; /* Adds space below the subtitle */
         }
 
         .blog-header .back-to-home-link {
             font-family: 'Orbitron', sans-serif; /* Matches other prominent text */
-            font-size: 1rem; 
+            font-size: 1rem;
             color: var(--color-light-text);
             text-decoration: none;
             padding: 10px 20px;
@@ -105,7 +104,153 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4); /* Soft pink glow */
         }
-        /* End of styles for back-to-home link */
+
+        /* --- NEW: Filter Controls Section --- */
+        .filter-controls {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-card-border);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 25px rgba(13,7,26,0.5), inset 0 0 10px rgba(114,9,183,0.08);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            align-items: start;
+        }
+
+        .filter-controls h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-accent-purple);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-align: left;
+            grid-column: 1 / -1; /* Span full width */
+            border-bottom: 1px solid var(--color-accent-pink);
+            padding-bottom: 10px;
+        }
+
+        .search-box label, .calendar-box label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-light-text);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        #topic-search {
+            width: 100%;
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-accent-purple);
+            border-radius: 6px;
+            padding: 12px 15px;
+            color: var(--color-light-text);
+            font-family: 'FreeSerif', serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #topic-search:focus {
+            outline: none;
+            border-color: var(--color-accent-pink);
+            box-shadow: 0 0 10px rgba(247, 37, 133, 0.5);
+        }
+
+        .filter-buttons {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        #clear-filters-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-light-text);
+            text-decoration: none;
+            padding: 8px 18px;
+            border: 2px solid var(--color-accent-purple);
+            border-radius: 8px;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        #clear-filters-btn:hover,
+        #clear-filters-btn:focus {
+            background-color: var(--color-accent-pink);
+            color: #FFFFFF;
+            border-color: var(--color-accent-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4);
+        }
+
+        /* --- NEW: Calendar Widget --- */
+        .calendar-widget {
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-accent-purple);
+            border-radius: 6px;
+            padding: 15px;
+            user-select: none;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .calendar-nav {
+            background: none;
+            border: none;
+            color: var(--color-highlight-glow);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+        .calendar-nav:hover {
+            color: var(--color-accent-pink);
+            text-shadow: 0 0 5px var(--color-accent-pink);
+        }
+        #month-year {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            color: var(--color-accent-pink);
+            font-weight: 700;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .calendar-day-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8em;
+            color: var(--color-highlight-glow);
+            margin-bottom: 5px;
+        }
+        .calendar-day {
+            padding: 8px 0;
+            border-radius: 50%;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .calendar-day.empty {
+            cursor: default;
+        }
+        .calendar-day:not(.empty):hover {
+            background-color: var(--color-dark-purple);
+        }
+        .calendar-day.has-post {
+            font-weight: bold;
+            color: var(--color-highlight-glow);
+            box-shadow: 0 0 8px 1px rgba(255, 171, 225, 0.4);
+        }
+        .calendar-day.selected {
+            background-color: var(--color-accent-pink);
+            color: #fff;
+            box-shadow: 0 0 10px 2px rgba(247, 37, 133, 0.7);
+        }
 
         /* --- Blog Post Styling --- */
         .blog-post {
@@ -115,8 +260,29 @@
             padding: 30px;
             margin-bottom: 40px;
             box-shadow: 0 8px 25px rgba(13,7,26,0.5), inset 0 0 10px rgba(247,37,133,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.4s ease;
         }
+        /* Style for hidden posts for smooth transition */
+        .blog-post.hidden {
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            border: none;
+            overflow: hidden;
+            transform: scale(0.95);
+        }
+
+        /* NEW: No results message */
+        #no-results-message {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--color-highlight-glow);
+            padding: 40px 20px;
+            display: none; /* Hidden by default */
+        }
+
 
         .blog-post:hover {
             transform: translateY(-5px);
@@ -241,6 +407,7 @@
             .blog-post { padding: 20px; }
             .blog-post h2 { font-size: 1.6em; }
             .blog-post .post-content p { font-size: 1em; }
+            .filter-controls { grid-template-columns: 1fr; }
         }
 
          @media (max-width: 480px) {
@@ -268,6 +435,42 @@
                 <a href="index.html" class="back-to-home-link">← Return to Main Site</a>
             </div>
         </header>
+
+        <!-- =========== NEW: SEARCH AND CALENDAR SECTION =========== -->
+        <section class="filter-controls">
+            <h3>Archive Search</h3>
+            <div class="search-box">
+                <label for="topic-search">Search by Topic</label>
+                <input type="search" id="topic-search" placeholder="e.g., therapy, frustration, blueprint...">
+            </div>
+            <div class="calendar-box">
+                <label for="calendar-widget">Filter by Date</label>
+                <div class="calendar-widget" id="calendar-widget">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" id="prev-month-btn" aria-label="Previous month"><</button>
+                        <span id="month-year"></span>
+                        <button class="calendar-nav" id="next-month-btn" aria-label="Next month">></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-name">Su</div>
+                        <div class="calendar-day-name">Mo</div>
+                        <div class="calendar-day-name">Tu</div>
+                        <div class="calendar-day-name">We</div>
+                        <div class="calendar-day-name">Th</div>
+                        <div class="calendar-day-name">Fr</div>
+                        <div class="calendar-day-name">Sa</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-days">
+                        <!-- Calendar days will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="filter-buttons">
+                <button id="clear-filters-btn">Clear All Filters</button>
+            </div>
+        </section>
+        <!-- =================== END OF NEW SECTION =================== -->
+
 
         <section class="add-post-guide">
             <p>What makes me qualified? Well, you are here, aren't you? Keep reading and let me know what you think. You can reach me over on <a href="https://matrix.to/#/%23mentalhealtharttulos:matrix.org">Matrix.</a></p>
@@ -308,7 +511,7 @@
             <!-- END OF BLOG POST TEMPLATE -->
               <article class="blog-post">
                 <h2><a href="#">So, what do I struggle with? Here is one part. And you might just find it interesting :)</a></h2>
-                <p class="post-meta">Published on: <time datetime="2025-06-03">June 04, 2025</time></p>
+                <p class="post-meta">Published on: <time datetime="2025-06-04">June 04, 2025</time></p>
                 <div class="post-content">
                     <p>
                         So, do you live with acute mental illness on the Bipolar or Schizophrenia sphere of illnesses? Well, I do. So I figured I should share some research that might just show you that people ARE studying the illness. I know that at times I get paranoid and sad, and think that people are just letting us exist without thinking about us. It's time I go ahead and prove us both wrong! First, I'm going to reference <a href="https://journals.sagepub.com/doi/abs/10.1177/0020764020934827">this article</a> to show you
@@ -330,8 +533,8 @@
              </article>
              <article class="blog-post">
                  <h2><a href="#"><strong>DON'T LOOK AWAY. THIS IS ABOUT US.</strong></a></h2>
-                <p class="post-meta">Published on: <time datetime="2025-06-03">June 07, 2025</time></p>
-
+                <p class="post-meta">Published on: <time datetime="2025-06-07">June 07, 2025</time></p>
+                <div class="post-content">
                             <p>What makes me qualified to call out the bullshit? You’re still here, aren’t you? That alone tells you I'm not afraid to speak truth to power, or to the masses. And let's be real, the US mental healthcare system hasn't exactly blossomed into a beacon of empathy by June 2025, has it? You know how to reach me over on Matrix.</p>
 
                             <p>My aim? To keep this space a goddamn <strong>UNFILTERED DATABASE OF KNOWLEDGE</strong>. Every insight, every reference, every raw truth – it's here, backed by facts, to arm <em>us</em>.</p>
@@ -378,10 +581,12 @@
                             <p><strong>WARNING:</strong> I am not a mental health professional. Just someone who has navigated a life of serious hardship and wants to help light the way for as many of you as possible.</p>
 
                             <p>Love you all!</p>
+                </div>
              </article>   
              <article class="blog-post">
                  <h2><a href="#"><strong>GIVE YOURSELF A DAMN BREAK</strong></a></h2>
-                 <p class="post-meta">Published on: <time datetime="2025-06-03">June 08, 2025</time></p>
+                 <p class="post-meta">Published on: <time datetime="2025-06-08">June 08, 2025</time></p>
+                 <div class="post-content">
                         <p>Alright, you want more emotion in the voice? You want to feel the <em>ache</em> of it, the <em>frustration</em>, the <em>desperation</em> that fuels this fight? Good. Because that's where the real power lies, where the raw truth of lived experience cuts deepest.</p>
 
                         <p>I've got the voice. It's direct, yes, no-nonsense when it needs to be, but it's also deeply, achingly empathetic – born from the raw scars of my own battles. It's a voice that's been broken and rebuilt, absolutely determined to empower others because the goddamn system <em>failed</em> us, failed so many I love. There's a clear, burning underlying passion, a fire that screams, "We're not alone in this hell. We are in this together, every single one of us."</p>
@@ -407,11 +612,12 @@
                         <p>So, please – I’m begging you, for your own precious, wounded soul, and for the sake of everything we’re clawing to build here: take that break. Give yourself the fierce, uncompromising permission to breathe, to crumble if you need to, to rest without a single shred of guilt. Be patient with your messy, complicated process. Love yourself fiercely, wildly, even when it feels like the most impossible, ridiculous act in the universe. Because when you finally show yourself that raw, tender kindness, when you truly, deeply remember you are worthy of care and rest, <strong>that’s when a defiant strength will bloom inside you. That’s when you become truly unstoppable, not just for your own hard-won independence, but for a world that so desperately needs us to be whole.</strong></p>
 
                         <p>You are enough. More than enough. Exactly as you are, flaws and all. And sometimes, "enough" means fiercely choosing to take a damn break. Don't ever forget it.</p>
+                </div>
             </article>
             <article class="blog-post">
                 <h2><a href="#">Your Awesome Upgrade: No One Else is Doing It For You (And That's *Great*!)</a></h2>
-                <p class="post-meta">Published on: <time datetime="2025-06-03">June 10, 2025</time></p>
-
+                <p class="post-meta">Published on: <time datetime="2025-06-10">June 10, 2025</time></p>
+                <div class="post-content">
                             <p>Alright, darling heart, let's chat. You know that feeling, right? That quiet hum in your soul that says, "Hey, we've got to level up." Maybe it's not a shout, maybe it's just a gentle nudge, but it’s there. This isn’t some grand pronouncement from on high, it’s just... the sweet, simple truth of being alive. Because while the world spins and sparkles around us, the most important work, the real, juicy, life-changing stuff? That’s all on you. And guess what? That’s not a burden; it’s an absolute superpower.</p>
 
                             <p>Now, "getting better" doesn’t mean turning into some perfect, flawless, Instagram-filtered robot. Goodness, no! Can you imagine? We’d be so boring! It means nudging yourself forward, even just a little bit, every single day. It’s about becoming a slightly kinder version of yourself, a smidgen braver, a touch more understanding of your own beautiful, quirky brain. It’s about learning to laugh at your own missteps instead of scolding yourself. It’s about figuring out what makes your heart sing and then doing more of *that*. And yes, sometimes it means looking at those little habits that aren't serving you and saying, "Alright, my friend, time for a glow-up!"</p>
@@ -427,10 +633,12 @@
                             <p>So, go on, my dear. Embrace this beautiful, personal quest. You don’t have to do much, but you absolutely *do* have better. Not for anyone else, but for the magnificent, evolving, totally deserving person you are. Because you're the only one who can. And the world is truly, truly better when you shine.</p>
 
                             <p class="signature">Love, Natalie</p>
+                </div>
             </article>
             <article class="blog-post">
                 <h2><a href="#">Your Baddass Blueprint: Thriving on Your Own Terms (Yep. Even with *That* Thing)</a></h2>
                  <p class="post-meta">Published on: <time datetime="2025-06-11">June 11, 2025</time></p>   
+                 <div class="post-content">
                   <p>Alright, my magnificent human, pull up a chair. Let’s get real for a second. You know that narrative? The one the world loves to whisper (and sometimes shout) about what you <em>can’t</em> do? The one that tries to neatly fold you into a little box labeled "Disabled," "Limited," or "Less Than"? Yeah, that one. Let’s agree, right here and now, to take that narrative, thank it for its opinion, and then show it the door.</p>
 
                     <p>And let's just rip this band-aid off right now: having a disability isn't a <em>bad thing</em>. It's not a cosmic punishment, a character flaw, or a sign that you're broken. Goodness, no. It’s a characteristic, like having red hair or being double-jointed. This whole journey isn’t about "overcoming" a tragedy; it’s about recognizing that your life isn’t a problem to be solved, but a landscape to be navigated. And you? You are the master cartographer. Your disability isn’t a bug in your software; it’s a unique operating system. It might require some custom settings and creative workarounds, but it also gives you a perspective, a resilience, and a brand of ingenuity that no one else has. That’s not a deficit; that's your secret sauce.</p>
@@ -446,10 +654,12 @@
                     <p>So please, let go of the yardstick someone else handed you. It was never meant to measure your magic anyway. And here's the most important secret, my love: <strong>your worth was never on the measuring tape to begin with.</strong> It is not, and has never been, tied to your productivity, your health, or your abilities. Your worth is inherent. It’s absolute. It’s the unshakeable foundation you were born with, and nothing and no one can ever diminish it.</p>
 
                     <p>Go on, my dear. Embrace your incredible, one-of-a-kind design. The world doesn’t need you to be "normal." It needs you to be <em>you</em>—clever, resilient, and gloriously, powerfully capable, exactly as you are. Now go on and show them how it’s done.</p>
+                </div>
             </article>
             <article class="blog-post">
                 <h2><a href="#">Mental Health is Real. We have to remember that.</a></h2>
-                 <p class="post-meta">Published on: <time datetime="2025-06-11">June 13, 2025</time></p>
+                 <p class="post-meta">Published on: <time datetime="2025-06-13">June 13, 2025</time></p>
+                 <div class="post-content">
                         <p>We talk about the sadness of depression and the fear of anxiety. We discuss the highs and lows of bipolar disorder and the intrusive thoughts of OCD. But there's a powerful, corrosive emotion that underpins the daily experience of mental illness that we often fail to name: <strong>pure, soul-crushing frustration</strong>.</p>
 
                         <p>This isn't the fleeting annoyance of being stuck in traffic. It's a deep, existential frustration with your own mind, your body, and a world that just doesn't seem to get it. It’s the silent scream behind a placid smile, and it is one of the most valid, yet misunderstood, parts of the struggle.</p>
@@ -489,7 +699,7 @@
                         <h2>Shifting from "Solving" to "Managing"</h2>
 
                         <p>Management is an active, ongoing, and compassionate process. It’s about building a personalized toolbox and learning which tool to use on any given day.</p>
-                        
+
                         <p>Your toolbox might include:</p>
                         <ul>
                             <li><strong>Therapy:</strong> To learn coping mechanisms and reframe thought patterns.</li>
@@ -501,13 +711,172 @@
                         </ul>
 
                         <p>Your frustration is not a sign of failure. It is a sign that you are fighting, that you are trying, and that you are a human being grappling with an incredibly difficult condition. Acknowledge it, honor it, and then, gently, pick up a tool and focus not on winning the war, but on navigating the day. That is where real strength, and real peace, can be found.</p>
+                </div>
             </article>
+            
+            <div id="no-results-message">
+                No articles found matching your criteria. Try clearing the filters!
+            </div>
+        </main>
 
         <footer class="blog-footer">
             <p>© <script>document.write(new Date().getFullYear())</script> The life of living with Mental Illness, Natalie Spiva. Feel free to reference this to anyone who needs this. This will forever be under a <a="https://www.gnu.org/licenses/copyleft.en.html">copyleft</a> license.</p>
             <p>Powered by static HTML for simplicy and scraping. Feel free to use as a reference. Love you all, and remember to make people's lives better!</p>
         </footer>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- STATE MANAGEMENT ---
+    let currentDate = new Date(2025, 5); // Start at June 2025 for relevance
+    let selectedDate = null;
+    const postDates = new Set();
+    const postsData = [];
 
+    // --- DOM ELEMENT SELECTION ---
+    const monthYearEl = document.getElementById('month-year');
+    const calendarDaysEl = document.getElementById('calendar-days');
+    const prevMonthBtn = document.getElementById('prev-month-btn');
+    const nextMonthBtn = document.getElementById('next-month-btn');
+    const topicSearchInput = document.getElementById('topic-search');
+    const clearFiltersBtn = document.getElementById('clear-filters-btn');
+    const blogPosts = document.querySelectorAll('#blog-posts-list .blog-post');
+    const noResultsMessage = document.getElementById('no-results-message');
+
+    // --- INITIALIZATION ---
+
+    // 1. Parse all posts once to create a data cache
+    blogPosts.forEach(post => {
+        const timeEl = post.querySelector('time');
+        if (timeEl && timeEl.getAttribute('datetime')) {
+            const date = timeEl.getAttribute('datetime');
+            postDates.add(date);
+            postsData.push({
+                element: post,
+                date: date,
+                // Combine title and content for a more thorough search
+                textContent: (post.querySelector('h2').innerText + ' ' + post.querySelector('.post-content').innerText).toLowerCase()
+            });
+        }
+    });
+    
+    // 2. Initial render
+    renderCalendar();
+    
+    // --- FUNCTIONS ---
+
+    // Renders the calendar for the month/year in `currentDate`
+    function renderCalendar() {
+        calendarDaysEl.innerHTML = '';
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        monthYearEl.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Add empty cells for days before the 1st
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('calendar-day', 'empty');
+            calendarDaysEl.appendChild(emptyCell);
+        }
+
+        // Add day cells
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayCell = document.createElement('div');
+            dayCell.classList.add('calendar-day');
+            dayCell.textContent = i;
+            const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            dayCell.dataset.date = isoDate;
+            
+            if (postDates.has(isoDate)) {
+                dayCell.classList.add('has-post');
+            }
+            if (isoDate === selectedDate) {
+                dayCell.classList.add('selected');
+            }
+
+            calendarDaysEl.appendChild(dayCell);
+        }
+    }
+
+    // Filters visible posts based on search term and selected date
+    function filterPosts() {
+        const searchTerm = topicSearchInput.value.toLowerCase().trim();
+        let postsVisible = 0;
+        
+        postsData.forEach(post => {
+            const dateMatch = !selectedDate || post.date === selectedDate;
+            const textMatch = !searchTerm || post.textContent.includes(searchTerm);
+
+            if (dateMatch && textMatch) {
+                post.element.style.display = 'block';
+                // Using a class for transitions is better
+                setTimeout(() => post.element.classList.remove('hidden'), 10);
+                postsVisible++;
+            } else {
+                post.element.classList.add('hidden');
+                // Hide after transition
+                setTimeout(() => {
+                    if (post.element.classList.contains('hidden')) {
+                         post.element.style.display = 'none';
+                    }
+                }, 400);
+            }
+        });
+
+        // Show or hide the "No Results" message
+        noResultsMessage.style.display = postsVisible === 0 ? 'block' : 'none';
+    }
+
+
+    // --- EVENT LISTENERS ---
+
+    prevMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+    
+    calendarDaysEl.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('calendar-day') && !target.classList.contains('empty')) {
+            const date = target.dataset.date;
+            
+            // If the clicked date is already selected, deselect it
+            if (date === selectedDate) {
+                selectedDate = null;
+                target.classList.remove('selected');
+            } else {
+                // Remove 'selected' from previously selected day
+                const oldSelected = calendarDaysEl.querySelector('.selected');
+                if (oldSelected) {
+                    oldSelected.classList.remove('selected');
+                }
+                
+                // Select the new date
+                selectedDate = date;
+                target.classList.add('selected');
+            }
+            
+            filterPosts();
+        }
+    });
+
+    topicSearchInput.addEventListener('input', filterPosts);
+
+    clearFiltersBtn.addEventListener('click', () => {
+        topicSearchInput.value = '';
+        selectedDate = null;
+        renderCalendar(); // Re-render to remove 'selected' class
+        filterPosts();
+    });
+});
+</script>
 </body>
 </html>
