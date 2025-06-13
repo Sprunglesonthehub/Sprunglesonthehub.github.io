@@ -1,23 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> <!-- The data-engine attribute will be added here by JS -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Natalie "Sprungles" Spiva - Esteemed Digital Artisan & Documentarian</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=FreeSerif:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=FreeSerif:wght@400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Engine Detection Script: Runs immediately to set up optimizations -->
+    <script>
+        (function() {
+            const html = document.documentElement;
+            const ua = navigator.userAgent;
+            if (ua.includes('Firefox')) {
+                html.setAttribute('data-engine', 'firefox');
+            } else if (ua.includes('Chrome') || ua.includes('Chromium') || ua.includes('Edg')) {
+                html.setAttribute('data-engine', 'chromium');
+            }
+        })();
+    </script>
+    
     <style>
         /* --- Root Variables for Consistent Themeing --- */
         :root {
-            --color-dark-bg: #0D071A; /* Deepest Indigo/Purple */
-            --color-light-text: #E0D8FF; /* Lighter, slightly cooler lavender */
-            --color-accent-pink: #F72585; /* Vibrant Pink */
-            --color-accent-purple: #A020F0; /* Brighter Purple */
-            --color-dark-purple: #7209B7; /* Darker Purple */
-            --color-highlight-glow: #FFABE1; /* Light Pink Glow */
-            --color-card-bg: rgba(20, 12, 38, 0.65); /* Card background */
-            --color-card-border: rgba(114, 9, 183, 0.4); /* Card border */
-            --color-shadow-base: rgba(13, 7, 26, 0.5); /* Base shadow */
-            --color-shadow-accent: rgba(247,37,133,0.3); /* Accent shadow */
+            --color-dark-bg: #0D071A;
+            --color-light-text: #E0D8FF;
+            --color-accent-pink: #F72585;
+            --color-accent-purple: #A020F0;
+            --color-dark-purple: #7209B7;
+            --color-highlight-glow: #FFABE1;
+            --color-card-bg: rgba(20, 12, 38, 0.65);
+            --color-card-border: rgba(114, 9, 183, 0.4);
+            --color-shadow-base: rgba(13, 7, 26, 0.5);
+            --color-shadow-accent: rgba(247,37,133,0.3);
+        }
+
+        /* --- THEME DEFINITIONS --- */
+        body[data-theme="terminal-green"] {
+            --color-accent-pink: #00ff41;
+            --color-accent-purple: #00c232;
+            --color-dark-purple: #008723;
+            --color-highlight-glow: #7cff9d;
+            --color-shadow-accent: rgba(0, 255, 65, 0.3);
+        }
+        body[data-theme="blue-archive"] {
+            --color-accent-pink: #00bfff;
+            --color-accent-purple: #0077ff;
+            --color-dark-purple: #004c9e;
+            --color-highlight-glow: #a1e2ff;
+            --color-shadow-accent: rgba(0, 191, 255, 0.3);
         }
 
         /* --- Global Resets & Base Styles --- */
@@ -27,11 +60,6 @@
             padding: 0;
         }
 
-        @keyframes fadeInPage {
-            from { opacity: 0; filter: blur(8px) saturate(0.5); transform: scale(0.98); }
-            to { opacity: 1; filter: blur(0px) saturate(1); transform: scale(1); }
-        }
-
         body {
             font-family: 'FreeSerif', serif;
             background-color: var(--color-dark-bg);
@@ -39,736 +67,177 @@
             line-height: 1.75;
             font-size: 17px;
             overflow-x: hidden;
-            animation: fadeInPage 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            background-image:
-                radial-gradient(circle at 1px 1px, rgba(247, 37, 133, 0.05) 1px, transparent 0),
-                radial-gradient(circle at 15px 15px, rgba(114, 9, 183, 0.05) 1px, transparent 0);
-            background-size: 30px 30px;
-            animation: bgPatternShift 40s linear infinite alternate;
-            position: relative; /* For absolute positioning of PNGs */
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            position: relative;
+        }
+        
+        /* --- BROWSER ENGINE OPTIMIZATIONS --- */
+        html[data-engine="chromium"] .floating-char-wrapper {
+             will-change: transform; /* Hint for Blink/Chromium compositor */
+        }
+        .navbar {
+            background-color: rgba(13,7,26,.85); /* Base for all browsers */
+            transition: background-color .3s ease;
+        }
+        html[data-engine="chromium"] .navbar {
+            -webkit-backdrop-filter: blur(15px) saturate(180%) brightness(.9); /* High-perf blur for Chromium */
+            backdrop-filter: blur(15px) saturate(180%) brightness(.9);
+            background-color: rgba(13,7,26,.75);
+        }
+        html[data-engine="firefox"] .navbar {
+            background-color: rgba(13,7,26,.9); /* More solid for Firefox performance */
+        }
+        html .navbar.scrolled {
+             background-color: rgba(13,7,26,.95);
         }
 
-        @keyframes bgPatternShift {
-            0% { background-position: 0 0, 0 0; }
-            100% { background-position: 60px 60px, -60px -60px; }
-        }
-
-        /* --- Floating Character PNGs (cutie.png and Sprungles.png) --- */
-        .floating-char {
-            position: absolute;
-            width: var(--size, 100px); /* Default size, can be overridden inline */
-            height: auto;
-            opacity: var(--opacity, 0.15); /* Default opacity */
+        /* --- Immersive Overlays & Backgrounds --- */
+        #crt-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(to bottom, rgba(18,16,16,0) 0, rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2) 100%);
+            background-size: 100% 4px;
+            z-index: 1500;
             pointer-events: none;
-            z-index: 50; /* Below content, above background */
-            animation: floatUpDown var(--float-duration, 15s) ease-in-out infinite,
-                       rotateChar var(--rotate-duration, 20s) linear infinite;
-            animation-delay: var(--animation-delay, 0s); /* Add animation delay */
-            will-change: transform, opacity; /* Performance optimization */
+            opacity: 0.2;
+            animation: crt-flicker 15s linear infinite;
         }
+        @keyframes crt-flicker { 0%, 49%, 51%, 100% { opacity: 0.2; } 50% { opacity: 0.15; } }
+        
+        #network-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; }
 
-        @keyframes floatUpDown {
-            0%, 100% { transform: translateY(0) rotate(var(--initial-rotate, 0deg)); }
-            25% { transform: translateY(-20px) rotate(calc(var(--initial-rotate, 0deg) + 5deg)); }
-            50% { transform: translateY(0) rotate(var(--initial-rotate, 0deg)); }
-            75% { transform: translateY(20px) rotate(calc(var(--initial-rotate, 0deg) - 5deg)); }
+        /* --- Boot Sequence Intro --- */
+        #boot-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: var(--color-dark-bg);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Fira Code', monospace;
+            color: var(--color-accent-pink);
+            padding: 20px;
+            transition: opacity 1s ease-in-out;
         }
+        .boot-line { display: block; white-space: pre-wrap; opacity: 0; transition: opacity 0.5s ease; font-size: 1.1em; text-shadow: 0 0 5px var(--color-accent-pink); }
+        .boot-line .boot-cursor { display: inline-block; background: var(--color-highlight-glow); width: 0.7em; height: 1.2em; margin-left: 5px; vertical-align: bottom; animation: blinkCursor 1s infinite steps(1,end); }
+        @keyframes blinkCursor { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
-        @keyframes rotateChar {
-            0% { transform: rotate(var(--initial-rotate, 0deg)); }
-            100% { transform: rotate(calc(var(--initial-rotate, 0deg) + 360deg)); }
-        }
-
-        /* Styles for cutie.png instances */
-        .cutie-float-1 { top: 10%; left: 5%; --size: 150px; --float-duration: 18s; --rotate-duration: 25s; --opacity: 0.15; --animation-delay: 0s; }
-        .cutie-float-2 { bottom: 15%; right: 8%; --size: 100px; --float-duration: 16s; --rotate-duration: 20s; --opacity: 0.2; transform: scaleX(-1); --animation-delay: 2s; } /* Flip horizontally */
-        .cutie-float-3 { top: 40%; left: 20%; --size: 80px; --float-duration: 20s; --rotate-duration: 30s; --opacity: 0.1; --initial-rotate: 90deg; --animation-delay: 4s; }
-        .cutie-float-4 { bottom: 5%; left: 15%; --size: 120px; --float-duration: 22s; --rotate-duration: 28s; --opacity: 0.18; --animation-delay: 6s; }
-        .cutie-float-5 { top: 25%; right: 2%; --size: 90px; --float-duration: 17s; --rotate-duration: 22s; --opacity: 0.25; --initial-rotate: -45deg; --animation-delay: 8s; }
-
-        /* Styles for Sprungles.png instances (distinct animations/properties) */
-        .sprungles-float-1 { top: 55%; right: 12%; --size: 130px; --float-duration: 20s; --rotate-duration: 28s; --opacity: 0.1; --animation-delay: 1s; }
-        .sprungles-float-2 { bottom: 20%; left: 10%; --size: 110px; --float-duration: 19s; --rotate-duration: 24s; --opacity: 0.18; transform: rotate(180deg) scaleX(-1); --animation-delay: 3s; }
-        .sprungles-float-3 { top: 5%; left: 40%; --size: 90px; --float-duration: 16s; --rotate-duration: 21s; --opacity: 0.22; --animation-delay: 5s; }
-        .sprungles-float-4 { bottom: 35%; right: 25%; --size: 70px; --float-duration: 23s; --rotate-duration: 32s; --opacity: 0.08; --initial-rotate: 45deg; --animation-delay: 7s; }
-        .sprungles-float-5 { top: 70%; left: 2%; --size: 105px; --float-duration: 18s; --rotate-duration: 26s; --opacity: 0.15; --initial-rotate: -90deg; --animation-delay: 9s; }
-
-
+        /* --- Floating Character Sprites & Glitch Effect --- */
+        .floating-char-wrapper { position: absolute; width: var(--size, 100px); height: auto; z-index: 50; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .floating-char { width: 100%; height: auto; opacity: var(--opacity, 0.15); pointer-events: none; will-change: clip-path; transition: opacity 0.3s ease; }
+        .glitch-layer { position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none; }
+        .floating-char-wrapper:hover .floating-char { opacity: 1; }
+        .floating-char-wrapper:hover .glitch-layer:nth-of-type(2) { animation: glitch-anim-1 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; }
+        .floating-char-wrapper:hover .glitch-layer:nth-of-type(3) { animation: glitch-anim-2 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; }
+        @keyframes glitch-anim-1 { 0% { transform: translate(0); opacity: 0; } 10% { transform: translate(-3px, -2px); opacity: 1; clip-path: polygon(0 20%, 100% 20%, 100% 23%, 0 23%); } 20% { transform: translate(3px, 2px); clip-path: polygon(0 50%, 100% 50%, 100% 51%, 0 51%); } 40% { transform: translate(-3px, 2px); clip-path: polygon(0 75%, 100% 75%, 100% 77%, 0 77%); } 60% { transform: translate(3px, -2px); opacity: 1; } 80%, 100% { transform: translate(0); opacity: 0; } }
+        @keyframes glitch-anim-2 { 0% { transform: translate(0); opacity: 0; } 15% { transform: translate(-2px, 3px); opacity: 1; clip-path: polygon(0 5%, 100% 5%, 100% 8%, 0 8%); } 25% { transform: translate(2px, -3px); clip-path: polygon(0 60%, 100% 60%, 100% 62%, 0 62%); } 45% { transform: translate(-2px, -3px); clip-path: polygon(0 33%, 100% 33%, 100% 35%, 0 35%); } 65% { transform: translate(2px, 3px); opacity: 1; } 85%, 100% { transform: translate(0); opacity: 0; } }
+        .cutie-float-1 { top: 10%; left: 5%; --size: 150px; --opacity: 0.15; }
+        .cutie-float-2 { bottom: 15%; right: 8%; --size: 100px; --opacity: 0.2; }
+        .cutie-float-3 { top: 40%; left: 20%; --size: 80px; --opacity: 0.1; --initial-rotate: 90deg; }
+        .cutie-float-4 { bottom: 5%; left: 15%; --size: 120px; --opacity: 0.18; }
+        .cutie-float-5 { top: 25%; right: 2%; --size: 90px; --opacity: 0.25; --initial-rotate: -45deg; }
+        .sprungles-float-1 { top: 55%; right: 12%; --size: 130px; --opacity: 0.1; }
+        .sprungles-float-2 { bottom: 20%; left: 10%; --size: 110px; --opacity: 0.18; }
+        .sprungles-float-3 { top: 5%; left: 40%; --size: 90px; --opacity: 0.22; }
+        .sprungles-float-4 { bottom: 35%; right: 25%; --size: 70px; --opacity: 0.08; --initial-rotate: 45deg; }
+        .sprungles-float-5 { top: 70%; left: 2%; --size: 105px; --opacity: 0.15; --initial-rotate: -90deg; }
+        
         /* --- Custom Scrollbar --- */
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: var(--color-dark-bg); }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--color-accent-pink), var(--color-accent-purple), var(--color-dark-purple));
-            border-radius: 6px;
-            border: 1px solid rgba(255, 171, 225, 0.5);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #FF00FF, var(--color-accent-pink));
-            box-shadow: 0 0 5px var(--color-highlight-glow);
-        }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--color-accent-pink), var(--color-accent-purple)); border-radius: 6px; border: 1px solid rgba(255, 171, 225, 0.5); }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #FF00FF, var(--color-accent-pink)); box-shadow: 0 0 5px var(--color-highlight-glow); }
 
-        /* --- Container & Layout --- */
-        .main-wrapper { max-width: 1150px; margin: 0 auto; padding: 0 25px; z-index: 100; position: relative; /* Ensure content is above parallax */ }
-
-        /* --- Header / Hero Section --- */
-        .hero {
-            min-height: 95vh; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; text-align: center; padding: 50px 20px;
-            position: relative; overflow: hidden; border-bottom: 2px solid transparent;
-            animation: heroBorderPulse 5s infinite alternate;
-            background: radial-gradient(circle at 50% 50%, rgba(247,37,133,0.05) 0%, transparent 70%);
-            z-index: 50; /* Ensure hero content is above general parallax */
-        }
-
-        /* Hero Particles - New */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 70% 30%, rgba(114,9,183,0.1) 0%, transparent 60%),
-                        radial-gradient(circle at 20% 80%, rgba(247,37,133,0.1) 0%, transparent 60%);
-            animation: heroBgShift 25s linear infinite alternate;
-            pointer-events: none;
-            z-index: 1;
-        }
-        @keyframes heroBgShift {
-            0% { background-position: 0% 0%, 0% 0%; }
-            100% { background-position: 100% 100%, 100% 100%; }
-        }
-
-        @keyframes heroBorderPulse {
-            0% { border-image: linear-gradient(90deg, transparent, rgba(247,37,133,0.2), transparent) 1; }
-            50% { border-image: linear-gradient(90deg, transparent, rgba(247,37,133,0.8), transparent) 1; }
-            100% { border-image: linear-gradient(90deg, transparent, rgba(247,37,133,0.2), transparent) 1; }
-        }
-        .hero-title {
-            font-family: 'Orbitron', sans-serif; /* Changed font */
-            font-size: clamp(3rem, 9vw, 6.5rem); color: #FFFFFF; margin-bottom: 10px;
-            letter-spacing: 1.5px; font-weight: normal; position: relative;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 20px rgba(247,37,133,0.9),
-                         0 0 35px rgba(247,37,133,0.7), 0 0 50px rgba(255,0,255,0.5);
-            line-height: 1.05;
-            z-index: 2; /* Above particles */
-        }
-        .hero-title .name-part {
-            display: inline-block; opacity: 0; transform: translateY(25px) scale(0.95);
-            animation: revealNameEnhanced 0.6s cubic-bezier(0.2,0.8,0.2,1) forwards;
-        }
+        /* --- Core Layout & Hero Section --- */
+        .main-wrapper { max-width: 1150px; margin: 0 auto; padding: 0 25px; z-index: 100; position: relative; }
+        .hero { min-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 50px 20px; position: relative; overflow: hidden; border-bottom: 2px solid transparent; animation: heroBorderPulse 5s infinite alternate; z-index: 50; }
+        .hero-title { font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 9vw, 6.5rem); color: #FFFFFF; margin-bottom: 10px; letter-spacing: 1.5px; font-weight: normal; position: relative; text-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 20px rgba(247,37,133,0.9), 0 0 35px rgba(247,37,133,0.7), 0 0 50px rgba(255,0,255,.5); line-height: 1.05; z-index: 2; }
+        .hero-title .name-part { display: inline-block; opacity: 0; transform: translateY(25px) scale(0.95); animation: revealNameEnhanced 0.6s cubic-bezier(0.2,0.8,0.2,1) forwards; }
         .hero-title .name-part:nth-child(1) { animation-delay: 0.3s; }
         .hero-title .name-part:nth-child(2) { animation-delay: 0.5s; }
         .hero-title .name-part:nth-child(3) { animation-delay: 0.7s; }
         @keyframes revealNameEnhanced { to { opacity: 1; transform: translateY(0) scale(1); } }
-        .glitch-text {
-            position: relative; color: #F72585;
-            animation: glitch-animation-super 3.5s infinite steps(10, end) alternate;
-            display: inline-block; will-change: transform, text-shadow, clip-path;
+        
+        /* --- Hero Name Scanline Effect --- */
+        .animated-name-part { position: relative; overflow: hidden; }
+        .animated-name-part::after {
+            content: ''; position: absolute; top: -100%; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 171, 225, 0.5) 49.5%, var(--color-highlight-glow) 50%, rgba(255, 171, 225, 0.5) 50.5%, transparent 100%);
+            animation: scan-through 4.5s cubic-bezier(0.77, 0, 0.18, 1) infinite;
         }
-        @keyframes glitch-animation-super {
-            0%,100% { text-shadow:3px 0 #7209B7,-3px 0 #A020F0;transform:skew(-7deg) scaleX(1.02);clip-path:inset(0% 0% 0% 0%);}
-            10% {text-shadow:-3px 0 #7209B7,3px 0 #A020F0;transform:skew(0deg);clip-path:inset(15% 0% 65% 0%);}
-            20% {text-shadow:3px -2px #7209B7,-3px 2px #A020F0;transform:skew(7deg) translateX(3px) scaleY(.98);clip-path:inset(35% 0% 35% 0%);}
-            50% {text-shadow:2px 0 #A020F0,-2px 0 #7209B7;transform:skew(0deg);clip-path:inset(0% 0% 0% 0%);}
-            80% {text-shadow:-3px 2px #A020F0,3px -2px #7209B7;transform:skew(-5deg) translateX(-2px);clip-path:inset(50% 0% 15% 0%);}
-        }
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 3.5vw, 1.7rem); color: #D8C8FF; margin-top: 25px;
-            max-width: 850px; letter-spacing: 1px; line-height: 1.65;
-            text-shadow: 0 0 10px rgba(180,112,253,0.7); opacity: 0;
-            animation: fadeInSubtitleEnhanced 1.2s 1.2s cubic-bezier(0.2,0.8,0.2,1) forwards;
-            z-index: 2; /* Above particles */
-        }
+        .hero-title .name-part:nth-child(1)::after { animation-delay: 0.8s; }
+        .hero-title .name-part:nth-child(3)::after { animation-delay: 1.5s; }
+        @keyframes scan-through { 0% { top: -100%; } 100% { top: 100%; } }
+
+        .glitch-text { position: relative; color: #F72585; animation: glitch-animation-super 3.5s infinite steps(10, end) alternate; display: inline-block; will-change: transform, text-shadow, clip-path; }
+        @keyframes glitch-animation-super { 0%,100%{text-shadow:3px 0 #7209B7,-3px 0 #A020F0;transform:skew(-7deg) scaleX(1.02);clip-path:inset(0)} 10%{text-shadow:-3px 0 #7209B7,3px 0 #A020F0;transform:skew(0);clip-path:inset(15% 0 65%)} 20%{text-shadow:3px -2px #7209B7,-3px 2px #A020F0;transform:skew(7deg) translateX(3px) scaleY(.98);clip-path:inset(35% 0)} 50%{text-shadow:2px 0 #A020F0,-2px 0 #7209B7;transform:skew(0);clip-path:inset(0)} 80%{text-shadow:-3px 2px #A020F0,3px -2px #7209B7;transform:skew(-5deg) translateX(-2px);clip-path:inset(50% 0 15%)}}
+        .hero-subtitle { font-size: clamp(1.1rem, 3.5vw, 1.7rem); color: #D8C8FF; margin-top: 25px; max-width: 850px; letter-spacing: 1px; line-height: 1.65; text-shadow: 0 0 10px rgba(180,112,253,0.7); opacity: 0; animation: fadeInSubtitleEnhanced 1.2s 1.2s cubic-bezier(0.2,0.8,0.2,1) forwards; z-index: 2; }
         @keyframes fadeInSubtitleEnhanced { to { opacity: 1; transform: translateY(-5px); } }
-        .scroll-down-indicator {
-            position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
-            color: #F72585; font-size: 2.8rem; animation: bouncePulseUpDown 2.8s infinite; opacity: 0.6;
-            z-index: 2; /* Above particles */
-        }
+        .scroll-down-indicator { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); color: #F72585; font-size: 2.8rem; animation: bouncePulseUpDown 2.8s infinite; opacity: 0.6; z-index: 2; }
         .scroll-down-indicator span { display: inline-block; }
-        @keyframes bouncePulseUpDown {
-            0%,100% { transform:translateX(-50%) translateY(0) scale(1); opacity:0.6; }
-            50% { transform:translateX(-50%) translateY(-15px) scale(1.15); opacity:1; }
-        }
+        @keyframes bouncePulseUpDown { 0%,100% { transform:translateX(-50%) translateY(0) scale(1); opacity:0.6; } 50% { transform:translateX(-50%) translateY(-15px) scale(1.15); opacity:1; } }
 
-        /* --- Navigation Bar --- */
-        .navbar {
-            position: sticky; top: 0; width: 100%;
-            background-color: rgba(13,7,26,0.75);
-            backdrop-filter: blur(15px) saturate(180%) brightness(0.9);
-            z-index: 1000; padding: 10px 0;
-            box-shadow: 0 4px 20px rgba(247,37,133,0.3);
-            border-bottom: 1px solid rgba(247,37,133,0.5);
-            transition: background-color 0.3s ease;
-        }
-        .navbar.scrolled { background-color: rgba(13,7,26,0.9); }
-        .nav-links { display: flex; justify-content: center; align-items: center; list-style: none; }
-        .nav-links li { margin: 0 20px; }
-        .nav-links a {
-            color: #E0C3FC; text-decoration: none; font-size: 1.15em;
-            font-weight: bold; padding: 12px 15px;
-            position: relative; transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;
-            letter-spacing: 0.7px; display: inline-block;
-        }
-        .nav-links a:hover { transform: translateY(-2px); }
-        .nav-links a::before, .nav-links a::after {
-            content: ''; position: absolute; height: 2px; background-color: #F72585;
-            transition: width 0.35s cubic-bezier(0.1,0.7,0.3,1); opacity: 0;
-        }
-        .nav-links a::before { top: 0; left: 50%; width: 0; transform: translateX(-50%); }
-        .nav-links a::after { bottom: 0; left: 50%; width: 0; transform: translateX(-50%); }
-        .nav-links a:hover, .nav-links a.active {
-            color: #FFFFFF; text-shadow: 0 0 7px #F72585, 0 0 15px #FF00FF;
-        }
-        .nav-links a:hover::before, .nav-links a.active::before,
-        .nav-links a:hover::after, .nav-links a.active::after { width: 70%; opacity: 1; }
+        /* --- Navigation, Content Sections, Cards, etc. --- */
+        .nav-links{display:flex;justify-content:center;align-items:center;list-style:none}.nav-links li{margin:0 20px}.nav-links a{color:#E0C3FC;text-decoration:none;font-size:1.15em;font-weight:700;padding:12px 15px;position:relative;transition:color .3s ease,text-shadow .3s ease,transform .2s ease;letter-spacing:.7px;display:inline-block}.nav-links a:hover{transform:translateY(-2px)}.nav-links a::after,.nav-links a::before{content:'';position:absolute;height:2px;background-color:#F72585;transition:width .35s cubic-bezier(.1,.7,.3,1);opacity:0}.nav-links a::before{top:0;left:50%;width:0;transform:translateX(-50%)}.nav-links a::after{bottom:0;left:50%;width:0;transform:translateX(-50%)}.nav-links a.active,.nav-links a:hover{color:#fff;text-shadow:0 0 7px #F72585,0 0 15px #f0f}.nav-links a.active::after,.nav-links a.active::before,.nav-links a:hover::after,.nav-links a:hover::before{width:70%;opacity:1}
+        .content-section{padding:100px 20px 80px;margin-bottom:60px;opacity:0;transform:translateY(50px) scale(.97);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);position:relative;z-index:100}.content-section.visible{opacity:1;transform:translateY(0) scale(1)}.content-section::after,.content-section::before{content:'';position:absolute;width:25px;height:25px;border-color:rgba(247,37,133,.3);border-style:solid;transition:all .5s ease;opacity:0}.content-section.visible::before{top:20px;left:0;border-width:3px 0 0 3px;opacity:1}.content-section.visible::after{bottom:20px;right:0;border-width:0 3px 3px 0;opacity:1}.section-title{font-family:'Orbitron',sans-serif;font-size:3.2em;color:var(--color-accent-pink);text-align:center;margin-bottom:70px;text-transform:uppercase;letter-spacing:3.5px;position:relative;padding-bottom:20px}.section-title-text{display:inline-block;white-space:pre;position:relative}.section-title .cursor{display:none;animation:blinkCursor 1s infinite steps(1,end);color:#FFABE1}.section-title::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:0;height:4px;background:linear-gradient(90deg,var(--color-dark-purple),var(--color-accent-pink),var(--color-highlight-glow),var(--color-accent-pink),var(--color-dark-purple));border-radius:2px;transition:width 1s .3s cubic-bezier(.2,.8,.2,1)}.content-section.visible .section-title::after{width:120px}.section-content{max-width:900px;margin:0 auto;text-align:left}.section-content p{margin-bottom:25px;font-size:1.18em;color:#E0D8FF}
+        .doc-content-pane strong.highlight,.repo-card strong.highlight,.section-content strong.highlight,.skill-card strong.highlight{color:var(--color-accent-pink);font-weight:700;text-shadow:0 0 5px var(--color-shadow-accent)}.doc-content-pane a,.repo-card a,.section-content a{font-weight:700;border-bottom:2px solid;border-image-slice:1;border-image-source:linear-gradient(to right,var(--color-highlight-glow),var(--color-accent-pink),#f0f);padding-bottom:2px;transition:all .2s ease}.doc-content-pane a:hover,.repo-card a:hover,.section-content a:hover{color:#fff;border-image-source:linear-gradient(to right,var(--color-accent-pink),#f0f,var(--color-highlight-glow));text-shadow:0 0 10px var(--color-accent-pink)}
+        .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;margin-top:50px}.repo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;padding:10px 0;margin-top:30px}.repo-card,.skill-card{background:var(--color-card-bg);-webkit-backdrop-filter:blur(8px) brightness(1.1);backdrop-filter:blur(8px) brightness(1.1);border-radius:12px;border:1px solid var(--color-card-border);box-shadow:0 5px 25px var(--color-shadow-base),inset 0 0 15px rgba(247,37,133,.1);transition:all .35s ease;position:relative;overflow:hidden}.repo-card::after,.skill-card::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle 200px at var(--mouse-x) var(--mouse-y),rgba(255,171,225,.15),transparent 80%);pointer-events:none;opacity:0;transition:opacity .5s ease;z-index:2}.repo-card:hover::after,.skill-card:hover::after{opacity:1}.repo-card:hover,.skill-card:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 10px 35px var(--color-shadow-accent),inset 0 0 20px rgba(114,9,183,.2);border-color:rgba(247,37,133,.6)}.repo-card>*,.skill-card>*{position:relative;z-index:1}.skill-card{padding:35px}.skill-card h3{color:#BE93FD;font-size:1.8em;margin-bottom:22px;border-bottom:2px solid;border-image-slice:1;border-image-source:linear-gradient(to right,var(--color-dark-purple),var(--color-accent-pink));padding-bottom:12px;letter-spacing:.8px}.skill-card h3 .skill-icon{font-size:.9em;margin-right:10px;color:var(--color-accent-pink);vertical-align:middle;transition:transform .3s ease}.skill-card:hover h3 .skill-icon{transform:rotate(15deg) scale(1.1)}.skill-card ul{list-style:none;padding-left:0}.skill-card ul li{margin-bottom:14px;padding-left:28px;position:relative;font-size:1.08em;color:#E0D8FF}.skill-card ul li::before{content:'»»';position:absolute;left:0;top:0;color:var(--color-accent-pink);font-weight:700;transition:transform .3s ease,color .3s ease}.skill-card ul li:hover::before{transform:translateX(6px) scale(1.1);color:var(--color-highlight-glow)}.repo-card{padding:25px;display:flex;flex-direction:column;align-items:center;text-align:center}.repo-icon{font-size:2.8em;color:#BE93FD;margin-bottom:15px;transition:color .3s ease,transform .3s ease;text-shadow:0 0 10px rgba(180,112,253,.7)}.repo-card:hover .repo-icon{color:var(--color-accent-pink);transform:rotate(5deg) scale(1.1);text-shadow:0 0 15px var(--color-shadow-accent)}.repo-title{font-family:'Orbitron',sans-serif;font-size:1.3em;color:var(--color-accent-pink);margin-bottom:10px;letter-spacing:.03em;text-shadow:0 0 8px var(--color-shadow-accent)}.repo-description{font-size:.9em;color:rgba(255,255,255,.7);margin-bottom:15px;line-height:1.4;max-width:250px}.repo-link{color:#E0D8FF;text-decoration:none;font-weight:500;font-size:1.05em;padding:8px 15px;border:1px solid var(--color-accent-purple);border-radius:5px;transition:all .3s ease;word-break:break-all;display:inline-block}.repo-link:hover{background-color:var(--color-accent-purple);color:#fff;text-shadow:0 0 10px #fff;box-shadow:0 0 15px var(--color-accent-purple);border-color:var(--color-accent-pink)}
+        .list-item-card{background-color:rgba(25,15,45,.75);padding:25px 30px;margin-bottom:28px;border-radius:10px;border-left:6px solid;border-image-slice:1;border-image-source:linear-gradient(to bottom,var(--color-accent-pink),var(--color-dark-purple));transition:background-color .3s ease,transform .3s ease,box-shadow .3s ease}.list-item-card:hover{background-color:rgba(35,22,60,.9);transform:translateX(8px) scale(1.01);box-shadow:8px 8px 20px rgba(13,7,26,.6)}.list-item-card strong{color:#BE93FD;font-size:1.15em;display:block;margin-bottom:5px}.copy-btn{background:0 0;border:1px solid var(--color-accent-purple);color:var(--color-accent-purple);cursor:pointer;border-radius:5px;padding:2px 6px;margin-left:10px;font-size:.9em;transition:all .2s ease;vertical-align:middle}.copy-btn:hover{background:var(--color-accent-purple);color:var(--color-dark-bg);transform:scale(1.1)}.copy-btn.copied{background:var(--color-accent-pink);border-color:var(--color-accent-pink);color:var(--color-dark-bg)}
+        .doc-tabs{display:flex;justify-content:center;margin-bottom:40px;flex-wrap:wrap}.doc-tabs a.doc-tab-link,.doc-tabs .doc-tab-button{background-color:rgba(25,15,45,.6);color:#BE93FD;border:1px solid rgba(114,9,183,.5);padding:12px 25px;margin:5px;cursor:pointer;font-family:'FreeSerif',serif;font-size:1.1em;font-weight:700;border-radius:8px;transition:all .3s ease;display:flex;align-items:center;text-decoration:none}.doc-tabs a.doc-tab-link .tab-icon,.doc-tabs .doc-tab-button .tab-icon{margin-right:8px;font-size:1.2em}.doc-tabs a.doc-tab-link:hover,.doc-tabs .doc-tab-button.active,.doc-tabs .doc-tab-button:hover{background-color:var(--color-accent-pink);color:#0D071A;border-color:var(--color-highlight-glow);box-shadow:0 0 15px var(--color-shadow-accent);transform:translateY(-3px)}.doc-tabs a.doc-tab-link:hover .tab-icon,.doc-tabs .doc-tab-button.active .tab-icon{color:#0D071A}.doc-content-wrapper{background-color:rgba(20,12,38,.75);padding:30px 35px;border-radius:10px;border:1px solid rgba(114,9,183,.3);box-shadow:0 5px 20px rgba(13,7,26,.4)}.doc-content-pane{display:none;animation:fadeInDocContent .5s ease-out}.doc-content-pane.active{display:block}@keyframes fadeInDocContent{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}.doc-content-pane h4{color:#BE93FD;font-size:1.6em;margin-top:25px;margin-bottom:15px;padding-bottom:8px;border-bottom:1px dashed rgba(247,37,133,.5)}.doc-content-pane h4:first-child{margin-top:0}.doc-content-pane .doc-icon{margin-right:10px;color:var(--color-accent-pink)}.doc-content-pane p{margin-bottom:18px;font-size:1.1em;line-height:1.7}.doc-content-pane ol li{margin-bottom:15px;padding-left:30px;position:relative}.doc-content-pane ol li strong{color:#FFABE1;display:block;margin-bottom:3px}.doc-content-pane ol li strong.upcoming-phase{color:#BE93FD}.doc-content-pane ol li .doc-icon{position:absolute;left:0;top:2px}.doc-link-button{display:inline-block;background-color:var(--color-dark-purple);color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:700;margin-top:10px;transition:background-color .3s ease,transform .2s ease}.doc-link-button:hover{background-color:var(--color-accent-pink);transform:scale(1.05);color:#0D071A}
+        a{color:#FFABE1;text-decoration:none;transition:color .3s ease,text-shadow .3s ease}a:hover{color:#fff;text-shadow:0 0 8px var(--color-accent-pink)}
+        .footer{text-align:center;padding:40px 20px;background:linear-gradient(to top,var(--color-dark-bg),rgba(18,10,32,.8) 50%,rgba(26,15,45,.7));color:var(--color-light-text);font-size:1em;border-top:3px solid;border-image-slice:1;border-image-source:linear-gradient(90deg,var(--color-dark-bg),var(--color-accent-pink) 30%,var(--color-accent-pink) 70%,var(--color-dark-bg));letter-spacing:.7px}.footer p{margin:0}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}.modal-overlay.visible{opacity:1;visibility:visible}.modal-content{position:absolute;background:var(--color-dark-bg);border:2px solid var(--color-accent-purple);border-radius:15px;max-width:600px;width:90%;box-shadow:0 0 25px var(--color-shadow-accent),inset 0 0 10px var(--color-light-text);transform:scale(.8);opacity:0;animation:modalPulseBorder 2s infinite alternate;overflow:hidden;max-height:80vh}.modal-overlay.visible .modal-content{transform:scale(1);opacity:1}@keyframes modalPulseBorder{0%{border-color:var(--color-accent-purple);box-shadow:0 0 25px var(--color-shadow-accent),inset 0 0 10px var(--color-light-text)}100%{border-color:var(--color-accent-pink);box-shadow:0 0 35px var(--color-highlight-glow),inset 0 0 15px var(--color-light-text)}}.modal-header{background:linear-gradient(rgba(255,255,255,.05),rgba(255,255,255,0));padding:10px 20px;cursor:grab;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-card-border);user-select:none}.modal-header:active{cursor:grabbing}.modal-title{margin:0;text-align:left;font-family:'Orbitron',sans-serif;color:var(--color-accent-pink);font-size:1.8em;text-shadow:0 0 10px var(--color-shadow-accent)}.modal-controls{font-family:sans-serif;opacity:.5}.modal-message{color:var(--color-light-text);font-size:1.1em;line-height:1.6;padding:20px 40px 30px;text-align:left;max-height:calc(80vh - 120px);overflow-y:auto}.modal-message h4{font-family:'Orbitron',sans-serif;color:var(--color-highlight-glow);font-size:1.3em;margin-top:20px;margin-bottom:10px;padding-bottom:5px;border-bottom:1px dashed var(--color-accent-purple)}.modal-message h4:first-child{margin-top:0}.modal-message p{margin-bottom:12px;font-size:1em}.modal-close-button{background:linear-gradient(90deg,var(--color-dark-purple),var(--color-accent-purple));color:#fff;font-size:1.1em;font-weight:700;padding:12px 25px;border:none;border-radius:8px;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 10px rgba(0,0,0,.4);letter-spacing:.5px;margin:0 40px 20px}.modal-close-button:hover{background:linear-gradient(90deg,var(--color-accent-pink),var(--color-dark-purple));transform:translateY(-2px) scale(1.02);box-shadow:0 6px 15px var(--color-shadow-accent);color:#0D071A}
+        .page-utility-button{display:block;margin:40px auto 20px;padding:15px 30px;background:linear-gradient(90deg,var(--color-accent-pink),var(--color-accent-purple));color:#fff;font-size:1.15em;font-weight:700;text-decoration:none;border:none;border-radius:8px;cursor:pointer;box-shadow:0 5px 15px rgba(247,37,133,.4);transition:all .3s ease;width:-moz-fit-content;width:fit-content}.page-utility-button:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(247,37,133,.6);background:linear-gradient(90deg,#f0f,var(--color-accent-pink))}#fixed-sprungles-button{position:fixed;top:20px;right:20px;z-index:1001;background:linear-gradient(135deg,var(--color-accent-pink),var(--color-accent-purple));color:var(--color-light-text);font-family:'Orbitron',sans-serif;font-size:.9em;font-weight:700;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;box-shadow:0 3px 10px var(--color-shadow-accent);transition:all .3s ease;text-shadow:0 1px 3px rgba(0,0,0,.3)}#fixed-sprungles-button:focus,#fixed-sprungles-button:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 5px 15px var(--color-shadow-accent);background:linear-gradient(135deg,var(--color-highlight-glow),var(--color-accent-pink));color:var(--color-dark-bg)}
 
-        /* --- Content Sections --- */
-        .content-section {
-            padding: 100px 20px 80px; margin-bottom: 60px; opacity: 0;
-            transform: translateY(50px) scale(0.97);
-            transition: opacity 0.8s cubic-bezier(0.2,0.8,0.2,1), transform 0.8s cubic-bezier(0.2,0.8,0.2,1);
-            position: relative;
-            z-index: 100; /* Ensure content sections are above floating characters */
-        }
-        .content-section.visible { opacity: 1; transform: translateY(0) scale(1); }
-        .content-section::before, .content-section::after {
-            content: ''; position: absolute; width: 25px; height: 25px;
-            border-color: rgba(247,37,133,0.3); border-style: solid;
-            transition: all 0.5s ease; opacity: 0;
-        }
-        .content-section.visible::before { top: 20px; left: 0px; border-width: 3px 0 0 3px; opacity: 1; }
-        .content-section.visible::after { bottom: 20px; right: 0px; border-width: 0 3px 3px 0; opacity: 1;}
-        @keyframes blinkCursor { 0%,100% { opacity:1; } 50% { opacity:0; } }
-        .section-title-text {
-            display: inline-block; overflow: hidden; white-space: nowrap; position: relative;
-        }
-        .section-title-text span {
-            display: inline-block; opacity: 0; transform: translateY(100%);
-            animation: charReveal 0.5s cubic-bezier(0.2,0.8,0.2,1) forwards;
-        }
-        @keyframes charReveal { to { opacity: 1; transform: translateY(0); } }
-        .section-title {
-            font-family: 'Orbitron', sans-serif; /* Changed font */
-            font-size: 3.2em; color: #F72585; text-align: center; margin-bottom: 70px;
-            text-transform: uppercase; letter-spacing: 3.5px; position: relative; padding-bottom: 20px;
-        }
-        .section-title .cursor { display:inline-block; animation:blinkCursor 1s infinite steps(1,end); color:#FFABE1; }
-        .section-title::after {
-            content: ''; position: absolute; left: 50%; transform: translateX(-50%); bottom: 0;
-            width: 0; height: 4px;
-            background: linear-gradient(90deg,#7209B7,#F72585,#BE93FD,#F72585,#7209B7);
-            border-radius: 2px; transition: width 1s 0.3s cubic-bezier(0.2,0.8,0.2,1);
-        }
-        .content-section.visible .section-title::after { width: 120px; }
-        .section-content { max-width: 900px; margin: 0 auto; text-align: left; }
-        .section-content p { margin-bottom: 25px; font-size: 1.18em; color: #E0D8FF; }
-        .section-content strong.highlight, .skill-card strong.highlight, .doc-content-pane strong.highlight, .repo-card strong.highlight { /* Added .repo-card */
-            color: #F72585; font-weight: bold; text-shadow: 0 0 5px rgba(247,37,133,0.7);
-        }
-        .section-content a, .doc-content-pane a, .repo-card a { /* Added .repo-card */
-            font-weight: bold; border-bottom: 2px solid; border-image-slice: 1;
-            border-image-source: linear-gradient(to right,#FFABE1,#F72585,#FF00FF);
-            padding-bottom: 2px; transition: border-image-source 0.3s ease,text-shadow 0.3s ease,color .2s ease;
-        }
-        .section-content a:hover, .doc-content-pane a:hover, .repo-card a:hover { /* Added .repo-card */
-            color: #FFFFFF;
-            border-image-source: linear-gradient(to right,#F72585,#FF00FF,#FFABE1);
-            text-shadow: 0 0 10px #F72585;
-        }
-
-        /* Skills Grid */
-        .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:40px; margin-top:50px; }
-        .skill-card {
-            background: rgba(20,12,38,0.65); backdrop-filter: blur(8px) brightness(1.1);
-            padding: 35px; border-radius: 12px; border: 1px solid rgba(114,9,183,0.4);
-            box-shadow: 0 5px 25px rgba(13,7,26,0.5), inset 0 0 15px rgba(247,37,133,0.1);
-            transition: transform .35s ease,box-shadow .35s ease,border-color .35s ease;
-            position: relative; overflow: hidden;
-        }
-        .skill-card::before {
-            content: ''; position: absolute; top:0;left:0;right:0;bottom:0;
-            background-image: linear-gradient(rgba(247,37,133,.03) .5px,transparent .5px),linear-gradient(90deg,rgba(247,37,133,.03) .5px,transparent .5px);
-            background-size: 15px 15px; opacity: 0; transition: opacity .5s ease; z-index: 0;
-        }
-        .skill-card:hover::before { opacity: 1; }
-        .skill-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 10px 35px rgba(247,37,133,.25),inset 0 0 20px rgba(114,9,183,.2);
-            border-color: rgba(247,37,133,.6);
-        }
-        .skill-card > * { position:relative; z-index:1; }
-        .skill-card h3 {
-            color: #BE93FD; font-size: 1.8em; margin-bottom: 22px; border-bottom: 2px solid;
-            border-image-slice: 1; border-image-source: linear-gradient(to right,#7209B7,#F72585);
-            padding-bottom: 12px; letter-spacing: .8px;
-        }
-        .skill-card h3 .skill-icon { font-size:.9em; margin-right:10px; color:#F72585; vertical-align:middle; transition:transform .3s ease; }
-        .skill-card:hover h3 .skill-icon { transform:rotate(15deg) scale(1.1); }
-        .skill-card ul { list-style:none; padding-left:0; }
-        .skill-card ul li { margin-bottom:14px; padding-left:28px; position:relative; font-size:1.08em; color:#E0D8FF; }
-        .skill-card ul li::before {
-            content:'»»'; position:absolute; left:0; top:0px; color:#F72585; font-weight:bold;
-            transition: transform .3s ease,color .3s ease;
-        }
-        .skill-card ul li:hover::before { transform:translateX(6px) scale(1.1); color:#FFABE1; }
-
-        /* Projects & Contact List */
-        .list-item-card {
-            background-color: rgba(25,15,45,.75); padding:25px 30px; margin-bottom:28px;
-            border-radius:10px; border-left:6px solid; border-image-slice:1;
-            border-image-source: linear-gradient(to bottom,#F72585,#7209B7);
-            transition: background-color .3s ease,transform .3s ease,box-shadow .3s ease;
-        }
-        .list-item-card:hover {
-            background-color: rgba(35,22,60,.9); transform:translateX(8px) scale(1.01);
-            box-shadow: 8px 8px 20px rgba(13,7,26,.6);
-        }
-        .list-item-card strong { color:#BE93FD; font-size:1.15em; display:block; margin-bottom:5px; }
-
-
-        /* --- Repositories Section Styles --- */
-        .repo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 10px 0;
-        }
-
-        .repo-card {
-            background-color: rgba(25, 15, 45, 0.8);
-            border: 1px solid rgba(114, 9, 183, 0.4);
-            border-radius: 12px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            transform: scale(0.95); /* Initial scale for entry animation */
-            opacity: 0; /* Initial opacity for entry animation */
-        }
-
-        .repo-card:nth-child(1) { transition-delay: 0.1s; }
-        .repo-card:nth-child(2) { transition-delay: 0.2s; }
-        .repo-card:nth-child(3) { transition-delay: 0.3s; }
-        .repo-card:nth-child(4) { transition-delay: 0.4s; }
-
-        .content-section.visible .repo-card {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .repo-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #7209B7, #F72585);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease-out;
-        }
-
-        .repo-card:hover::before { transform: scaleX(1); }
-
-        .repo-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(247, 37, 133, 0.25), 0 0 15px rgba(114, 9, 183, 0.2);
-            border-color: rgba(247, 37, 133, 0.6);
-        }
-
-        .repo-icon {
-            font-size: 2.8em;
-            color: #BE93FD;
-            margin-bottom: 15px;
-            transition: color 0.3s ease, transform 0.3s ease;
-            text-shadow: 0 0 10px rgba(180, 112, 253, 0.7);
-        }
-
-        .repo-card:hover .repo-icon {
-            color: #F72585;
-            transform: rotate(5deg) scale(1.1);
-            text-shadow: 0 0 15px rgba(247, 37, 133, 0.7);
-        }
-
-        .repo-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
-            color: #F72585;
-            margin-bottom: 10px;
-            letter-spacing: 0.03em;
-            text-shadow: 0 0 8px rgba(247, 37, 133, 0.7);
-        }
-
-        .repo-description {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 15px;
-            line-height: 1.4;
-            max-width: 250px;
-        }
-
-        .repo-link {
-            color: #E0D8FF;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.05em;
-            padding: 8px 15px;
-            border: 1px solid #A020F0;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            word-break: break-all;
-            display: inline-block;
-        }
-
-        .repo-link:hover {
-            background-color: #A020F0;
-            color: #FFFFFF;
-            text-shadow: 0 0 10px #FFFFFF;
-            box-shadow: 0 0 15px #A020F0;
-            border-color: #F72585;
-        }
-
-
-        /* --- Documentation Section Styles --- */
-        .doc-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        /* Combined styles for both buttons and links for consistency */
-        .doc-tabs .doc-tab-button, .doc-tabs a.doc-tab-link {
-            background-color: rgba(25,15,45,0.6);
-            color: #BE93FD;
-            border: 1px solid rgba(114,9,183,0.5);
-            padding: 12px 25px;
-            margin: 5px;
-            cursor: pointer;
-            font-family: 'FreeSerif', serif;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            text-decoration: none; /* For the link version */
-        }
-        .doc-tabs .doc-tab-button .tab-icon, .doc-tabs a.doc-tab-link .tab-icon { margin-right: 8px; font-size: 1.2em; }
-
-        .doc-tabs .doc-tab-button:hover, .doc-tabs .doc-tab-button.active,
-        .doc-tabs a.doc-tab-link:hover { /* Hover for link too */
-            background-color: #F72585;
-            color: #0D071A;
-            border-color: #FFABE1;
-            box-shadow: 0 0 15px rgba(247,37,133,0.5);
-            transform: translateY(-3px);
-        }
-        .doc-tabs .doc-tab-button.active .tab-icon, .doc-tabs a.doc-tab-link:hover .tab-icon { color: #0D071A; }
-
-
-        .doc-content-wrapper {
-            background-color: rgba(20,12,38,0.75);
-            padding: 30px 35px;
-            border-radius: 10px;
-            border: 1px solid rgba(114,9,183,0.3);
-            box-shadow: 0 5px 20px rgba(13,7,26,0.4);
-        }
-        .doc-content-pane {
-            display: none;
-            animation: fadeInDocContent 0.5s ease-out;
-        }
-        .doc-content-pane.active { display: block; }
-        @keyframes fadeInDocContent {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .doc-content-pane h4 {
-            color: #BE93FD;
-            font-size: 1.6em;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed rgba(247,37,133,0.5);
-        }
-        .doc-content-pane h4:first-child { margin-top: 0; }
-        .doc-content-pane .doc-icon { margin-right: 10px; color: #F72585; }
-        .doc-content-pane p {
-            margin-bottom: 18px;
-            font-size: 1.1em;
-            line-height: 1.7;
-        }
-        .doc-content-pane ol li {
-            margin-bottom: 15px;
-            padding-left: 30px; /* Space for the icon */
-            position: relative;
-        }
-        .doc-content-pane ol li strong {
-            color: #FFABE1; /* Default for current/concluded phase titles */
-            display: block;
-            margin-bottom: 3px;
-        }
-        .doc-content-pane ol li strong.upcoming-phase { /* Specific class or direct style for upcoming */
-            color: #BE93FD; /* Color for upcoming phases */
-        }
-        .doc-content-pane ol li .doc-icon { /* Ensure icon is positioned correctly */
-            position: absolute;
-            left: 0;
-            top: 2px; /* Adjust as needed for vertical alignment */
-        }
-
-        .doc-link-button {
-            display: inline-block;
-            background-color: #7209B7;
-            color: #FFFFFF;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .doc-link-button:hover {
-            background-color: #F72585;
-            transform: scale(1.05);
-            color: #0D071A;
-        }
-
-
-        /* Global Links */
-        a { color:#FFABE1; text-decoration:none; transition:color .3s ease,text-shadow .3s ease; }
-        a:hover { color:#FFFFFF; text-shadow:0 0 8px #F72585; }
-
-        /* --- Footer --- */
-        .footer {
-            text-align:center; padding:60px 20px;
-            background:linear-gradient(to top,var(--color-dark-bg),rgba(18,10,32,0.8) 50%,rgba(26,15,45,0.7));
-            color:var(--color-light-text); font-size:1em; border-top:3px solid; border-image-slice:1;
-            border-image-source:linear-gradient(90deg,var(--color-dark-bg),var(--color-accent-pink) 30%,var(--color-accent-pink) 70%,var(--color-dark-bg));
-            letter-spacing:.7px;
-        }
-        .footer p { margin:0; }
-
-        /* --- Custom Modal/Popup Styles --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* Dark, slightly transparent overlay */
-            backdrop-filter: blur(8px); /* Blur effect on background */
-            z-index: 2000; /* High z-index to cover everything */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .modal-overlay.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: var(--color-dark-bg);
-            border: 2px solid var(--color-accent-purple);
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 600px; /* Increased max-width for more content */
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 0 25px var(--color-accent-pink), inset 0 0 10px var(--color-light-text);
-            position: relative;
-            transform: scale(0.8); /* Initial scale for bounce effect */
-            opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease; /* Bounce transition */
-            animation: modalPulseBorder 2s infinite alternate; /* Pulsing border */
-            overflow-y: auto; /* Allow vertical scrolling */
-            max-height: 80vh; /* Max height before scrolling */
-        }
-
-        .modal-overlay.visible .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        @keyframes modalPulseBorder {
-            0% { border-color: var(--color-accent-purple); box-shadow: 0 0 25px var(--color-accent-pink), inset 0 0 10px var(--color-light-text); }
-            100% { border-color: var(--color-accent-pink); box-shadow: 0 0 35px var(--color-highlight-glow), inset 0 0 15px var(--color-light-text); }
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--color-accent-pink);
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(247,37,133,0.8);
-        }
-
-        .modal-message {
-            color: var(--color-light-text);
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            text-align: left; /* Align text to left for better readability of structured content */
-        }
-        .modal-message h4 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--color-highlight-glow);
-            font-size: 1.3em;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px dashed var(--color-accent-purple);
-        }
-        .modal-message h4:first-child {
-            margin-top: 0;
-        }
-        .modal-message p {
-            margin-bottom: 12px;
-            font-size: 1em; /* Slightly smaller for sub-paragraphs */
-        }
-
-
-        .modal-close-button {
-            background: linear-gradient(90deg, var(--color-dark-purple), var(--color-accent-purple));
-            color: #FFFFFF;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            letter-spacing: 0.5px;
-            margin-top: 10px; /* Add some space above the close button if content is long */
-        }
-
-        .modal-close-button:hover {
-            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-dark-purple));
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 15px rgba(247,37,133,0.6);
-            color: #0D071A; /* Text changes on hover */
-        }
-
-
-        /* --- Page Utility Button Styles (common for rendering-issue and sprungles-info) --- */
-        .page-utility-button { /* This class is now only for the "Rendering Anomalies" button */
-            display: block;
-            margin: 40px auto 20px auto;
-            padding: 15px 30px;
-            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-accent-purple));
-            color: #FFFFFF;
-            font-size: 1.15em;
-            font-weight: bold;
-            text-decoration: none;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(247,37,133,0.4);
-            transition: all 0.3s ease;
-            width: fit-content;
-        }
-        .page-utility-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(247,37,133,0.6);
-            background: linear-gradient(90deg, #FF00FF, var(--color-accent-pink));
-        }
-
-        /* --- Fixed "Why Sprungles?" Button --- */
-        #fixed-sprungles-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001; /* Above navbar, below modal */
-            background: linear-gradient(135deg, var(--color-accent-pink), var(--color-accent-purple));
-            color: var(--color-light-text);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9em;
-            font-weight: bold;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px; /* More rounded for a fixed "pill" shape */
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(var(--color-shadow-accent), 0.5);
-            transition: all 0.3s ease;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-        #fixed-sprungles-button:hover,
-        #fixed-sprungles-button:focus {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 5px 15px var(--color-shadow-accent);
-            background: linear-gradient(135deg, var(--color-highlight-glow), var(--color-accent-pink));
-            color: var(--color-dark-bg);
-        }
-
-
-        /* --- Responsive Adjustments --- */
-        @media (max-width:768px){
-            body {font-size:16px;} .hero {min-height:85vh;} .section-title {font-size:2.6em;}
-            .nav-links li {margin:0 10px;}
-            .nav-links a {font-size:1.05em; padding:10px 10px;}
-            .skills-grid, .repo-grid {grid-template-columns:1fr; gap:30px;}
-            .skill-card, .repo-card {padding:30px;}
-            .section-content p {font-size:1.12em;}
-            .content-section::before,.content-section::after {width:20px;height:20px;}
-            .doc-tab-button, a.doc-tab-link {font-size: 1em; padding: 10px 15px;}
-            .page-utility-button { font-size: 1em; padding: 12px 25px; margin: 30px auto 15px auto;}
-            #fixed-sprungles-button { font-size: 0.8em; padding: 7px 12px; top: 15px; right: 15px; }
-            .modal-content { padding: 30px; max-height: 75vh; }
-            .modal-title { font-size: 1.5em; }
-            .modal-message { font-size: 1em; }
-            .modal-message h4 { font-size: 1.15em; }
-            .modal-message p { font-size: 0.95em; }
-        }
-        @media (max-width:480px){
-            .hero-title {font-size:clamp(2.4rem,11vw,4rem);}
-            .hero-subtitle {font-size:clamp(1rem,4.5vw,1.3rem);}
-            .section-title {font-size:2.2em;letter-spacing:2.5px;}
-            .nav-links {flex-direction:column;padding:15px 0;} .nav-links li {margin:10px 0;}
-            .skill-card h3, .repo-card h3 {font-size:1.6em;}
-            .list-item-card {padding:20px 25px;}
-            .doc-tabs { flex-direction: column; align-items: stretch;}
-            .doc-tab-button, a.doc-tab-link { margin: 8px 0; }
-            .page-utility-button { font-size: 0.9em; padding: 10px 20px; }
-            #fixed-sprungles-button { font-size: 0.75em; padding: 6px 10px; top: 10px; right: 10px; }
-            .modal-content { padding: 20px; max-height: 70vh; }
-            .modal-title { font-size: 1.3em; }
-            .modal-message { font-size: 0.9em; }
-            .modal-message h4 { font-size: 1.1em; }
-            .modal-message p { font-size: 0.9em; }
-        }
-
+        /* --- New Effects CSS --- */
+        #command-palette-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);z-index:3000;display:flex;justify-content:center;padding-top:15vh;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}#command-palette-overlay:not(.hidden){opacity:1;visibility:visible}#command-palette{width:100%;max-width:600px;background-color:var(--color-dark-bg);border:1px solid var(--color-accent-purple);border-radius:8px;box-shadow:0 10px 40px var(--color-shadow-base);transform:scale(.95);transition:transform .2s ease;overflow:hidden;height:-moz-fit-content;height:fit-content;max-height:50vh}#command-palette-overlay:not(.hidden) #command-palette{transform:scale(1)}.palette-input-wrapper{display:flex;align-items:center;padding:15px;border-bottom:1px solid var(--color-card-border)}.palette-icon{font-size:1.2em;color:var(--color-accent-pink);margin-right:15px}#palette-input{width:100%;background:0 0;border:none;outline:0;color:var(--color-light-text);font-family:'Fira Code',monospace;font-size:1.2em}#palette-results{list-style:none;padding:8px;max-height:calc(50vh - 70px);overflow-y:auto}.palette-result-item{padding:12px 15px;color:var(--color-light-text);border-radius:5px;cursor:pointer;transition:background-color .2s ease;display:flex;justify-content:space-between;align-items:center}.palette-result-item.selected,.palette-result-item:hover{background-color:var(--color-accent-purple);color:var(--color-dark-bg)}.palette-result-item .item-path{font-family:'Orbitron',sans-serif;font-size:1.1em}.palette-result-item .item-action{font-size:.9em;opacity:.7}
+        @keyframes partyTime{0%{filter:hue-rotate(0deg) saturate(1)}100%{filter:hue-rotate(360deg) saturate(1.5)}}
+        #theme-switcher{position:fixed;bottom:20px;right:60px;display:flex;gap:8px;background:rgba(0,0,0,.2);padding:5px;border-radius:15px;z-index:1002}#sound-toggle{position:fixed;bottom:20px;right:20px;font-size:1.5rem;cursor:pointer;opacity:.5;transition:opacity .3s,transform .3s;z-index:1002}#sound-toggle:hover{opacity:1;transform:scale(1.1)}#sound-toggle.muted::after{content:'/';position:absolute;top:-2px;left:4px;color:var(--color-accent-pink);font-weight:700;font-size:1.8rem;transform:rotate(15deg)}.theme-button{width:20px;height:20px;border-radius:50%;border:2px solid hsla(0,0%,100%,.3);cursor:pointer;transition:transform .2s,border-color .2s}.theme-button:hover{transform:scale(1.1)}.theme-button.active{border-color:#fff;box-shadow:0 0 5px #fff}.theme-button[data-theme=cyber-pink]{background-color:var(--color-accent-pink)}.theme-button[data-theme=terminal-green]{background-color:#00ff41}.theme-button[data-theme=blue-archive]{background-color:#00bfff}
+        .redacted-text{position:relative;color:transparent;transition:color .5s ease}.redacted-text::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-image:repeating-linear-gradient(-45deg,var(--color-dark-bg),var(--color-dark-bg) 20px,#000 20px,#000 40px);opacity:1;transition:opacity .5s ease;pointer-events:none}.redacted-text:hover{color:var(--color-light-text)}.redacted-text:hover::before{opacity:0}
+        #connection-status{position:fixed;bottom:20px;left:20px;display:flex;align-items:center;font-family:'Fira Code',monospace;font-size:.8em;color:var(--color-light-text);opacity:.6;z-index:1002;letter-spacing:1px;text-shadow:0 0 5px var(--color-shadow-base)}.status-dot{width:8px;height:8px;border-radius:50%;background-color:#0f0;margin-right:8px;box-shadow:0 0 5px #0f0;animation:pulse-green 2s infinite}@keyframes pulse-green{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.7}}#connection-status.syncing .status-dot{background-color:#0ff;box-shadow:0 0 5px #0ff;animation:pulse-cyan 1s infinite}@keyframes pulse-cyan{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.8);opacity:.5}}#connection-status.interrupted .status-dot{background-color:red;box-shadow:0 0 5px red;animation:pulse-red .5s infinite}@keyframes pulse-red{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+        #activity-graph{display:grid;grid-template-columns:repeat(26,1fr);grid-template-rows:repeat(7,1fr);gap:3px;width:-moz-fit-content;width:fit-content;margin:20px auto 0}.graph-cell{width:12px;height:12px;background-color:hsla(263,45%,15%,.1);border-radius:2px;animation:pulse-activity 10s infinite;animation-timing-function:steps(1,end)}@keyframes pulse-activity{0%{background-color:hsla(263,45%,15%,.1)}5%{background-color:var(--color-dark-purple)}10%{background-color:var(--color-accent-purple)}15%{background-color:var(--color-accent-pink)}20%{background-color:hsla(263,45%,15%,.1)}100%{background-color:hsla(263,45%,15%,.1)}}
+        #event-log-container{position:fixed;bottom:80px;left:20px;width:350px;height:150px;background:rgba(0,0,0,.3);border:1px solid var(--color-card-border);border-radius:4px;overflow:hidden;font-family:'Fira Code',monospace;font-size:.75em;z-index:1001;opacity:.7;transition:opacity .3s}#event-log-container:hover{opacity:1}#event-log{height:100%;overflow-y:scroll;padding:8px;scrollbar-width:none;-ms-overflow-style:none}#event-log::-webkit-scrollbar{display:none}.log-entry{line-height:1.5;white-space:pre-wrap;word-break:break-all}.log-info{color:#00bfff}.log-warn{color:#ffd700}.log-debug{color:var(--color-accent-purple)}.log-error{color:#ff4d4d}
+        .decrypt-button{margin-top:20px;padding:8px 15px;background:0 0;border:1px solid var(--color-accent-pink);color:var(--color-accent-pink);font-family:'Fira Code',monospace;cursor:pointer;transition:all .2s ease}.decrypt-button:hover{background:var(--color-accent-pink);color:var(--color-dark-bg)}.decrypt-button:disabled{opacity:.3;cursor:not-allowed}
+        .code-player-container{background:#080410;border:1px solid var(--color-card-border);border-radius:5px;margin-top:15px;font-family:'Fira Code',monospace}.code-player-header{background:#140c26;padding:5px 10px;font-size:.8em;color:var(--color-light-text);border-bottom:1px solid var(--color-card-border)}#code-player{display:block;padding:10px;font-size:.85em;white-space:pre-wrap;min-height:100px}#code-player .code-cursor{display:inline-block;background:var(--color-accent-pink);width:8px;height:1.2em;vertical-align:bottom;animation:blinkCursor 1s infinite steps(1,end)}.code-keyword{color:var(--color-accent-pink)}.code-type{color:#569cd6}.code-comment{color:#6a9955}.code-string{color:#ce9178}
+        
+        /* --- Responsive Styles --- */
+        @media (max-width:768px){body{font-size:16px}.hero{min-height:85vh}.section-title{font-size:2.6em}.nav-links li{margin:0 10px}.nav-links a{font-size:1.05em;padding:10px}.repo-grid,.skills-grid{grid-template-columns:1fr;gap:30px}.repo-card,.skill-card{padding:30px}.section-content p{font-size:1.12em}.content-section::after,.content-section::before{width:20px;height:20px}a.doc-tab-link,.doc-tab-button{font-size:1em;padding:10px 15px}.page-utility-button{font-size:1em;padding:12px 25px;margin:30px auto 15px}#fixed-sprungles-button{font-size:.8em;padding:7px 12px;top:15px;right:15px}.modal-content{padding:0;max-height:75vh}.modal-message{padding:20px 30px 30px}.modal-title{font-size:1.5em}.modal-close-button{margin:0 30px 20px}.modal-message{font-size:1em}.modal-message h4{font-size:1.15em}.modal-message p{font-size:.95em}.boot-line{font-size:1em}}
+        @media (max-width:480px){.hero-title{font-size:clamp(2.4rem,11vw,4rem)}.hero-subtitle{font-size:clamp(1rem,4.5vw,1.3rem)}.section-title{font-size:2.2em;letter-spacing:2.5px}.nav-links{flex-direction:column;padding:15px 0}.nav-links li{margin:10px 0}.repo-card h3,.skill-card h3{font-size:1.6em}.list-item-card{padding:20px 25px}.doc-tabs{flex-direction:column;align-items:stretch}a.doc-tab-link,.doc-tab-button{margin:8px 0}.page-utility-button{font-size:.9em;padding:10px 20px}#fixed-sprungles-button{font-size:.75em;padding:6px 10px;top:10px;right:10px}.modal-content{padding:0;max-height:70vh}.modal-message{padding:15px 20px 20px}.modal-title{font-size:1.3em}.modal-message{font-size:.9em}.modal-message h4{font-size:1.1em}.modal-message p{font-size:.9em}.boot-line{font-size:.9em}#connection-status,#sound-toggle,#theme-switcher,#event-log-container,#activity-graph{display:none}}
     </style>
 </head>
 <body>
+    <div id="theme-glitch-overlay"></div>
+    <div id="crt-overlay"></div>
+    <canvas id="network-canvas"></canvas>
 
-    <img src="cutie.png" alt="Cute character" class="floating-char cutie-float-1">
-    <img src="cutie.png" alt="Cute character" class="floating-char cutie-float-2">
-    <img src="cutie.png" alt="Cute character" class="floating-char cutie-float-3">
-    <img src="cutie.png" alt="Cute character" class="floating-char cutie-float-4">
-    <img src="cutie.png" alt="Cute character" class="floating-char cutie-float-5">
+    <div id="boot-overlay">
+        <div id="boot-text-container">
+            <span class="boot-line">> Booting SPRUNGLES_OS...</span>
+            <span class="boot-line">> Initializing digital artisan protocols... [OK]</span>
+            <span class="boot-line">> Loading documentarian archives... [OK]</span>
+            <span class="boot-line">> Establishing secure communique... [OK]</span>
+            <span class="boot-line">> Welcome, discerning visitor.<span class="boot-cursor"></span></span>
+        </div>
+    </div>
+    
+    <div class="floating-char-wrapper cutie-float-1"><img src="cutie.png" alt="Cute character" class="floating-char" loading="lazy"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper cutie-float-2"><img src="cutie.png" alt="Cute character" class="floating-char" loading="lazy"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper cutie-float-3"><img src="cutie.png" alt="Cute character" class="floating-char" loading="lazy"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper cutie-float-4"><img src="cutie.png" alt="Cute character" class="floating-char" loading="lazy"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper cutie-float-5"><img src="cutie.png" alt="Cute character" class="floating-char" loading="lazy"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="cutie.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper sprungles-float-1"><img src="Sprungles.png" alt="Sprungles character" class="floating-char" loading="lazy"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper sprungles-float-2"><img src="Sprungles.png" alt="Sprungles character" class="floating-char" loading="lazy"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper sprungles-float-3"><img src="Sprungles.png" alt="Sprungles character" class="floating-char" loading="lazy"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper sprungles-float-4"><img src="Sprungles.png" alt="Sprungles character" class="floating-char" loading="lazy"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
+    <div class="floating-char-wrapper sprungles-float-5"><img src="Sprungles.png" alt="Sprungles character" class="floating-char" loading="lazy"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"><img src="Sprungles.png" alt="" class="floating-char glitch-layer" loading="lazy" aria-hidden="true"></div>
 
-    <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-1">
-    <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-2">
-    <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-3">
-    <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-4">
-    <img src="Sprungles.png" alt="Sprungles character" class="floating-char sprungles-float-5">
-
-    <button id="fixed-sprungles-button" onclick="showSprunglesInfo();">Sprungles?</button>
+    <button id="fixed-sprungles-button" onclick="showSprunglesInfo()">Sprungles?</button>
 
     <header class="hero">
         <h1 class="hero-title">
-            <span class="name-part">Natalie</span> <span class="name-part glitch-text">"Sprungles"</span> <span class="name-part">Spiva</span>
+            <span class="name-part animated-name-part">Natalie</span> <span class="name-part glitch-text">"Sprungles"</span> <span class="name-part animated-name-part">Spiva</span>
         </h1>
         <p class="hero-subtitle">
             Esteemed Digital Artisan & Architect of Open Systems & User Experiences. It is with profound affection for the intricate dance of logic and creativity that I, alongside valued collaborators, present these works, hoping they resonate with fellow connoisseurs of elegant code, visionary desktop environments, and champions of digital liberty, particularly within the beloved <a href="https://arttulos.org" target="_blank" style="color: #FFABE1; text-shadow: 0 0 5px #F72585;">ArttulOS</a> ecosystem and the <strong class="highlight">ArttulCat</strong> browser.
@@ -779,7 +248,7 @@
     <nav class="navbar">
         <div class="main-wrapper">
             <ul class="nav-links">
-                <li><a href="#about" class="active">Oneself</a></li>
+                <li><a href="#about">Oneself</a></li>
                 <li><a href="#skills">Proficiencies</a></li>
                 <li><a href="#projects">Endeavors</a></li>
                 <li><a href="#repositories">Code Hubs</a></li>
@@ -792,463 +261,535 @@
 
     <main class="main-wrapper">
         <section id="about" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">A_Brief_Introduction</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">A_Brief_Introduction</span><span class="cursor">_</span></h2>
             <div class="section-content">
-                <p>
-                    Salutations. I am Natalie Spiva, though many within the digital sphere affectionately (or perhaps with a knowing chuckle at my late-night coding sessions) refer to me as <strong class="highlight">Sprungles</strong>. My professional existence is a rather delightful tapestry woven from threads of rigorous software development and an insatiable curiosity for network administration.
-                </p>
-                <p>
-                    It is my distinct pleasure to immerse myself in the foundational structures of computing – particularly the esteemed <a href="https://arttulos.org" target="_blank">ArttulOS</a>, to which I dedicate considerable developmental effort alongside my capable friend and fellow developer, <strong class="highlight">Liv</strong>. Our shared passion for this OS makes the endeavor all the more rewarding. Furthermore, I champion a more liberated and user-centric web experience as a developer for the <strong class="highlight">ArttulCat</strong> Firefox fork. The Android ecosystem, too, receives my devoted attention. One might say I enjoy persuading electrons to perform elaborate ballets, all in the name of robust, open, and occasionally surprising technology. This is not merely a profession; it is a cherished vocation.
-                </p>
+                <p>Salutations. I am Natalie Spiva, though many within the digital sphere affectionately (or perhaps with a knowing chuckle at my late-night coding sessions) refer to me as <strong class="highlight">Sprungles</strong>. My professional existence is a rather delightful tapestry woven from threads of rigorous software development and an insatiable curiosity for network administration.</p>
+                <p>It is my distinct pleasure to immerse myself in the foundational structures of computing – particularly the esteemed <a href="https://arttulos.org" target="_blank">ArttulOS</a>, to which I dedicate considerable developmental effort alongside my capable friend and fellow developer, <strong class="highlight">Liv</strong>. Our shared passion for this OS makes the endeavor all the more rewarding. Furthermore, I champion a more liberated and user-centric web experience as a developer for the <strong class="highlight">ArttulCat</strong> Firefox fork. The Android ecosystem, too, receives my devoted attention.</p>
+                <p class="redacted-text">One might say I enjoy persuading electrons to perform elaborate ballets, all in the name of robust, open, and occasionally surprising technology. This is not merely a profession; it is a cherished vocation.</p>
             </div>
         </section>
 
         <section id="skills" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">An_Arsenal_of_Aptitudes</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">An_Arsenal_of_Aptitudes</span><span class="cursor">_</span></h2>
             <div class="section-content">
                 <p>Herein lies a curated selection of the capabilities I have cultivated with dedication and, dare I say, a touch of obsessive glee. Consider it a glimpse into the workshop of a rather enthusiastic digital smithy.</p>
                 <div class="skills-grid">
-                    <div class="skill-card">
-                        <h3><span class="skill-icon">⚙️</span> OS & Systems Architecture</h3>
-                        <ul>
-                            <li>Devising for <a href="https://arttulos.org" target="_blank">ArttulOS</a> & Linux: Ah, the exquisite challenge of sculpting the very "soul" of the machine! A pursuit undertaken with meticulous care, and often in delightful concert with my collaborator <strong class="highlight">Liv</strong> on ArttulOS.</li>
-                            <li>System Internals Comprehension: Exploring the elegant, often bewildering, machinery that operates beneath the surface. A true delight for the inquisitive mind.</li>
-                            <li>Shell Scripting Artistry (Bash, Zsh): Composing potent incantations to command systems with grace and automate the mundane. Terribly satisfying, that.</li>
-                            <li>System Administration & Automation: The noble art of nurturing digital ecosystems and imbuing them with a most welcome self-sufficiency.</li>
-                            <li>Desktop Environment Crafting (Arteetion Shell): Forging intuitive and powerful user interfaces for X11 & Wayland – a truly delightful endeavor in shaping how users interact with their systems.</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3><span class="skill-icon">🌐</span> Web & Browser Alchemy</h3>
-                        <ul>
-                            <li>Browser Internals Investigation: A fascinating journey into how our digital windows to the world are constructed. So many moving parts, all singing in (mostly) harmony!</li>
-                            <li><strong class="highlight">ArttulCat</strong> Refinement: Lovingly enhancing a specialized Firefox, ensuring it remains a steadfast companion for those who value digital sovereignty.</li>
-                            <li>WebExtension Craftsmanship: Forging bespoke utilities that bestow new powers upon the humble browser. Small enchantments, big impact!</li>
-                            <li>Web Performance Optimization: The thrilling chase for microsecond efficiencies, ensuring digital experiences are swift and seamless. Because waiting is such a bore.</li>
-                            <li>JavaScript, HTML, CSS Fluency: Wielding the elemental languages of the web with a practiced hand and an ever-watchful eye for elegance.</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3><span class="skill-icon">📱</span> Android & Mobile Artistry</h3>
-                        <ul>
-                            <li>Native Android Application Development (Java/Kotlin): Sculpting applications for the Android platform with a deep appreciation for its unique character.</li>
-                            <li>LineageOS Cultivation for Oriole (Pixel 6): A labor of love, breathing new, open life into excellent hardware like the Google Pixel 6. My humble offerings reside on <a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank">GitHub</a>.</li>
-                            <li>Android Open Source Project (AOSP) Familiarity: Engaging with the foundational blueprint of Android itself – a truly humbling and enlightening experience.</li>
-                            <li>Mobile User Interface & Experience Design: The delicate art of ensuring that powerful technology is also a joy to interact with. Form and function, beautifully wed.</li>
-                        </ul>
-                    </div>
+                    <div class="skill-card"><h3><span class="skill-icon">⚙️</span> OS & Systems Architecture</h3><ul><li>Devising for <a href="https://arttulos.org" target="_blank">ArttulOS</a> & Linux: Ah, the exquisite challenge of sculpting the very "soul" of the machine! A pursuit undertaken with meticulous care, and often in delightful concert with my collaborator <strong class="highlight">Liv</strong> on ArttulOS.</li><li>System Internals Comprehension: Exploring the elegant, often bewildering, machinery that operates beneath the surface. A true delight for the inquisitive mind.</li><li>Shell Scripting Artistry (Bash, Zsh): Composing potent incantations to command systems with grace and automate the mundane. Terribly satisfying, that.</li><li>System Administration & Automation: The noble art of nurturing digital ecosystems and imbuing them with a most welcome self-sufficiency.</li><li>Desktop Environment Crafting (Arteetion Shell): Forging intuitive and powerful user interfaces for X11 & Wayland – a truly delightful endeavor in shaping how users interact with their systems.</li></ul></div>
+                    <div class="skill-card"><h3><span class="skill-icon">🌐</span> Web & Browser Alchemy</h3><ul><li>Browser Internals Investigation: A fascinating journey into how our digital windows to the world are constructed. So many moving parts, all singing in (mostly) harmony!</li><li><strong class="highlight">ArttulCat</strong> Refinement: Lovingly enhancing a specialized Firefox, ensuring it remains a steadfast companion for those who value digital sovereignty.</li><li>WebExtension Craftsmanship: Forging bespoke utilities that bestow new powers upon the humble browser. Small enchantments, big impact!</li><li>Web Performance Optimization: The thrilling chase for microsecond efficiencies, ensuring digital experiences are swift and seamless. Because waiting is such a bore.</li><li>JavaScript, HTML, CSS Fluency: Wielding the elemental languages of the web with a practiced hand and an ever-watchful eye for elegance.</li></ul></div>
+                    <div class="skill-card"><h3><span class="skill-icon">📱</span> Android & Mobile Artistry</h3><ul><li>Native Android Application Development (Java/Kotlin): Sculpting applications for the Android platform with a deep appreciation for its unique character.</li><li>LineageOS Cultivation for Oriole (Pixel 6): A labor of love, breathing new, open life into excellent hardware like the Google Pixel 6. My humble offerings reside on <a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank">GitHub</a>.</li><li>Android Open Source Project (AOSP) Familiarity: Engaging with the foundational blueprint of Android itself – a truly humbling and enlightening experience.</li><li>Mobile User Interface & Experience Design: The delicate art of ensuring that powerful technology is also a joy to interact with. Form and function, beautifully wed.</li></ul></div>
                     <div class="skill-card">
                         <h3><span class="skill-icon">🔗</span> Network Cartography & Stewardship</h3>
-                        <ul>
-                            <li>Internet Protocols (TCP/IP, et al.): Deciphering the intricate protocols that allow our digital world to communicate. A veritable symphony of signals!</li>
-                            <li>Network Configuration & Security Fortification: The responsible endeavor of establishing and safeguarding the pathways of digital information.</li>
-                            <li>Diagnostic Acumen: The often-underappreciated skill of pinpointing why digital conversations falter, and gently coaxing them back to fluency.</li>
-                            <li>Packet Analysis (Wireshark): Donning the detective's hat to meticulously examine network traffic. The data, my dear Watson, never lies! (Well, almost never.)</li>
+                        <ul class="encrypted-list" data-encrypted="true">
+                            <li>B^@#dsaf$vda sd%DSf^ga%#v&d DSf^sdaf^s*dsaf^%d#</li>
+                            <li>#ds^Fdsaf ds%fsd^G#s^fDS*d^A sdaf^s*dsaf^%d#^%d#</li>
+                            <li>s*^#Dsa^f ds%fsd^g#s^fdg*d^a sdaf^s*dsaf^%d#^%d#</li>
+                            <li>B$@#dsaf$vda sd%DSf^ga%#v&d DSf^sdaf^s*dsaf^%d#</li>
                         </ul>
+                        <button class="decrypt-button">DECRYPT</button>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <section id="projects" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">A_Portfolio_of_Passions</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">A_Portfolio_of_Passions</span><span class="cursor">_</span></h2>
             <div class="section-content">
                 <p>Permit me to share a selection of current and notable undertakings. Each represents not merely a task completed, but a journey embarked upon with heartfelt commitment, particularly my cherished contributions to <strong class="highlight">ArttulCat</strong> and the ever-evolving <a href="https://arttulos.org" target="_blank">ArttulOS</a>.</p>
+                <div class="list-item-card"><strong>ArttulOS Foundational Pillars Initiative:</strong> Together with my esteemed friend and collaborator, <strong class="highlight">Liv</strong>, my efforts are diligently applied to bolstering the core integrity, security, and innovative feature set of <a href="https://arttulos.org" target="_blank">ArttulOS</a>. Our combined dedication ensures it remains a beacon of open-source excellence. This shared journey is where the heart truly is.</div>
+                <div class="list-item-card"><strong>The ArttulCat "User Sovereignty" Project:</strong> Spearheading development within the <strong class="highlight">ArttulCat</strong> Firefox fork, dedicated to embedding features that profoundly enhance user privacy, autonomy, and the sheer joy of a liberated Browse experience. A most rewarding challenge!</div>
+                <div class="list-item-card"><strong>LineageOS for the Oriole Device (Pixel 6):</strong> With considerable care, I curate and disseminate custom <a href="https://lineageos.org/" target="_blank">LineageOS</a> iterations for the Google Pixel 6 (Oriole), providing a pristine, de-Googled Android alternative. These builds, offered with humble pride, can be found at <a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank">Sprungles' LineageOS Repository</a>.</div>
                 <div class="list-item-card">
-                    <strong>ArttulOS Foundational Pillars Initiative:</strong> Together with my esteemed friend and collaborator, <strong class="highlight">Liv</strong>, my efforts are diligently applied to bolstering the core integrity, security, and innovative feature set of <a href="https://arttulos.org" target="_blank">ArttulOS</a>. Our combined dedication ensures it remains a beacon of open-source excellence. This shared journey is where the heart truly is.
-                </div>
-                <div class="list-item-card">
-                    <strong>The ArttulCat "User Sovereignty" Project:</strong> Spearheading development within the <strong class="highlight">ArttulCat</strong> Firefox fork, dedicated to embedding features that profoundly enhance user privacy, autonomy, and the sheer joy of a liberated Browse experience. A most rewarding challenge!
-                </div>
-                <div class="list-item-card">
-                    <strong>LineageOS for the Oriole Device (Pixel 6):</strong> With considerable care, I curate and disseminate custom <a href="https://lineageos.org/" target="_blank">LineageOS</a> iterations for the Google Pixel 6 (Oriole), providing a pristine, de-Googled Android alternative. These builds, offered with humble pride, can be found at <a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank">Sprungles' LineageOS Repository</a>.
-                </div>
-                <div class="list-item-card">
-                    <strong>Arteetion Shell (Custom Desktop Environment):</strong> A rather ambitious and deeply cherished passion project – the creation of a unique, performant, and, one hopes, aesthetically pleasing desktop environment for X11 & Wayland. This grand architectural undertaking, complete with its own windowing system and compositor, is currently brewing in the digital crucible. Its grand debut is eagerly anticipated! (Status: Under Intensive Development - Chronicles Forthcoming)
+                    <strong>Arteetion Shell (Custom Desktop Environment):</strong> A rather ambitious and deeply cherished passion project – the creation of a unique, performant, and, one hopes, aesthetically pleasing desktop environment for X11 & Wayland.
+                    <div class="code-player-container">
+                        <div class="code-player-header">arteetion_compositor.c</div>
+                        <pre><code id="code-player"></code></pre>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="repositories" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">Code_Archives</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">Code_Archives</span><span class="cursor">_</span></h2>
             <div class="section-content">
-                <p style="text-align: center; margin-bottom: 30px;">
-                    Access my open-source contributions and personal projects across various platforms. Explore the architecture.
-                </p>
+                <p style="text-align: center; margin-bottom: 30px;">Access my open-source contributions and personal projects across various platforms. Explore the architecture.</p>
                 <div class="repo-grid">
-                    <div class="repo-card">
-                        <span class="repo-icon">🐙</span>
-                        <h3 class="repo-title">GitHub Repository</h3>
-                        <p class="repo-description">
-                            Primary public code repository. Discover collaborative efforts and personal ventures here.
-                        </p>
-                        <a href="https://github.com/sprunglesonthehub" target="_blank" class="repo-link">github.com/sprunglesonthehub</a>
-                    </div>
-                    <div class="repo-card">
-                        <span class="repo-icon">🦊</span>
-                        <h3 class="repo-title">GitLab Mirror</h3>
-                        <p class="repo-description">
-                            Alternative repository for certain projects, ensuring redundancy and platform preference.
-                        </p>
-                        <a href="https://gitlab.com/sprungles" target="_blank" class="repo-link">gitlab.com/sprungles</a>
-                    </div>
-                    <div class="repo-card">
-                        <span class="repo-icon">🖥️</span>
-                        <h3 class="repo-title">Self-Hosted GitLab</h3>
-                        <p class="repo-description">
-                            Direct access to my personal GitLab instance for niche projects and experimental code.
-                        </p>
-                        <a href="https://darrengames.ddns.net:2500/sprungles" target="_blank" class="repo-link">darrengames.ddns.net:2500/sprungles</a>
-                    </div>
-                    <div class="repo-card">
-                        <span class="repo-icon">✍️</span>
-                        <h3 class="repo-title">Digital Dispatches (Blog)</h3>
-                        <p class="repo-description">
-                            Personal chronicles, technical insights, and updates on my ongoing digital explorations.
-                        </p>
-                        <a href="https://www.blogger.com/blog/posts/4408630306827296278?hl=en&tab=jj" target="_blank" class="repo-link">My Blogger Chronicles</a>
-                    </div>
+                    <div class="repo-card"><span class="repo-icon">🐙</span><h3 class="repo-title">GitHub Repository</h3><p class="repo-description">Primary public code repository. Discover collaborative efforts and personal ventures here.</p><a href="https://github.com/sprunglesonthehub" target="_blank" class="repo-link">github.com/sprunglesonthehub</a></div>
+                    <div class="repo-card"><span class="repo-icon">🦊</span><h3 class="repo-title">GitLab Mirror</h3><p class="repo-description">Alternative repository for certain projects, ensuring redundancy and platform preference.</p><a href="https://gitlab.com/sprungles" target="_blank" class="repo-link">gitlab.com/sprungles</a></div>
+                    <div class="repo-card"><span class="repo-icon">🖥️</span><h3 class="repo-title">Self-Hosted GitLab</h3><p class="repo-description">Direct access to my personal GitLab instance for niche projects and experimental code.</p><a href="https://darrengames.ddns.net:2500/sprungles" target="_blank" class="repo-link">darrengames.ddns.net:2500/sprungles</a></div>
+                    <div class="repo-card"><span class="repo-icon">✍️</span><h3 class="repo-title">Digital Dispatches (Blog)</h3><p class="repo-description">Personal chronicles, technical insights, and updates on my ongoing digital explorations.</p><a href="https://www.blogger.com/blog/posts/4408630306827296278?hl=en&tab=jj" target="_blank" class="repo-link">My Blogger Chronicles</a></div>
                 </div>
             </div>
         </section>
 
-
         <section id="documentation" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">Digital_Scrolls_&_Codices</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">Digital_Scrolls_&_Codices</span><span class="cursor">_</span></h2>
             <div class="section-content">
-                <p style="text-align: center; margin-bottom: 50px;">
-                    Welcome to the archives, where the blueprints and chronicles of my key endeavors are preserved. It is my pleasure to offer these insights, hoping they prove both illuminating and useful. Please select a compendium below for your perusal.
-                </p>
-
+                <p style="text-align: center; margin-bottom: 50px;">Welcome to the archives, where the blueprints and chronicles of my key endeavors are preserved. It is my pleasure to offer these insights, hoping they prove both illuminating and useful. Please select a compendium below for your perusal.</p>
                 <div class="doc-tabs">
                     <button class="doc-tab-button active" data-tab="arttulos"><span class="tab-icon">🐧</span>ArttulOS</button>
                     <a href="https://arttulos.org/arttulcat.html" target="_blank" class="doc-tab-link"><span class="tab-icon">😼</span>ArttulCat</a>
+                    <a href="sprungli.html" target="_blank" class="doc-tab-link"><span class="tab-icon">📖</span>The Wiki Resource</a>
                     <button class="doc-tab-button" data-tab="lineageos"><span class="tab-icon">📱</span>LineageOS</button>
                     <button class="doc-tab-button" data-tab="arteetionshell"><span class="tab-icon">🎨</span>Arteetion Shell</button>
                 </div>
-
                 <div class="doc-content-wrapper">
-                    <div id="arttulos-doc" class="doc-content-pane active">
-                        <h4><span class="doc-icon">🚀</span>ArttulOS Project Overview:</h4>
-                        <p>
-                            ArttulOS stands as a testament to the pursuit of digital freedom and robust functionality. It's a collaboratively engineered operating system, built from the ground up, designed for those who value performance, privacy, and granular control over their computing experience. My role involves foundational system architecture, security enhancements, and optimizing user experience alongside <strong class="highlight">Liv</strong>.
-                        </p>
-                        <h4><span class="doc-icon">🗓️</span>Development Roadmap (Key Phases):</h4>
-                        <ol>
-                            <li>
-                                <strong>Phase I: Core Kernel Hardening (Concluded):</strong> Focused on fortifying the Linux kernel integration, ensuring a stable and secure base for all subsequent development. Achieved significant reductions in potential attack vectors.
-                            </li>
-                            <li>
-                                <strong>Phase II: Modular Desktop Environment Integration (Current Phase):</strong> Currently, we are deeply immersed in refining the modularity and performance of the Arteetion Shell within ArttulOS. This phase involves extensive work on Wayland compositor integration and X11 compatibility, ensuring a seamless and responsive graphical experience. Our aim is a truly adaptive desktop.
-                            </li>
-                            <li>
-                                <strong>Phase III: Application Ecosystem Expansion (Upcoming Phase - <span class="upcoming-phase">Q4 2025</span>):</strong> This phase will concentrate on expanding our native application suite and ensuring broader compatibility with essential third-party software, focusing on security-audited and privacy-respecting alternatives.
-                            </li>
-                            <li>
-                                <strong>Phase IV: Decentralized Network Protocols (Conceptual - <span class="upcoming-phase">2026+</span>):</strong> Long-term vision includes exploring and integrating decentralized network protocols to further enhance user autonomy and resilience against centralized failures.
-                            </li>
-                        </ol>
-                        <p>
-                            For a deeper dive into the ArttulOS project, including technical specifications and contribution guidelines, please visit the official project page:
-                        </p>
-                        <p style="text-align: center;">
-                            <a href="https://arttulos.org" target="_blank" class="doc-link-button">Explore ArttulOS Official Site</a>
-                        </p>
-                    </div>
-
-                    <div id="lineageos-doc" class="doc-content-pane">
-                        <h4><span class="doc-icon">⚙️</span>LineageOS for Oriole (Pixel 6) Overview:</h4>
-                        <p>
-                            My LineageOS builds for the Google Pixel 6 (codename "Oriole") offer a pure, de-Googled Android experience, free from proprietary tracking and unnecessary bloatware. This project focuses on providing stable, secure, and feature-rich custom ROMs for enthusiasts and privacy-conscious users.
-                        </p>
-                        <h4><span class="doc-icon">🔧</span>Build Process & Features:</h4>
-                        <ul>
-                            <li><strong>AOSP Baseline:</strong> Built directly from the Android Open Source Project (AOSP) and LineageOS sources.</li>
-                            <li><strong>Minimal GApps:</strong> Strictly no Google Play Services; users have the option to install <a href="https://f-droid.org/" target="_blank">F-Droid</a> for open-source applications or microG for limited compatibility.</li>
-                            <li><strong>Security Patches:</strong> Always kept up-to-date with the latest Android security updates.</li>
-                            <li><strong>Optimized Performance:</strong> Kernel and system-level optimizations for improved battery life and responsiveness.</li>
-                        </ul>
-                        <p>
-                            You can find the latest builds, installation instructions, and source code for these custom ROMs on my dedicated GitHub repository:
-                        </p>
-                        <p style="text-align: center;">
-                            <a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank" class="doc-link-button">Access LineageOS Builds</a>
-                        </p>
-                    </div>
-
-                    <div id="arteetionshell-doc" class="doc-content-pane">
-                        <h4><span class="doc-icon">✨</span>Arteetion Shell Vision:</h4>
-                        <p>
-                            Arteetion Shell is my ambitious foray into crafting a truly unique and highly performant desktop environment. Conceived for both X11 and Wayland, it aims to blend aesthetic elegance with uncompromising efficiency, offering a fresh perspective on human-computer interaction. It encompasses not just a shell, but a custom windowing system and compositor.
-                        </p>
-                        <h4><span class="doc-icon">🛠️</span>Architectural Highlights (Current Status):</h4>
-                        <ul>
-                            <li><strong>Modular Design:</strong> Built with a highly modular architecture, allowing for extensive customization and flexibility.</li>
-                            <li><strong>Wayland-First Approach:</strong> Prioritizing Wayland for modern graphics and security, with robust XWayland compatibility.</li>
-                            <li><strong>Custom Compositor:</strong> Developing a lightweight and performant compositor for fluid animations and efficient rendering.</li>
-                            <li><strong>Themed Elements:</strong> Deeply integrated theming capabilities to provide a cohesive and visually stunning experience.</li>
-                            <li><strong>Status:</strong> Currently in intensive development. Progress is steady, and internal prototypes are yielding promising results. Public chronicles and early access will be announced upon reaching a stable pre-alpha state when appropriate for public consumption.</li>
-                        </ul>
-                        <p>
-                            While Arteetion Shell is a significant long-term internal project, detailed documentation and chronicles of its architectural evolution are being meticulously compiled. Access to these resources will be provided to approved collaborators as development progresses. Please inquire via the Communique Channels for further details.
-                        </p>
-                        <p style="text-align: center;">
-                            <a href="javascript:void(0);" onclick="showCustomModal('Arteetion Shell Access', 'Arteetion Shell documentation is currently internal and will be made public when appropriate. Please contact Sprungles via the Communique Channels for more information regarding collaboration.');" class="doc-link-button">Arteetion Shell (Internal Access)</a>
-                        </p>
-                    </div>
+                    <div id="arttulos-doc" class="doc-content-pane active"><h4><span class="doc-icon">🚀</span>ArttulOS Project Overview:</h4><p>ArttulOS stands as a testament to the pursuit of digital freedom and robust functionality. It's a collaboratively engineered operating system, built from the ground up, designed for those who value performance, privacy, and granular control over their computing experience. My role involves foundational system architecture, security enhancements, and optimizing user experience alongside <strong class="highlight">Liv</strong>.</p><h4><span class="doc-icon">🗓️</span>Development Roadmap (Key Phases):</h4><ol><li><strong>Phase I: Core Kernel Hardening (Concluded):</strong> Focused on fortifying the Linux kernel integration, ensuring a stable and secure base for all subsequent development. Achieved significant reductions in potential attack vectors.</li><li><strong>Phase II: Modular Desktop Environment Integration (Current Phase):</strong> Currently, we are deeply immersed in refining the modularity and performance of the Arteetion Shell within ArttulOS. This phase involves extensive work on Wayland compositor integration and X11 compatibility, ensuring a seamless and responsive graphical experience. Our aim is a truly adaptive desktop.</li><li><strong>Phase III: Application Ecosystem Expansion (Upcoming Phase - <span class="upcoming-phase">Q4 2025</span>):</strong> This phase will concentrate on expanding our native application suite and ensuring broader compatibility with essential third-party software, focusing on security-audited and privacy-respecting alternatives.</li><li><strong>Phase IV: Decentralized Network Protocols (Conceptual - <span class="upcoming-phase">2026+</span>):</strong> Long-term vision includes exploring and integrating decentralized network protocols to further enhance user autonomy and resilience against centralized failures.</li></ol><p style="text-align: center;"><a href="https://arttulos.org" target="_blank" class="doc-link-button">Explore ArttulOS Official Site</a></p></div>
+                    <div id="lineageos-doc" class="doc-content-pane"><h4><span class="doc-icon">⚙️</span>LineageOS for Oriole (Pixel 6) Overview:</h4><p>My LineageOS builds for the Google Pixel 6 (codename "Oriole") offer a pure, de-Googled Android experience, free from proprietary tracking and unnecessary bloatware. This project focuses on providing stable, secure, and feature-rich custom ROMs for enthusiasts and privacy-conscious users.</p><h4><span class="doc-icon">🔧</span>Build Process & Features:</h4><ul><li><strong>AOSP Baseline:</strong> Built directly from the Android Open Source Project (AOSP) and LineageOS sources.</li><li><strong>Minimal GApps:</strong> Strictly no Google Play Services; users have the option to install <a href="https://f-droid.org/" target="_blank">F-Droid</a> for open-source applications or microG for limited compatibility.</li><li><strong>Security Patches:</strong> Always kept up-to-date with the latest Android security updates.</li><li><strong>Optimized Performance:</strong> Kernel and system-level optimizations for improved battery life and responsiveness.</li></ul><p style="text-align: center;"><a href="https://github.com/Sprunglesonthehub/LineageOS-Builds" target="_blank" class="doc-link-button">Access LineageOS Builds</a></p></div>
+                    <div id="arteetionshell-doc" class="doc-content-pane"><h4><span class="doc-icon">✨</span>Arteetion Shell Vision:</h4><p>Arteetion Shell is my ambitious foray into crafting a truly unique and highly performant desktop environment. Conceived for both X11 and Wayland, it aims to blend aesthetic elegance with uncompromising efficiency, offering a fresh perspective on human-computer interaction. It encompasses not just a shell, but a custom windowing system and compositor.</p><h4><span class="doc-icon">🛠️</span>Architectural Highlights (Current Status):</h4><ul><li><strong>Modular Design:</strong> Built with a highly modular architecture, allowing for extensive customization and flexibility.</li><li><strong>Wayland-First Approach:</strong> Prioritizing Wayland for modern graphics and security, with robust XWayland compatibility.</li><li><strong>Custom Compositor:</strong> Developing a lightweight and performant compositor for fluid animations and efficient rendering.</li><li><strong>Themed Elements:</strong> Deeply integrated theming capabilities to provide a cohesive and visually stunning experience.</li><li><strong>Status:</strong> Currently in intensive development. Progress is steady, and internal prototypes are yielding promising results. Public chronicles and early access will be announced upon reaching a stable pre-alpha state when appropriate for public consumption.</li></ul><p style="text-align: center;"><a href="javascript:void(0);" onclick="showCustomModal('Arteetion Shell Access', 'Arteetion Shell documentation is currently internal and will be made public when appropriate. Please contact Sprungles via the Communique Channels for more information regarding collaboration.');" class="doc-link-button">Arteetion Shell (Internal Access)</a></p></div>
                 </div>
             </div>
         </section>
 
-
         <section id="contact" class="content-section">
-            <h2 class="section-title"><span class="section-title-text">Communique_Channels</span><span class="cursor">.</span></h2>
+            <h2 class="section-title"><span class="section-title-text">Communique_Channels</span><span class="cursor">_</span></h2>
             <div class="section-content">
                 <p>Establishing contact is most welcome! Whether for collaboration, inquiries, or merely a philosophical discourse on the nature of digital existence, these are my preferred communication vectors:</p>
-                <div class="list-item-card">
-                    <strong>Matrix Direct Comms:</strong> For real-time discussions, informal queries, or quick collaborative bursts, the Matrix protocol is my most responsive channel. Find me at <a href="https://matrix.to/#/@sprungles:matrix.org" target="_blank">@sprungles:matrix.org</a>.
-                </div>
-                <div class="list-item-card">
-                    <strong>Secure Mail Drop:</strong> For more formal correspondence, detailed proposals, or communications that require a measured approach, encrypted email is preferred. Reach me at <a href="mailto:sprungles.me@proton.me">sprungles.me@proton.me</a>.
-                </div>
-                <div class="list-item-card">
-                    <strong>Digital Dispatches (Blog):</strong> For longer-form thoughts, project updates, and chronicles of my digital explorations, peruse my blog at <a href="https://www.blogger.com/blog/posts/4408630306827296278?hl=en&tab=jj" target="_blank">My Blogger Chronicles</a>. Consider it a public journal of my ongoing adventures.
-                </div>
+                <div class="list-item-card"><strong>Matrix Direct Comms:</strong> For real-time discussions... find me at <a href="https://matrix.to/#/@sprungles:matrix.org" target="_blank">@sprungles:matrix.org</a>. <button class="copy-btn" data-copy-text="@sprungles:matrix.org" aria-label="Copy Matrix ID">📋</button></div>
+                <div class="list-item-card"><strong>Secure Mail Drop:</strong> For more formal correspondence... Reach me at <a href="mailto:sprungles.me@proton.me">sprungles.me@proton.me</a>. <button class="copy-btn" data-copy-text="sprungles.me@proton.me" aria-label="Copy Email Address">📋</button></div>
+                <div class="list-item-card"><strong>Digital Dispatches (Blog):</strong> For longer-form thoughts... peruse my blog at <a href="https://www.blogger.com/blog/posts/4408630306827296278?hl=en&tab=jj" target="_blank">My Blogger Chronicles</a>.</div>
             </div>
         </section>
 
         <button onclick="showCustomModal('Rendering Anomalies?', 'If anything doesn\'t seem to be rendering properly, please ensure your browser is up-to-date and supports modern CSS features, or try a different browser. Clear your cache if persistent issues arise!');" class="page-utility-button">
-            Experiencing Rendering Anomalies? (Click for Diagnostics)
+            Experiencing Rendering Anomalies?
         </button>
     </main>
+    
+    <div id="command-palette-overlay" class="hidden">
+        <div id="command-palette">
+            <div class="palette-input-wrapper"><span class="palette-icon">❯</span><input type="text" id="palette-input" placeholder="Navigate to..." autocomplete="off"></div>
+            <ul id="palette-results"></ul>
+        </div>
+    </div>
 
     <footer class="footer">
-        <p>
-            © <script>document.write(new Date().getFullYear())</script> Natalie "Sprungles" Spiva. All systems nominal. Initiating collaboration protocols.
-        </p>
+        <p>© <script>document.write(new Date().getFullYear())</script> Natalie "Sprungles" Spiva. All systems nominal. Collaboration protocols open.</p>
+        <div id="activity-graph"></div>
+        <div id="event-log-container">
+            <div id="event-log"></div>
+        </div>
+        <div id="connection-status"><span class="status-dot"></span><span class="status-text">CONNECTED</span></div>
+        <div id="theme-switcher">
+            <div class="theme-button active" data-theme="cyber-pink" title="Cyber Pink"></div>
+            <div class="theme-button" data-theme="terminal-green" title="Terminal Green"></div>
+            <div class="theme-button" data-theme="blue-archive" title="Blue Archive"></div>
+        </div>
+        <div id="sound-toggle" class="muted">🔊</div>
     </footer>
 
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 class="modal-title" id="modalTitle"></h3>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <span class="modal-controls">_ ◻︎ X</span>
+            </div>
             <div class="modal-message" id="modalMessage"></div>
             <button class="modal-close-button" onclick="hideCustomModal()">Understood</button>
         </div>
     </div>
-
-
+    
     <script>
-        // Function to show the custom modal
+        // This tiny script starts the boot sequence immediately for perceived performance.
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('boot-overlay');
+            if (overlay) {
+                const lines = overlay.querySelectorAll('.boot-line');
+                const body = document.body;
+                const wait = ms => new Promise(res => setTimeout(res, ms));
+                async function runBootSequence() {
+                    for (const line of lines) { line.style.opacity = '1'; await wait(500 + Math.random() * 200); }
+                    await wait(1000);
+                    overlay.style.opacity = '0';
+                    body.style.opacity = '1';
+                    overlay.addEventListener('transitionend', () => { overlay.style.display = 'none'; }, { once: true });
+                }
+                runBootSequence();
+            } else { document.body.style.opacity = '1'; }
+        });
+    </script>
+    
+    <script defer>
+        /**
+         * Master script for all page interactions and enhancements.
+         * Structured for clarity and executed deferentially to avoid render-blocking.
+         */
+
+        // --- GLOBAL SCOPE UTILITIES ---
+        window.logEvent = () => {}; // No-op if not initialized
+        window.playSound = () => {}; // No-op if not initialized
+
+        // --- UTILITY & MODAL FUNCTIONS ---
         function showCustomModal(title, messageHTML) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').innerHTML = messageHTML; // Use innerHTML
-            document.getElementById('customModal').classList.add('visible');
+            const modal = document.getElementById('customModal');
+            modal.querySelector('#modalTitle').textContent = title;
+            modal.querySelector('#modalMessage').innerHTML = messageHTML;
+            modal.classList.add('visible');
+            window.logEvent(`Modal opened: '${title}'`, 'debug');
         }
+        function hideCustomModal() { document.getElementById('customModal').classList.remove('visible'); }
+        function showSprunglesInfo() { showCustomModal("The Meaning of Sprungles", `<h4>For Mental Health:</h4><p>The mind is dynamic... "Sprungles" hints at the ability to bounce back from that internal chaos.</p><h4>For Code:</h4><p>Software is dynamic. Bugs "spring" up... Programmers manage this chaos to build.</p><h4>For Privacy:</h4><p>Personal data is in constant, dynamic flow... "Sprungles" represents managing that flow—encrypting and securing our information.</p>`); }
 
-        // Function to hide the custom modal
-        function hideCustomModal() {
-            document.getElementById('customModal').classList.remove('visible');
-        }
-
-        // Function to show Sprungles info
-        function showSprunglesInfo() {
-            const title = "The Meaning of Sprungles";
-            const messageContent = `
-                <h4>For Mental Health:</h4>
-                <p>Think about your mind – it's definitely dynamic, with thoughts and feelings always popping up. Sometimes it can feel a bit chaotic in there, right?</p>
-                <p>But "Sprungles" also hints at being able to bounce back (that's the manageable part), like finding ways to deal with those busy thoughts and feelings.</p>
-
-                <h4>For Code (like computer programming):</h4>
-                <p>Software is super dynamic; it's always being updated and doing new things.</p>
-                <p>And let's be honest, code can get chaotic sometimes with bugs that "spring" up and cause trouble.</p>
-                <p>But programmers can work through it, fix those bugs, and manage the code to make cool stuff.</p>
-
-                <h4>For Privacy:</h4>
-                <p>Our personal information is constantly flowing – very dynamic.</p>
-                <p>If we're not careful, it can feel chaotic, like our data could leak out everywhere.</p>
-                <p>So, "Sprungles" could be about how we try to manage that flow – like using tools to protect our info, maybe by "jumbling it up" (encrypting it) so only we can understand it, and keeping it secure.</p>
-            `;
-            showCustomModal(title, messageContent);
-        }
-
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                // If it's an internal link (starts with #), scroll smoothly
-                if (href.startsWith('#')) {
-                    e.preventDefault();
-                    document.querySelector(href).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-
-                    // Update active class for internal links
-                    document.querySelectorAll('.nav-links a').forEach(link => {
-                        link.classList.remove('active');
-                    });
-                    this.classList.add('active');
+        // --- TEXT SCRAMBLE CLASS ---
+        class TextScramble {
+            constructor(el) { this.el = el; this.chars = '!<>-_\\/[]{}—=+*^?#_'; this.update = this.update.bind(this); }
+            setText(newText) {
+                const oldText = this.el.innerText, length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '', to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40), end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
                 }
-                // If it's an external link (like blog.html), let the browser handle it
-                // but remove active class from all other links
-                else {
-                     document.querySelectorAll('.nav-links a').forEach(link => {
-                        link.classList.remove('active');
-                    });
-                    // Optionally, you could add an 'active' class to the blog link itself
-                    // if you want it to appear active when clicked, though it will be lost on page load.
-                    // this.classList.add('active');
+                cancelAnimationFrame(this.frameRequest); this.frame = 0; this.update(); return promise;
+            }
+            update() {
+                let output = '', complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) { complete++; output += to; } 
+                    else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) { char = this.randomChar(); this.queue[i].char = char; }
+                        output += `<span class="scramble-char">${char}</span>`;
+                    } else { output += from; }
                 }
-            });
-        });
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) { this.resolve(); } 
+                else { this.frameRequest = requestAnimationFrame(this.update); this.frame++; }
+            }
+            randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
+        }
 
-        // Sticky Navbar and active link highlighting on scroll
-        const navbar = document.querySelector('.navbar');
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-links a');
+        // --- CORE LOGIC INITIALIZER ---
+        function initializePage() {
+            const navbar = document.querySelector('.navbar');
+            const sections = document.querySelectorAll('main > section');
+            const navLinks = document.querySelectorAll('.nav-links a');
 
-        window.addEventListener('scroll', () => {
-            // Sticky effect
-            if (window.scrollY > 0) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+            // --- FEATURE SETUP FUNCTIONS ---
+            function setupEventLog() {
+                const logEl = document.getElementById('event-log');
+                if (!logEl) return;
+                window.logEvent = (message, level = 'info') => {
+                    if(!logEl) return;
+                    const timestamp = new Date().toLocaleTimeString();
+                    const entry = document.createElement('div');
+                    entry.className = `log-entry log-${level}`;
+                    entry.innerHTML = `<span>[${timestamp}]</span> [${level.toUpperCase()}] ${message}`;
+                    logEl.appendChild(entry);
+                    logEl.scrollTop = logEl.scrollHeight;
+                };
+                logEvent("System core initialized.");
+                logEvent("UI modules loading...", 'debug');
             }
 
-            // Active link highlighting for internal links
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - navbar.offsetHeight - 50; // Adjust for navbar height
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                // Only apply active state logic to internal links
-                if (link.getAttribute('href').startsWith('#')) {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                }
-            });
-
-            // Intersection Observer for section visibility (for initial animation)
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const sectionObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => {
-                sectionObserver.observe(section);
-            });
-        });
-
-
-    // Ensure character animation for section titles on load/scroll and correct tab functionality
-    function initializePage() {
-        // Initial check for section visibility on load
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const sectionObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const section = entry.target;
-                    const titleText = section.querySelector('.section-title-text');
-                    if (titleText && !titleText.dataset.charsWrapped) { // Check if already wrapped
-                        titleText.innerHTML = titleText.textContent.split('').map((char, i) =>
-                            `<span style="animation-delay: ${i * 0.03}s">${char === ' ' ? ' ' : char}</span>`
-                        ).join('');
-                        titleText.dataset.charsWrapped = true; // Mark as wrapped
-                    }
-                    section.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        sections.forEach(section => {
-            sectionObserver.observe(section);
-        });
-
-        // --- Documentation Tab UI Logic ---
-        const docTabsContainer = document.querySelector('.doc-tabs');
-        const docTabButtons = document.querySelectorAll('.doc-tab-button'); // Only internal tab buttons
-        const docContentPanes = document.querySelectorAll('.doc-content-pane');
-
-        if (docTabsContainer && docTabButtons.length > 0 && docContentPanes.length > 0) {
-            docTabsContainer.addEventListener('click', (e) => {
-                const clickedElement = e.target.closest('.doc-tab-button, .doc-tab-link'); // Check for either button or link
-                if (!clickedElement) return; // Exit if click wasn't on a valid tab element
-
-                // If it's a direct link (like ArttulCat), let the browser handle it
-                if (clickedElement.tagName === 'A') {
-                    // Remove active state from other *tab buttons* when an external link is clicked,
-                    // so when returning to the page, ArttulOS is correctly active
-                    docTabButtons.forEach(button => {
-                        button.classList.remove('active');
+            function setupSmoothScrolling() {
+                navLinks.forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href.startsWith('#')) {
+                            e.preventDefault();
+                            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+                            window.logEvent(`Navigation initiated to: ${href}`);
+                        }
                     });
-                    // This is crucial: we also need to ensure the *content panes* are hidden
-                    // when an external link is clicked, so the default tab is visible on return.
-                    docContentPanes.forEach(pane => {
-                        pane.classList.remove('active');
-                    });
-                    // Make sure the first internal tab button and pane are active again if user navigates away and then back
-                    if (docTabButtons.length > 0) docTabButtons[0].classList.add('active');
-                    if (docContentPanes.length > 0) docContentPanes[0].classList.add('active');
-                    return; // Let the browser navigate
-                }
-
-                // If it's an internal tab button, proceed with tab switching logic
-                const targetTabId = clickedElement.dataset.tab;
-
-                docTabButtons.forEach(button => {
-                    button.classList.remove('active');
                 });
-                clickedElement.classList.add('active');
+            }
 
-                docContentPanes.forEach(pane => {
-                    if (pane.id === `${targetTabId}-doc`) {
-                        pane.classList.add('active');
-                    } else {
-                        pane.classList.remove('active');
+            function setupScrollListeners() {
+                let isScrolling;
+                window.addEventListener('scroll', () => {
+                    navbar.classList.toggle('scrolled', window.scrollY > 50);
+                    window.clearTimeout(isScrolling);
+                    isScrolling = setTimeout(() => {
+                        window.logEvent(`Viewport changed to Y: ${Math.round(window.pageYOffset)}`);
+                    }, 100);
+                    let current = '';
+                    sections.forEach(section => {
+                        if (pageYOffset >= section.offsetTop - navbar.offsetHeight - 50) current = section.getAttribute('id');
+                    });
+                    navLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (href.startsWith('#')) link.classList.toggle('active', href.includes(current));
+                    });
+                });
+            }
+
+            function setupIntersectionObserver() {
+                const sectionObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const section = entry.target;
+                            section.classList.add('visible');
+                            const title = section.querySelector('.section-title-text');
+                            if (title && !title.dataset.typed) typeOutTitle(title);
+                        }
+                    });
+                }, { root: null, rootMargin: '0px', threshold: 0.15 });
+                sections.forEach(section => sectionObserver.observe(section));
+            }
+
+            function typeOutTitle(titleElement) {
+                const text = titleElement.textContent.trim();
+                const cursor = titleElement.nextElementSibling;
+                titleElement.textContent = '';
+                titleElement.dataset.typed = 'true';
+                if (cursor) cursor.style.display = 'inline-block';
+                let i = 0;
+                (function type() {
+                    if (i < text.length) { titleElement.textContent += text.charAt(i++); setTimeout(type, 60 + Math.random() * 40); } 
+                    else if (cursor) { titleElement.appendChild(cursor); }
+                })();
+            }
+
+            function setupFloatingChars() {
+                const wrappers = document.querySelectorAll('.floating-char-wrapper');
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                const MOUSE_RADIUS = 250, SCATTER_FORCE = 1.5, FLOAT_SPEED = 0.0005, FLOAT_AMPLITUDE = 15;
+                let mouse = { x: -1000, y: -1000 };
+                document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+                wrappers.forEach((wrapper, i) => {
+                    const img = wrapper.querySelector('img');
+                    if (getComputedStyle(img).transform.includes('scaleX(-1)')) wrapper.dataset.scaleX = 'scaleX(-1)';
+                    wrapper.dataset.initialRotate = getComputedStyle(wrapper).getPropertyValue('--initial-rotate');
+                    (function update() {
+                        const time = Date.now() * FLOAT_SPEED * (1 + i * 0.1);
+                        let floatX = Math.cos(time) * FLOAT_AMPLITUDE * 0.5, floatY = Math.sin(time) * FLOAT_AMPLITUDE;
+                        const wrapperRect = wrapper.getBoundingClientRect();
+                        if (wrapperRect.width === 0) { requestAnimationFrame(update); return; }
+                        const dx = (wrapperRect.left + wrapperRect.width / 2) - mouse.x, dy = (wrapperRect.top + wrapperRect.height / 2) - mouse.y;
+                        const distance = Math.hypot(dx, dy);
+                        let scatterX = 0, scatterY = 0;
+                        if (distance < MOUSE_RADIUS) {
+                            const force = (MOUSE_RADIUS - distance) / MOUSE_RADIUS;
+                            scatterX = (dx / distance) * force * FLOAT_AMPLITUDE * SCATTER_FORCE;
+                            scatterY = (dy / distance) * force * FLOAT_AMPLITUDE * SCATTER_FORCE;
+                        }
+                        wrapper.style.transform = `translate(${floatX + scatterX}px, ${floatY + scatterY}px) rotate(${wrapper.dataset.initialRotate || '0deg'}) ${wrapper.dataset.scaleX || ''}`;
+                        requestAnimationFrame(update);
+                    })();
+                });
+            }
+            
+            function setupAudio() {
+                try {
+                    const hoverSound = new Audio('sounds/ui_hover.wav');
+                    const clickSound = new Audio('sounds/ui_click.wav');
+                    const themeChangeSound = new Audio('sounds/ui_theme_change.wav');
+                    const toggle = document.getElementById('sound-toggle');
+                    let isMuted = true;
+                    hoverSound.volume = 0.3; clickSound.volume = 0.5; themeChangeSound.volume = 0.6;
+                    window.playSound = (sound, isThemeChange = false) => {
+                        if (!isMuted) {
+                            const s = isThemeChange ? themeChangeSound : sound;
+                            s.currentTime = 0; s.play().catch(e => {});
+                        }
+                    }
+                    toggle.addEventListener('click', () => { isMuted = !isMuted; toggle.classList.toggle('muted', isMuted); window.playSound(clickSound); });
+                    document.querySelectorAll('a, button, .doc-tab-button, .theme-button').forEach(el => {
+                        el.addEventListener('mouseenter', () => window.playSound(hoverSound));
+                        el.addEventListener('click', () => window.playSound(clickSound));
+                    });
+                } catch (error) { console.warn("Audio features disabled."); document.getElementById('sound-toggle')?.remove(); }
+            }
+
+            function setupEasterEgg() {
+                document.addEventListener('keydown', e => {
+                    if (e.key.toLowerCase() === 's' && e.target.tagName !== 'INPUT' && !e.ctrlKey && !e.metaKey) {
+                        triggerPartyMode();
                     }
                 });
+                function triggerPartyMode() {
+                    if (document.body.style.animation.includes('partyTime')) return;
+                    window.logEvent("Undocumented feature triggered: S-MODE_PARTY.sh", 'warn');
+                    document.body.style.animation = 'partyTime 1.5s linear infinite';
+                    showCustomModal('🎉 S-Mode Activated! 🎉', '<p>You found the secret! All systems are now operating at maximum Sprungles. Press "Understood" to restore normal operations.</p>');
+                    const modalCloseButton = document.querySelector('.modal-close-button');
+                    const originalOnClick = modalCloseButton.onclick;
+                    modalCloseButton.onclick = function() { document.body.style.animation = ''; originalOnClick(); modalCloseButton.onclick = originalOnClick; };
+                }
+            }
+            
+            function setupCommandPalette() {
+                const overlay = document.getElementById('command-palette-overlay');
+                const input = document.getElementById('palette-input');
+                const resultsList = document.getElementById('palette-results');
+                const commands = [ { name: 'Oneself', id: 'about' }, { name: 'Proficiencies', id: 'skills' }, { name: 'Endeavors', id: 'projects' }, { name: 'Code Hubs', id: 'repositories' }, { name: 'Archives', id: 'documentation' }, { name: 'Communique', id: 'contact' }, { name: 'View Chronicles', action: () => window.open('blog.html', '_blank') }, { name: 'The Wiki Resource', action: () => window.open('sprungli.html', '_blank') } ];
+                function renderResults(filteredCommands) {
+                    resultsList.innerHTML = '';
+                    filteredCommands.forEach(cmd => {
+                        const li = document.createElement('li');
+                        li.className = 'palette-result-item';
+                        li.innerHTML = `<span class="item-path">${cmd.name}</span><span class="item-action">${cmd.id ? 'Jump' : 'Open'}</span>`;
+                        li.onclick = () => { if (cmd.id) document.getElementById(cmd.id).scrollIntoView({ behavior: 'smooth' }); else if (cmd.action) cmd.action(); closePalette(); };
+                        resultsList.appendChild(li);
+                    });
+                }
+                function openPalette() { window.logEvent("Command Palette opened."); overlay.classList.remove('hidden'); input.value = ''; renderResults(commands); input.focus(); }
+                function closePalette() { overlay.classList.add('hidden'); }
+                window.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openPalette(); }
+                    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closePalette();
+                });
+                input.addEventListener('input', () => renderResults(commands.filter(cmd => cmd.name.toLowerCase().includes(input.value.toLowerCase()))));
+                overlay.addEventListener('click', e => { if (e.target === overlay) closePalette(); });
+            }
+
+            function setupTextScrambles() {
+                document.querySelectorAll('.nav-links a, .repo-card .repo-link, .doc-link-button').forEach(link => {
+                    const fx = new TextScramble(link);
+                    let originalText = link.textContent;
+                    link.addEventListener('mouseenter', () => fx.setText(originalText));
+                });
+            }
+
+            function setupCardSpotlight() {
+                document.querySelectorAll('.skill-card, .repo-card').forEach(card => {
+                    card.addEventListener('mousemove', e => {
+                        const rect = card.getBoundingClientRect();
+                        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                    });
+                });
+            }
+
+            function setupNetworkCanvas() {
+                const canvas = document.getElementById('network-canvas');
+                if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                const ctx = canvas.getContext('2d');
+                let particles = []; const particleCount = window.innerWidth > 768 ? 70 : 30;
+                const lineColor = 'rgba(247, 37, 133, 0.2)', particleColor = 'rgba(190, 147, 253, 0.3)';
+                function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+                resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+                class Particle {
+                    constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 1; }
+                    update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width) this.vx *= -1; if (this.y < 0 || this.y > canvas.height) this.vy *= -1; }
+                    draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = particleColor; ctx.fill(); }
+                }
+                for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); });
+                    for (let a = 0; a < particles.length; a++) for (let b = a; b < particles.length; b++) { const dist = Math.hypot(particles[a].x - particles[b].x, particles[a].y - particles[b].y); if (dist < 120) { ctx.beginPath(); ctx.moveTo(particles[a].x, particles[a].y); ctx.lineTo(particles[b].x, particles[b].y); ctx.strokeStyle = lineColor; ctx.lineWidth = 1 - dist / 120; ctx.stroke(); } }
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+
+            function setupConnectionStatus() {
+                const statusEl = document.getElementById('connection-status'); if (!statusEl) return;
+                const textEl = statusEl.querySelector('.status-text');
+                const states = [{ name: 'CONNECTED', class: 'connected', duration: 10000 }, { name: 'SYNCING_DATA', class: 'syncing', duration: 3000 }, { name: 'CONNECTION_INTERRUPTED', class: 'interrupted', duration: 700 }];
+                function changeStatus() {
+                    const chance = Math.random();
+                    let currentState = (chance < 0.8) ? states[0] : (chance < 0.95) ? states[1] : states[2];
+                    if (statusEl.className !== currentState.class) window.logEvent(`Network status changed: ${currentState.name}`, currentState.class === 'interrupted' ? 'error' : 'debug');
+                    statusEl.className = currentState.class; textEl.textContent = currentState.name;
+                    setTimeout(changeStatus, 2000 + Math.random() * currentState.duration);
+                }
+                setTimeout(changeStatus, 5000);
+            }
+
+            function setupDraggableModals() {
+                const modalContent = document.querySelector('.modal-content'); const header = document.querySelector('.modal-header');
+                let isDragging = false, offsetX, offsetY;
+                header.addEventListener('mousedown', (e) => {
+                    isDragging = true; offsetX = e.clientX - modalContent.offsetLeft; offsetY = e.clientY - modalContent.offsetTop;
+                    modalContent.style.transition = 'none';
+                });
+                document.addEventListener('mousemove', (e) => { if (!isDragging) return; modalContent.style.left = `${e.clientX - offsetX}px`; modalContent.style.top = `${e.clientY - offsetY}px`; });
+                document.addEventListener('mouseup', () => { isDragging = false; modalContent.style.transition = ''; });
+            }
+
+            function setupActivityGraph() {
+                const graph = document.getElementById('activity-graph'); if (!graph) return;
+                const totalCells = 26 * 7;
+                for (let i = 0; i < totalCells; i++) {
+                    const cell = document.createElement('div'); cell.className = 'graph-cell';
+                    cell.style.animationDelay = `${Math.random() * 10}s`; graph.appendChild(cell);
+                }
+            }
+            
+            function setupThemeSwitcher() {
+                const buttons = document.querySelectorAll('.theme-button'); const glitchOverlay = document.getElementById('theme-glitch-overlay');
+                const savedTheme = localStorage.getItem('sprungles-theme') || 'cyber-pink';
+                function applyTheme(themeName) {
+                    window.logEvent(`Theme changed to '${themeName}'`, 'warn');
+                    if (window.playSound) window.playSound(null, true);
+                    glitchOverlay.classList.add('active');
+                    document.body.setAttribute('data-theme', themeName);
+                    buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeName));
+                    localStorage.setItem('sprungles-theme', themeName);
+                    setTimeout(() => glitchOverlay.classList.remove('active'), 400);
+                }
+                buttons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.theme)));
+                applyTheme(savedTheme);
+            }
+            
+            function setupDecryptionModule() {
+                const decryptButton = document.querySelector('.decrypt-button'); const encryptedList = document.querySelector('.encrypted-list');
+                if (!decryptButton || !encryptedList) return;
+                const realText = [ "Internet Protocols (TCP/IP, et al.): Deciphering the intricate protocols that allow our digital world to communicate.", "Network Configuration & Security Fortification: The responsible endeavor of establishing and safeguarding digital information.", "Diagnostic Acumen: The skill of pinpointing why digital conversations falter, and coaxing them back to fluency.", "Packet Analysis (Wireshark): Donning the detective's hat to meticulously examine network traffic. The data never lies." ];
+                decryptButton.addEventListener('click', () => {
+                    if (!encryptedList.dataset.encrypted) return;
+                    window.logEvent("Decryption sequence initiated for 'NET_CARTOGRAPHY'", 'warn');
+                    decryptButton.disabled = true; decryptButton.textContent = "DECRYPTING...";
+                    const listItems = encryptedList.querySelectorAll('li'); let promises = [];
+                    listItems.forEach((li, index) => { const fx = new TextScramble(li); promises.push(fx.setText(realText[index])); });
+                    Promise.all(promises).then(() => {
+                        decryptButton.textContent = "DECRYPTION COMPLETE";
+                        window.logEvent("Decryption successful. Data stream normalized.");
+                        delete encryptedList.dataset.encrypted;
+                    });
+                });
+            }
+
+            function setupCodePlayer() {
+                const codeEl = document.getElementById('code-player'); if (!codeEl) return;
+                const codeLines = [ `// Initialize compositor\n`, `struct <span class="code-type">arteetion_compositor</span>* compositor = <span class="code-keyword">create_compositor</span>();\n\n`, `<span class="code-keyword">if</span> (!compositor) {\n`, `   <span class="code-type">log</span>(<span class="code-string">"FATAL: Could not allocate compositor"</span>);\n`, `   <span class="code-keyword">return</span> -1;\n`, `}\n`, `<span class="code-comment">// Let the ballet begin...</span>` ];
+                let currentLine = 0, currentChar = 0, currentText = '';
+                function typeCode() {
+                    if (currentLine >= codeLines.length) { setTimeout(() => { currentLine = 0; currentChar = 0; currentText = ''; typeCode(); }, 7000); return; }
+                    currentText += codeLines[currentLine][currentChar];
+                    codeEl.innerHTML = currentText + '<span class="code-cursor"></span>'; currentChar++;
+                    if (currentChar >= codeLines[currentLine].length) { currentChar = 0; currentLine++; }
+                    setTimeout(typeCode, Math.random() * 100 + 50);
+                }
+                typeCode();
+            }
+
+            // --- EXECUTE ALL SETUP FUNCTIONS ---
+            setupEventLog();
+            setupSmoothScrolling();
+            setupScrollListeners();
+            setupIntersectionObserver();
+            setupFloatingChars();
+            setupAudio();
+            setupEasterEgg();
+            setupCommandPalette();
+            setupTextScrambles();
+            setupCardSpotlight();
+            setupNetworkCanvas();
+            setupConnectionStatus();
+            setupDraggableModals();
+            setupActivityGraph();
+            setupThemeSwitcher();
+            setupDecryptionModule();
+            setupCodePlayer();
+
+            // --- Remaining simple initializers ---
+            document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', () => navigator.clipboard.writeText(b.dataset.copyText).then(() => { const original = b.innerHTML; b.textContent = 'Copied!'; b.classList.add('copied'); setTimeout(() => { b.innerHTML = original; b.classList.remove('copied'); }, 2000); })));
+            document.querySelector('.doc-tabs')?.addEventListener('click', e => {
+                const btn = e.target.closest('.doc-tab-button'); if (!btn || btn.classList.contains('active')) return;
+                const targetId = btn.dataset.tab, wrapper = btn.closest('.doc-tabs').nextElementSibling;
+                document.querySelector('.doc-tabs .doc-tab-button.active').classList.remove('active'); btn.classList.add('active');
+                wrapper.querySelector('.doc-content-pane.active').classList.remove('active'); wrapper.querySelector(`#${targetId}-doc`).classList.add('active');
             });
-
-            // Initialize active tab for documentation on page load
-            // Only activate the first *internal* tab, which is ArttulOS
-            if (docTabButtons.length > 0 && docContentPanes.length > 0) { // Ensure elements exist
-                docTabButtons[0].classList.add('active');
-                docContentPanes[0].classList.add('active');
-            }
+            document.querySelector('.nav-links a[href="#about"]')?.classList.add('active');
         }
-         // Set initial active nav link if not blog page
-        if (!window.location.pathname.endsWith('blog.html')) {
-            const firstNavLink = document.querySelector('.nav-links a[href="#about"]');
-            if (firstNavLink) {
-                navLinks.forEach(link => link.classList.remove('active')); // Clear all first
-                firstNavLink.classList.add('active');
-            }
-        }
-    }
-    window.addEventListener('load', initializePage);
 
-</script>
-
+        // --- RUN INITIALIZER ---
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initializePage); } 
+        else { initializePage(); }
+    </script>
 </body>
 </html>
