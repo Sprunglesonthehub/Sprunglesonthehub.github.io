@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprungli WikiSeek</title>
+    <!-- Vue.js Library -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        :root {
+            --color-bg: #0D071A; --color-text: #E0D8FF;
+            --color-accent-pink: #F72585; --color-accent-purple: #A020F0;
+            --color-card-bg: rgba(20, 12, 38, 0.75); --color-card-border: rgba(114, 9, 183, 0.4);
+            --color-shadow-base: rgba(13, 7, 26, 0.5); --color-shadow-accent: rgba(247, 37, 133, 0.3);
+            --color-bg-grid: rgba(114, 9, 183, 0.07);
+        }
+        
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--color-bg); color: var(--color-text);
+            line-height: 1.7; font-size: 17px; overflow-x: hidden; animation: fadeIn 1s ease-out forwards;
+        }
+        #background-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: linear-gradient(var(--color-bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-bg-grid) 1px, transparent 1px);
+            background-size: 40px 40px; animation: bg-pan 60s linear infinite;
+        }
+        @keyframes bg-pan { 0% { background-position: 0 0; } 100% { background-position: -400px -400px; } }
+        
+        #app [v-cloak] { display: none; }
+        .locked { filter: blur(8px); pointer-events: none; user-select: none; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13, 7, 26, 0.8); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 0.5s forwards; }
+        .is-chromium .modal-overlay { backdrop-filter: blur(10px); }
+        .hidden { display: none; }
+        .choice-modal { background: var(--color-card-bg); border: 1px solid var(--color-accent-pink); border-radius: 15px; max-width: 550px; width: 90%; padding: 30px; text-align: center; box-shadow: 0 0 50px var(--color-shadow-accent); }
+        .choice-modal h2 { font-family: 'Orbitron', sans-serif; font-size: 1.8em; margin-bottom: 15px; color: var(--color-accent-pink); }
+        .choice-modal p { margin-bottom: 25px; opacity: 0.8; }
+        .choice-buttons { display: flex; gap: 20px; justify-content: center; }
+        .choice-btn { flex: 1; padding: 12px 20px; font-family: 'Orbitron', sans-serif; font-size: 1.1em; border: 2px solid var(--color-card-border); border-radius: 8px; background: transparent; color: var(--color-text); cursor: pointer; transition: all 0.3s ease; }
+        .choice-btn:hover { background: var(--color-accent-pink); border-color: var(--color-accent-pink); color: #fff; transform: translateY(-3px); }
+
+        .search-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 5vh 25px 80px 25px; }
+        .search-logo { font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 9vw, 6rem); color: var(--color-text); margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 20px var(--color-accent-pink); }
+        .search-form { position: relative; width: 100%; max-width: 700px; display: flex; align-items: center; margin-bottom: 40px; }
+        #searchInput { width: 100%; padding: 18px 70px 18px 25px; font-family: 'Fira Code', monospace; font-size: 1.2em; color: var(--color-text); background-color: var(--color-card-bg); border: 2px solid var(--color-card-border); border-radius: 50px; outline: none; transition: all .3s ease; }
+        #searchInput:focus { border-color: var(--color-accent-pink); box-shadow: 0 0 25px var(--color-shadow-accent); }
+        #searchButton { position: absolute; right: 0px; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-pink)); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .3s ease;}
+        #searchButton:hover { transform: translateY(-50%) scale(1.1); }
+        
+        .unified-results-area { width: 100%; max-width: 900px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+        .result-item { background: var(--color-card-bg); border: 1px solid var(--color-card-border); padding: 20px; border-radius: 10px; position: relative; animation: fadeInResult 0.5s ease forwards; transition: transform .3s ease, box-shadow .3s ease; }
+        .is-chromium .result-item { backdrop-filter: blur(5px); }
+        @keyframes fadeInResult { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .result-item:hover { transform: translateY(-5px); box-shadow: 0 8px 30px var(--color-shadow-accent); }
+        .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .result-source-tag { font-family: 'Orbitron', sans-serif; font-size: 0.8em; padding: 4px 10px; border-radius: 5px; color: #fff; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .result-title-link { text-decoration: none; color: var(--color-accent-pink); }
+        .result-title { font-size: 1.25em; margin-bottom: 8px; line-height: 1.3; }
+        .result-item:hover .result-title-link { color: var(--color-text); text-decoration: underline; }
+        .result-snippet { font-size: 0.95em; color: var(--color-text); opacity: 0.8; }
+        .result-snippet .searchmatch { font-weight: bold; color: var(--color-accent-pink); background-color: rgba(247,37,133,0.1); }
+        
+        .external-links-section { margin-top: 40px; text-align: center; }
+        .external-links-section h3 { font-family: 'Orbitron'; margin-bottom: 20px; opacity: 0.8; font-size: 1.4em; }
+        .external-links-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .external-link-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; padding: 25px; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 10px; text-decoration: none; color: var(--color-text); font-family: 'Orbitron', sans-serif; transition: all 0.3s ease; height: 150px; }
+        .external-link-btn.disabled { opacity: 0.5; pointer-events: none; }
+        .external-link-btn:not(.disabled):hover { background: var(--color-accent-purple); border-color: var(--color-accent-pink); transform: translateY(-5px); color: #fff; }
+        .external-link-btn svg { width: 40px; height: 40px; }
+        
+        .notice { text-align: center; padding: 60px 20px; font-size: 1.1em; font-family: 'Fira Code', monospace; opacity: 0.7; }
+    </style>
+     <script>
+        // --- Browser Detection Snippet ---
+        (function() {
+            const ua = navigator.userAgent;
+            if (ua.includes("Firefox")) { document.documentElement.classList.add("is-firefox"); } 
+            else { document.documentElement.classList.add("is-chromium"); }
+        })();
+    </script>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- SVG Icon Definitions -->
+        <svg width="0" height="0" style="position:absolute">
+            <defs>
+                 <!-- All <symbol> definitions from previous version go here -->
+            </defs>
+        </svg>
+
+        <div id="background-grid"></div>
+
+        <div class="modal-overlay" v-if="!userMode">
+            <div class="choice-modal">
+                <h2>Select Search Methodology</h2>
+                <p>Choose your preferred engine for external links. Your choice will be remembered.</p>
+                <div class="choice-buttons">
+                    <button class="choice-btn" @click="initializeMode('opensource')">Open Source (SearXNG)</button>
+                    <button class="choice-btn" @click="initializeMode('proprietary')">Proprietary (Google)</button>
+                </div>
+            </div>
+        </div>
+
+        <main class="search-wrapper" :class="{ 'locked': !userMode }">
+            <h1 class="search-logo">Sprungli WikiSeek</h1>
+            <form class="search-form" @submit.prevent="performSearch">
+                <input type="text" id="searchInput" placeholder="Search..." autocomplete="off" v-model="searchQuery">
+                <button type="submit" id="searchButton" aria-label="Submit search">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width:20px;height:20px;"><path d="M16.67 16.64L21 21M19 11c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8 8 3.58 8 8Z"/></svg>
+                </button>
+            </form>
+            
+            <div class="unified-results-area">
+                <div v-if="isLoading" class="notice">Searching...</div>
+                <div v-else-if="unifiedResults.length > 0">
+                    <div v-for="(result, index) in unifiedResults" :key="result.pageid + result.wikiKey" class="result-item" :style="{animationDelay: index * 40 + 'ms'}">
+                        <div class="result-header">
+                            <span class="result-source-tag" :style="{ backgroundColor: allSources[result.wikiKey].color }">{{ allSources[result.wikiKey].name }}</span>
+                        </div>
+                        <h3 class="result-title"><a :href="result.pageUrl" target="_blank" rel="noopener noreferrer" class="result-title-link">{{ result.title }}</a></h3>
+                        <div class="result-snippet" v-html="result.snippet"></div>
+                    </div>
+                </div>
+                <div v-else-if="hasSearched" class="notice">No results found from interactive sources.</div>
+                <div v-else class="notice">Enter a query to begin.</div>
+
+                <div class="external-links-section" v-if="enabledExternalKeys.length > 0 && userMode">
+                    <h3>Further Research</h3>
+                    <div class="external-links-container">
+                        <a v-for="key in enabledExternalKeys" :key="key" :href="getExternalLink(key)" target="_blank" rel="noopener noreferrer" class="external-link-btn" :class="{ 'disabled': !searchQuery }">
+                            <svg><use :xlink:href="allSources[key].icon"/></svg>
+                            <span>{{ allSources[key].name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    const { createApp, ref, reactive, computed, onMounted, watch } = Vue
+
+    createApp({
+        setup() {
+            const userMode = ref(localStorage.getItem('userSearchMode'));
+            const searchQuery = ref('');
+            const isLoading = ref(false);
+            const hasSearched = ref(false);
+            const allSources = {
+                arch: { name: 'Arch Wiki', type: 'interactive', api: 'https://wiki.archlinux.org/api.php', color: '#1793D1', icon: '#icon-arch' },
+                gentoo: { name: 'Gentoo Wiki', type: 'interactive', api: 'https://wiki.gentoo.org/api.php', color: '#9681C0', icon: '#icon-gentoo' },
+                almalinux: { name: 'AlmaLinux Wiki', type: 'interactive', api: 'https://wiki.almalinux.org/w/api.php', color: '#00A868', icon: '#icon-almalinux' },
+                debian: { name: 'Debian Wiki', type: 'external', icon: '#icon-debian' },
+                microsoft: { name: 'Microsoft Learn', type: 'external', icon: '#icon-microsoft' },
+                redhat: { name: 'Red Hat', type: 'external', icon: '#icon-redhat' },
+                rocky: { name: 'Rocky Linux', type: 'external', icon: '#icon-rocky' }
+            };
+            const unifiedResults = ref([]);
+            const debounceTimer = ref(null);
+            
+            const enabledInteractiveKeys = computed(() => Object.keys(allSources).filter(key => allSources[key].type === 'interactive'));
+            const enabledExternalKeys = computed(() => Object.keys(allSources).filter(key => allSources[key].type === 'external'));
+
+            const initializeMode = (mode) => {
+                userMode.value = mode;
+                localStorage.setItem('userSearchMode', mode);
+                const fontUrl = mode === 'proprietary'
+                    ? 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&family=Fira+Code:wght@400&display=swap'
+                    : 'https://fonts.bunny.net/css?family=orbitron:400,700|fira-code:400|roboto:400,700';
+                loadStylesheet(fontUrl);
+                document.body.style.fontFamily = "'Roboto', sans-serif";
+            };
+            
+            const loadStylesheet = (url) => { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = url; document.head.appendChild(link); };
+
+            const performSearch = async () => {
+                if (!searchQuery.value) {
+                    unifiedResults.value = [];
+                    hasSearched.value = false;
+                    return;
+                }
+                isLoading.value = true;
+                hasSearched.value = true;
+                
+                const promises = enabledInteractiveKeys.value.map(key => 
+                    fetchSearchResults(allSources[key].api, searchQuery.value).then(data => ({ key, data }))
+                );
+                
+                const allResults = await Promise.all(promises);
+                
+                let tempResults = [];
+                allResults.forEach(({ key, data }) => {
+                    const mapped = data.search.map(result => ({ ...result, wikiKey: key, pageUrl: `${new URL(allSources[key].api).origin}/index.php?title=${encodeURIComponent(result.title)}` }));
+                    tempResults.push(...mapped);
+                });
+
+                tempResults.sort((a, b) => (b.snippet.includes('searchmatch') ? 1 : 0) - (a.snippet.includes('searchmatch') ? 1 : 0));
+                unifiedResults.value = tempResults;
+
+                isLoading.value = false;
+            };
+            
+            const getExternalLink = (key) => {
+                if (!searchQuery.value) return '#';
+                const sourceName = allSources[key].name;
+                const baseUrl = userMode.value === 'proprietary' ? 'https://www.google.com/search?q=' : 'https://search.canine.tools/search?q=';
+                const fullQuery = `${sourceName} ${searchQuery.value}`;
+                return `${baseUrl}${encodeURIComponent(fullQuery)}`;
+            };
+            
+            const fetchSearchResults = async (api, query) => {
+                const url = `${api}?action=query&list=search&srsearch=${encodeURIComponent(query)}&srprop=snippet&format=json&origin=*`;
+                try { 
+                    const res = await fetch(url); 
+                    if (!res.ok) return { search: [] };
+                    const data = await res.json();
+                    return data.query || { search: [] };
+                } catch { return { search: [] }; }
+            };
+
+            watch(searchQuery, (newQuery) => {
+                clearTimeout(debounceTimer.value);
+                if (newQuery) {
+                    debounceTimer.value = setTimeout(() => performSearch(), 500);
+                } else {
+                    unifiedResults.value = [];
+                    hasSearched.value = false;
+                }
+            });
+            
+            onMounted(() => {
+                if (userMode.value) initializeMode(userMode.value);
+            });
+            
+            return {
+                userMode, searchQuery, isLoading, hasSearched, allSources,
+                unifiedResults, enabledInteractiveKeys, enabledExternalKeys,
+                initializeMode, performSearch, getExternalLink
+            };
+        }
+    }).mount('#app');
+    </script>
+</body>
+</html>
