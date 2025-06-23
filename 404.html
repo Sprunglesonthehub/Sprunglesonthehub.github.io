@@ -3,71 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Backup Site - Sprungles.org</title>
-    <meta http-equiv="refresh" content="3; url=https://sprungles.gitlab.io">
+    <title>404 Not Found - Rerouting...</title>
+    <meta http-equiv="refresh" content="4; url=https://sprungles.org">
+    <link href="https://fonts.bunny.net/css?family=orbitron:700|fira-code:400" rel="stylesheet" />
     <style>
+        :root {
+            --color-bg: #0A0B1E;
+            --color-text: #D1D1E9;
+            --color-accent-purple: #9D4EDD;
+            --color-accent-blue: #3A86FF;
+            --color-panel-bg: rgba(26, 27, 46, 0.75);
+            --color-border: rgba(157, 78, 221, 0.25);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes subtleFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Fira Code', monospace;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #4a148c, #880e4f); /* Darker purple to deep pink gradient */
-            color: #fce4ec; /* Light pink text for good contrast */
+            background-color: var(--color-bg);
+            color: var(--color-text);
             text-align: center;
             overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
         }
+
+        .background-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image:
+                linear-gradient(var(--color-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.1;
+        }
+
         .error-container {
-            background-color: rgba(0, 0, 0, 0.4); /* Darker, semi-transparent background for the text box */
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
-            padding: 30px;
-            margin-bottom: 30px; /* Space between the text container and the image */
-            backdrop-filter: blur(5px); /* Optional: A subtle blur effect behind the container */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle light border */
+            background-color: var(--color-panel-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 90%;
+            animation: subtleFlicker 3s infinite alternate;
         }
+
         h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 2.5em;
             margin-bottom: 15px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            color: var(--color-accent-purple);
+            text-shadow: 0 0 15px var(--color-accent-purple);
         }
+        
         p {
             font-size: 1.1em;
             margin-bottom: 10px;
+            line-height: 1.6;
         }
-        img {
-            max-width: 250px; /* Adjust size of character as needed */
+        
+        .character-svg {
+            max-width: 200px;
             height: auto;
-            border-radius: 10px; /* Slightly rounded corners for the image */
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6); /* Shadow for the image to make it pop */
-            animation: float 3s ease-in-out infinite; /* Simple floating animation */
-        }
-        a {
-            color: #f48fb1; /* A contrasting pink for the link */
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
-        }
-        a:hover {
-            color: #ffb3e6; /* Lighter pink on hover */
-            text-decoration: underline;
+            filter: drop-shadow(0 0 20px var(--color-accent-blue));
+            animation: pulse 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+        a {
+            color: var(--color-accent-blue);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px var(--color-accent-blue);
+        }
+        a:hover {
+            color: #fff;
+            text-shadow: 0 0 15px #fff;
+        }
+        
+        /* --- NEW GitHub Fallback Button --- */
+        .fallback-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+        }
+        .fallback-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-muted, #8c82a6);
+            display: block;
+            margin-bottom: 5px;
+        }
+        .fallback-link {
+            display: inline-block;
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em;
+            color: var(--color-text);
+            background-color: transparent;
+            border: 1px solid var(--color-border);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .fallback-link:hover {
+            background-color: var(--color-accent-purple);
+            border-color: var(--color-accent-purple);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
+    <div class="background-grid"></div>
+
     <div class="error-container">
-        <h1>Oops! Page Not Found</h1>
-        <p>Redirecting you to our backup site at sprungles.gitlab.io in 3 seconds...</p>
-        <p>If you're not redirected automatically, please <a href="https://sprungles.gitlab.io">click here</a>.</p>
+        <h1>404 // SIGNAL LOST</h1>
+        <p>REROUTING TO PRIMARY NODE (sprungles.org) IN 4 SECONDS...</p>
+        <p>If transmission fails, establish manual link: <a href="https://sprungles.org">sprungles.org</a>.</p>
     </div>
-    <img src="cutie.png" alt="Cute character for 404 page">
+
+    <svg viewBox="0 0 200 200" class="character-svg">
+        <defs>
+            <linearGradient id="charGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--color-accent-purple)" />
+                <stop offset="100%" stop-color="var(--color-accent-blue)" />
+            </linearGradient>
+        </defs>
+        <path fill="url(#charGrad)" d="M100 20C40 20 40 80 40 120S60 200 100 180c40-20 60-80 60-120S160 20 100 20z"/>
+        <path fill="var(--color-bg)" d="M80 80h40v40H80z" transform="rotate(45 100 100)"/>
+        <path fill="var(--color-text)" d="M70 140h60v5H70z"/>
+        <path stroke="var(--color-text)" stroke-width="3" fill="none" d="M50,110 a50,50 0 0,1 100,0"/>
+    </svg>
+    
+    <div class="fallback-container">
+        <span class="fallback-label">System Override</span>
+        <a href="https://sprungles.gitlab.io" class="fallback-link">Redirect to GitLab Mirror</a>
+    </div>
+
 </body>
 </html>
