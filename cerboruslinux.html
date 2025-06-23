@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerberus Linux // Command Interface</title>
+    <style>
+        :root {
+            --color-bg: #0D0D10;
+            --color-text: #C1C1C1;
+            --color-accent-amber: #FFB800;
+            --color-panel-bg: rgba(20, 20, 24, 0.9);
+            --color-border: rgba(255, 184, 0, 0.25);
+            --font-sans: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --font-display: 'Orbitron', sans-serif;
+        }
+
+        /* --- Base Setup --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-mono);
+            font-size: 16px;
+            line-height: 1.7;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        /* --- Background Effects --- */
+        .background-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image:
+                linear-gradient(rgba(255, 184, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 184, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        /* --- Main Interface Layout --- */
+        #main-interface {
+            width: 95vw; height: 90vh;
+            max-width: 1400px; max-height: 800px;
+            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; animation: fadeIn 1s 0.5s forwards;
+        }
+
+        /* --- Central Content Panel --- */
+        .content-hub {
+            width: 50%; height: 80%;
+            background: var(--color-panel-bg);
+            border: 1px solid var(--color-border);
+            position: relative;
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            overflow: hidden;
+        }
+        .content-panel {
+            position: absolute; top: 40px; left: 40px; right: 40px; bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            pointer-events: none;
+        }
+        .content-panel.is-active { opacity: 1; transform: translateY(0); pointer-events: all; }
+        .content-panel h1 {
+            font-family: var(--font-display);
+            font-size: 3em; color: #fff;
+            margin-bottom: 20px; text-shadow: 0 0 10px var(--color-accent-amber);
+        }
+        .content-panel a { color: var(--color-accent-amber); text-decoration: none; }
+        .content-panel a:hover { text-decoration: underline; }
+
+        /* --- Navigation Nodes --- */
+        .nav-node {
+            position: absolute;
+            width: 200px; height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .nav-node:hover { transform: scale(1.05); }
+
+        #node-security { top: 0; left: 25%; transform: translate(-50%, -40%); }
+        #node-performance { top: 50%; right: 0; transform: translate(40%, -50%); }
+        #node-control { bottom: 0; left: 25%; transform: translate(-50%, 40%); }
+        
+        .node-svg { width: 100%; height: 100%; }
+        .node-svg .outer-hex {
+            fill: var(--color-panel-bg);
+            stroke: var(--color-border);
+            stroke-width: 1;
+            transition: fill 0.3s;
+        }
+        .nav-node:hover .outer-hex, .nav-node.is-active .outer-hex {
+            fill: rgba(255, 184, 0, 0.1);
+            stroke: var(--color-accent-amber);
+        }
+        .node-svg .icon {
+            fill: var(--color-accent-amber);
+            transition: filter 0.3s;
+            filter: drop-shadow(0 0 5px var(--color-accent-amber));
+        }
+        .nav-node:hover .icon, .nav-node.is-active .icon { filter: drop-shadow(0 0 15px var(--color-accent-amber)); }
+        
+        .node-svg .label {
+            font-family: var(--font-display);
+            fill: var(--color-text);
+            font-size: 14px;
+            text-anchor: middle;
+            transition: fill 0.3s;
+        }
+        .nav-node:hover .label, .nav-node.is-active .label { fill: #fff; }
+
+        /* --- NEW: System Status Dropdown --- */
+        #system-status {
+            position: absolute;
+            top: -50px; right: 0;
+            z-index: 100;
+        }
+        #system-status .status-header {
+            font-family: var(--font-display);
+            font-size: 14px; color: var(--color-accent-amber);
+            text-align: right;
+            margin-bottom: 5px;
+        }
+        .status-dropdown {
+            position: relative;
+        }
+        .status-display {
+            border: 1px solid var(--color-border);
+            padding: 8px 15px;
+            width: 280px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--color-panel-bg);
+            transition: background 0.2s;
+        }
+        .status-display:hover { background: rgba(255, 184, 0, 0.1); }
+        .status-display span:after { content: ' ▼'; font-size: 10px; }
+
+        .status-options {
+            position: absolute;
+            top: 100%; right: 0;
+            width: 100%;
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            display: none; /* Toggled with JS */
+        }
+        .status-options.is-open { display: block; }
+        .status-options div {
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .status-options div:hover { background: rgba(255, 184, 0, 0.1); }
+
+        /* --- Decorative elements --- */
+        .footer-credits { position: fixed; bottom: 10px; right: 20px; font-size: 12px; opacity: 0.5; }
+        .footer-credits a { color: var(--color-accent-amber); }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+
+    <!-- Main Interface -->
+    <div id="main-interface">
+        
+        <!-- Navigation Nodes -->
+        <div class="nav-node is-active" id="node-security" data-target="panel-security">
+            <svg class="node-svg" viewBox="0 0 100 100">
+                <path class="outer-hex" d="M50 5 L93.3 27.5 L93.3 72.5 L50 95 L6.7 72.5 L6.7 27.5 Z"/>
+                <path class="icon" d="M50 25 L30 35 L30 55 L50 65 L70 55 L70 35 Z M50 30 L65 37.5 L65 52.5 L50 60 L35 52.5 L35 37.5 Z"/>
+                <text class="label" x="50" y="82">Security</text>
+            </svg>
+        </div>
+        <div class="nav-node" id="node-performance" data-target="panel-performance">
+            <svg class="node-svg" viewBox="0 0 100 100">
+                <path class="outer-hex" d="M50 5 L93.3 27.5 L93.3 72.5 L50 95 L6.7 72.5 L6.7 27.5 Z"/>
+                <path class="icon" d="M30 50 L50 25 L70 50 L50 75 Z"/>
+                <text class="label" x="50" y="82">Performance</text>
+            </svg>
+        </div>
+        <div class="nav-node" id="node-control" data-target="panel-control">
+             <svg class="node-svg" viewBox="0 0 100 100">
+                <path class="outer-hex" d="M50 5 L93.3 27.5 L93.3 72.5 L50 95 L6.7 72.5 L6.7 27.5 Z"/>
+                <circle class="icon" cx="50" cy="50" r="20" fill="none" stroke="var(--color-accent-amber)" stroke-width="4" />
+                <circle class="icon" cx="50" cy="50" r="8" />
+                <text class="label" x="50" y="82">Control</text>
+            </svg>
+        </div>
+
+        <!-- System Status Dropdown (formerly the loader) -->
+        <div id="system-status">
+            <h3 class="status-header">KERNEL MODE</h3>
+            <div class="status-dropdown">
+                <div class="status-display" id="status-display-btn">
+                    <span id="current-status-text">Open Source GFX</span>
+                </div>
+                <div class="status-options" id="status-options-list">
+                    <div data-choice="opensource">Open Source GFX (Bunny)</div>
+                    <div data-choice="proprietary">Proprietary GFX (Google)</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Central Content Hub -->
+        <div class="content-hub">
+            <div id="panel-security" class="content-panel is-active">
+                <h1>Sentinel Security Layer</h1>
+                <p>An impenetrable guardian for your data. Cerberus employs kernel-level hardening, mandatory access controls, and a zero-trust networking model by default. It is the vigilant warden standing between your work and the chaos of the net. Assume breach; achieve security.</p>
+                <br/><p><a href="#">> Read Security Whitepaper</a></p>
+            </div>
+            <div id="panel-performance" class="content-panel">
+                <h1>Hyperion Performance Core</h1>
+                <p>Leveraging the AngusOS HAL, Cerberus achieves near bare-metal speeds by eliminating redundant abstraction layers. The custom I/O scheduler and process governor ensure your most demanding tasks are never throttled. This is your hardware, fully unleashed.</p>
+                 <br/><p><a href="#">> View Benchmarks</a></p>
+            </div>
+            <div id="panel-control" class="content-panel">
+                <h1>Nexus Command Suite</h1>
+                <p>Your system, your rules. Cerberus provides unfiltered access to its modular architecture. Swap kernels, recompile packages with custom flags, and script any aspect of the system with a powerful and consistent toolkit. This is absolute authority, delivered.</p>
+                <br/><p><a href="#">> Explore Documentation</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-credits">
+        <p>© 2025 Cerberus Project. Web Experience by <a href="#">Sprungles</a>.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navNodes = document.querySelectorAll('.nav-node');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            
+            const statusDisplayBtn = document.getElementById('status-display-btn');
+            const statusOptionsList = document.getElementById('status-options-list');
+            const currentStatusText = document.getElementById('current-status-text');
+            const statusOptions = document.querySelectorAll('.status-options div');
+
+            // --- Font/Asset Loading Logic ---
+            function loadFont(choice) {
+                const existingLink = document.getElementById('dynamic-font-link');
+                if (existingLink) {
+                    existingLink.remove();
+                }
+
+                const fontLink = document.createElement('link');
+                fontLink.id = 'dynamic-font-link';
+                fontLink.rel = 'stylesheet';
+                
+                if (choice === 'proprietary') {
+                    fontLink.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Fira+Code&family=Roboto&display=swap';
+                } else { // opensource
+                    fontLink.href = 'https://fonts.bunny.net/css?family=orbitron:700|fira-code:400|roboto:400';
+                }
+                document.head.appendChild(fontLink);
+            }
+            
+            // --- Dropdown Menu Logic ---
+            statusDisplayBtn.addEventListener('click', () => {
+                statusOptionsList.classList.toggle('is-open');
+            });
+
+            statusOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const choice = option.getAttribute('data-choice');
+                    loadFont(choice);
+                    currentStatusText.textContent = option.textContent;
+                    statusOptionsList.classList.remove('is-open');
+                });
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                if (!statusDisplayBtn.contains(event.target) && !statusOptionsList.contains(event.target)) {
+                    statusOptionsList.classList.remove('is-open');
+                }
+            });
+
+
+            // --- Main Panel Navigation Logic ---
+            navNodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    const targetId = node.getAttribute('data-target');
+                    navNodes.forEach(n => n.classList.remove('is-active'));
+                    node.classList.add('is-active');
+
+                    contentPanels.forEach(panel => {
+                        panel.classList.toggle('is-active', panel.id === targetId);
+                    });
+                });
+            });
+
+            // --- Initial Load ---
+            // Load the default font choice on page start
+            loadFont('opensource');
+        });
+    </script>
+</body>
+</html>
