@@ -131,6 +131,14 @@
         .highlight{color:var(--color-accent-pink);font-weight:bold;}
         .section-content a{color:var(--color-accent-pink);font-weight:bold;text-decoration:none;}
         .section-content a:hover{text-decoration:underline;}
+        
+        h3.subsection-title {
+            font-family: var(--font-display);
+            font-size: 1.8em;
+            color: var(--color-accent-purple);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
 
         .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:40px;}
         .skill-card{background-color:var(--color-surface);border:1px solid var(--color-border);padding:30px;border-radius:8px;transition:transform .3s ease,box-shadow .3s ease;}
@@ -170,8 +178,10 @@
 
             <ul class="main-nav">
                 <li><a href="#about" class="is-active">About Me</a></li>
+                <!-- NEW ArttulOS LINK -->
+                <li><a href="arttulos.html">ArttulOS</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Key Endeavors</a></li>
+                <li><a href="#projects">Other Endeavors</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
 
@@ -198,27 +208,54 @@
             <section id="about" class="content-section">
                 <h2 class="section-title">About Me</h2>
                 <div class="section-content">
-                    <p>Salutations. I am Natalie Spiva, though widely known in digital circles as <span class="highlight">Sprungles</span>. My work is dedicated to architecting systems that empower the user. My flagship project is <a href="https://arttulos.org" target="_blank">ArttulOS</a>, a complete desktop Linux distribution built for performance and control.</p>
-                    <p>To counter the growing trend of locked-down, proprietary mobile ecosystems, I have two specialized projects. First is <span class="highlight">AngusOS</span>, a foundational Android distribution that I maintain to provide a stable, open hardware interface. This work serves as the crucial bedrock for my ultimate mobile vision: <span class="highlight">Cerberus Linux</span>.</p>
-                    <p>Cerberus is a full-featured Linux distribution for Android devices, built directly on the Android HAL provided by AngusOS. It is an exercise in absolute freedom, designed to give users complete authority over the powerful hardware they own, free from the constraints of Google's increasingly controlled ecosystem.</p>
+                    <p>Salutations. I am Natalie Spiva, though widely known in digital circles as <span class="highlight">Sprungles</span>. My work is dedicated to architecting systems that empower the user, free from the constraints of increasingly locked-down, proprietary ecosystems.</p>
+                    <p>My flagship project is <a href="#arttulos">ArttulOS</a>, a complete Linux distribution detailed below. This project is the culmination of my efforts to build robust, open-source platforms for both desktop and mobile hardware, giving users complete authority over the devices they own.</p>
+                </div>
+            </section>
+
+            <!-- ============================================= -->
+            <!-- ======== NEW COMPREHENSIVE ARTTULOS SECTION ======== -->
+            <!-- ============================================= -->
+            <section id="arttulos" class="content-section">
+                <h2 class="section-title">ArttulOS</h2>
+                <div class="section-content">
+                    <p>ArttulOS is a powerful, open-source Linux distribution built on the rock-solid foundation of <span class="highlight">Rocky Linux</span>. It delivers the security and reliability of the RHEL ecosystem while serving as the essential OS layer for <span class="highlight">Cerborus Linux</span>, bridging the gap between traditional servers and modern Android-powered hardware.</p>
+
+                    <h3 class="subsection-title">Core Pillars</h3>
+                    <div class="skills-grid">
+                        <div class="skill-card"><h3>🛡️ Built on Rocky</h3><p>Benefit from 100% bug-for-bug compatibility with Red Hat Enterprise Linux. Get the stability, security features (like SELinux), and vast package ecosystem that powers the world's most demanding IT environments.</p></div>
+                        <div class="skill-card"><h3>📱 Cerborus Foundation</h3><p>ArttulOS is the essential operating system that powers Cerborus Linux. It's the stable, userspace layer running directly on top of the Android HAL, enabling a full, server-grade Linux on mobile chipsets.</p></div>
+                        <div class="skill-card"><h3>📦 Open & Flexible</h3><p>Fully open-source and transparent. We provide the tools and images you need to build your own servers, embedded systems, or experimental devices. Your hardware, your rules.</p></div>
+                    </div>
+
+                    <h3 class="subsection-title">System Architecture</h3>
+                    <p>ArttulOS holds a unique position. For standard servers, it's a reliable OS. For Cerborus Linux, it's the bridge between hardware and a full Linux experience.</p>
+                    <div class="list-item-card"><strong>Layer 3: User Applications / Cerborus Linux</strong> Run standard Linux applications, containers, or the full Cerberus environment.</div>
+                    <div class="list-item-card"><strong>Layer 2: ArttulOS (Rocky-based Userspace)</strong> The complete and stable operating system.</div>
+                    <div class="list-item-card"><strong>Layer 1: Linux Kernel / AngusOS HAL</strong> The low-level hardware drivers and kernel. For Cerberus, this is the Android Hardware Abstraction Layer provided by AngusOS.</div>
+
+                    <h3 class="subsection-title">Get Started</h3>
+                    <p>Ready to build? Dive into the source code or download the latest release.</p>
+                    <div class="list-item-card"><strong>Download Images:</strong> <a href="https://arttulos.org" target="_blank">Get the latest ISOs and raw images from the official site.</a></div>
+                    <div class="list-item-card"><strong>Source Code:</strong> <a href="https://github.com/sprunglesonthehub" target="_blank">Explore the repositories for ArttulOS and its components on GitHub.</a></div>
                 </div>
             </section>
 
             <section id="skills" class="content-section">
                 <h2 class="section-title">Skills & Proficiencies</h2>
                 <div class="skills-grid">
-                    <div class="skill-card"><h3>OS & Systems Architecture</h3><ul><li>Architecting ArttulOS (Desktop)</li><li>Building AngusOS (Android Base)</li><li>Developing Cerberus Linux (Mobile)</li><li>System Internals & HAL Integration</li></ul></div>
+                    <div class="skill-card"><h3>OS & Systems Architecture</h3><ul><li>Linux Distribution Development</li><li>Android (AOSP) & HAL Integration</li><li>System Internals & Kernel Interaction</li><li>Bootloader & System Initialization</li></ul></div>
                     <div class="skill-card"><h3>Web & Browser Development</h3><ul><li>ArttulCat (Firefox Fork) Maintenance</li><li>WebExtension & API Integration</li><li>Performance Optimization & Profiling</li><li>JavaScript, HTML, CSS Mastery</li></ul></div>
-                    <div class="skill-card"><h3>Android & Mobile</h3><ul><li>Android Open Source Project (AOSP)</li><li>Native App Development (Java/Kotlin)</li><li>System-level Privacy Hardening</li><li>Mobile UI/UX Principles</li></ul></div>
+                    <div class="skill-card"><h3>Software & Security</h3><ul><li>C, C++, Rust, Go</li><li>System-level Privacy Hardening</li><li>Reverse Engineering (Ghidra)</li><li>Network & Application Security</li></ul></div>
                     <div class="skill-card"><h3>Network Cartography</h3><ul><li>Internet Protocols (TCP/IP, et al.)</li><li>Network Configuration & Security</li><li>Packet Analysis (Wireshark)</li><li>Diagnostic Acumen</li></ul></div>
                 </div>
             </section>
 
             <section id="projects" class="content-section">
-                <h2 class="section-title">Key Endeavors</h2>
+                <h2 class="section-title">Other Endeavors</h2>
                 <div class="section-content">
-                    <div class="list-item-card"><strong>ArttulOS Desktop:</strong> The flagship project—a complete, independent Linux distribution for desktops and servers, focused on performance, modularity, and a refined user experience.</div>
-                    <div class="list-item-card"><strong>Cerberus Linux for Mobile:</strong> A revolutionary project to bring a true Linux environment to Android hardware. By leveraging the AngusOS HAL, Cerberus delivers unparalleled control and freedom, breaking the chains of the standard Android environment.</div>
+                    <p>Beyond the core ArttulOS project, I maintain several other key initiatives that support my mission of an open and empowered digital world.</p>
+                    <div class="list-item-card"><strong>Cerberus Linux for Mobile:</strong> The revolutionary project to bring a true Linux environment to Android hardware, running on top of ArttulOS and the AngusOS HAL.</div>
                     <div class="list-item-card"><strong>AngusOS Foundation:</strong> The essential Android distribution maintained as a clean, stable hardware interface layer, making the power of Cerberus Linux possible on a wide range of mobile devices.</div>
                     <div class="list-item-card"><strong>ArttulCat Browser:</strong> Lead development on features that empower users with greater privacy controls and a more efficient browsing experience, free from unwanted telemetry.</div>
                 </div>
@@ -276,18 +313,18 @@
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    const sectionId = entry.target.id;
-                    const navLink = document.querySelector(`.main-nav a[href="#${sectionId}"]`);
-                    
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
+                        const sectionId = entry.target.id;
+                        const navLink = document.querySelector(`.main-nav a[href="#${sectionId}"]`);
+                        
                         if (navLink) {
                             navLinks.forEach(link => link.classList.remove('is-active'));
                             navLink.classList.add('is-active');
                         }
                     }
                 });
-            }, { root: null, threshold: 0.1, rootMargin: "-40% 0px -40% 0px" });
+            }, { root: null, threshold: 0.2, rootMargin: "-40% 0px -40% 0px" });
 
             sections.forEach(section => observer.observe(section));
             

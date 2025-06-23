@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArttulOS :: System Shell</title>
+    <meta name="description" content="ArttulOS is a powerful Linux distribution based on Rocky Linux, serving as the foundation for Cerborus Linux.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: #1a1a1a;
+            --glow-color: #00ff9c;
+            --text-color: #00dd8c;
+            --secondary-color: #e0e0e0;
+            --accent-color: #ffb800;
+            --border-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+        }
+
+        /* --- CRT Effect --- */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 51%);
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+          0% { opacity: 0.5; }
+          50% { opacity: 0.9; }
+          100% { opacity: 0.5; }
+        }
+
+        /* --- Terminal & Loader --- */
+        #terminal-wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+            text-shadow: 0 0 5px var(--glow-color);
+        }
+        
+        #terminal {
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        #terminal .line { white-space: pre-wrap; word-break: break-all; }
+        .prompt .prefix { color: var(--accent-color); }
+        .input-line { display: flex; }
+        #userInput {
+            background: transparent; border: none; color: var(--secondary-color);
+            font-family: 'Fira Code', monospace; font-size: 16px; flex-grow: 1; padding-left: 10px;
+        }
+        #userInput:focus { outline: none; }
+        .output { display: none; }
+        .output.command { color: var(--secondary-color); }
+        .output.info { color: var(--text-color); }
+        .output.highlight { color: var(--accent-color); }
+        .output.art { color: var(--glow-color); white-space: pre; line-height: 1.1; }
+
+        /* --- NEW: Loader Styles --- */
+        #loader-wrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        #progress-container {
+            width: 100%;
+            height: 30px;
+            border: 2px solid var(--border-color);
+            background-color: var(--surface-color);
+            margin-bottom: 15px;
+            padding: 2px;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--glow-color);
+            box-shadow: 0 0 10px var(--glow-color);
+            transition: width 0.1s linear;
+        }
+        #progress-text {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        #loader-status {
+            color: var(--text-color);
+        }
+        
+        /* --- Main Content Page (Styles remain the same) --- */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        #main-content .container { padding: 40px 0; border-bottom: 1px solid var(--border-color); }
+        #main-content .container:last-child { border-bottom: none; }
+        .content-header { text-align: center; }
+        .content-header pre { font-size: 10px; color: var(--glow-color); text-shadow: 0 0 5px var(--glow-color); margin-bottom: 20px; }
+        .content-header h1 { color: var(--secondary-color); font-size: 3rem; text-shadow: 0 0 8px var(--glow-color); }
+        .content-header .tagline { font-size: 1.5rem; color: var(--accent-color); margin-top: 10px; }
+        h2 { font-size: 2.25rem; color: var(--secondary-color); text-shadow: 0 0 5px var(--glow-color); margin-bottom: 20px; text-align: center; }
+        p { max-width: 700px; margin: 0 auto 20px auto; color: var(--secondary-color); line-height: 1.7; text-align: center; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px; }
+        .pillar-card { background-color: var(--surface-color); border: 1px solid var(--border-color); padding: 30px; border-radius: 4px; box-shadow: 0 0 15px rgba(0, 255, 156, 0.1); }
+        .pillar-card h3 { color: var(--glow-color); font-size: 1.5rem; margin-bottom: 15px; }
+        .pillar-card p { font-size: 1rem; text-align: left; color: var(--secondary-color); }
+        .architecture-stack { background-color: var(--surface-color); border: 1px solid var(--border-color); padding: 40px; margin: 40px auto 0 auto; max-width: 600px; }
+        .stack-layer { border: 1px solid var(--border-color); padding: 20px; margin-bottom: 10px; text-align: center; }
+        .stack-layer.arttulos { border-color: var(--glow-color); box-shadow: 0 0 10px var(--glow-color); }
+        .stack-layer h4 { color: var(--accent-color); margin: 0 0 10px 0; }
+        .stack-layer p { margin: 0; }
+        .cta-section { text-align: center; }
+        .cta-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 12px 25px; font-family: 'Fira Code', monospace; font-weight: 700; text-decoration: none; border: 2px solid var(--glow-color); transition: all 0.2s ease; }
+        .btn-primary { background-color: var(--glow-color); color: var(--bg-color); text-shadow: none; }
+        .btn-primary:hover { background-color: var(--bg-color); color: var(--glow-color); }
+        .btn-secondary { background-color: transparent; color: var(--glow-color); }
+        .btn-secondary:hover { background-color: var(--glow-color); color: var(--bg-color); text-shadow: none; }
+        footer { text-align: center; padding: 40px 20px; color: #888; }
+        footer a { color: var(--text-color); }
+    </style>
+</head>
+<body>
+
+    <div id="terminal-wrapper">
+        <div id="terminal">
+            <div id="outputContainer"></div>
+            <div class="input-line line" id="inputLine">
+                <div class="prompt">
+                    <span class="prefix">guest@arttulos</span><span>:</span><span class="path">~</span>$ 
+                </div>
+                <input type="text" id="userInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+            </div>
+        </div>
+        <!-- NEW: Loader HTML structure -->
+        <div id="loader-wrapper">
+            <div id="progress-text">0%</div>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="loader-status"></div>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <!-- Main content remains the same... -->
+        <header class="content-header container">
+            <pre id="header-logo"></pre><h1>ArttulOS</h1><p class="tagline">Enterprise Stability. Mobile Innovation.</p>
+        </header>
+        <section class="container">
+            <h2>More Than an Operating System</h2><p>ArttulOS was born from an ambitious idea: what if you could have the proven, long-term stability of an enterprise server on any device? By using Rocky Linux as our upstream, we inherit a decade of security, performance, and compatibility. But we don't stop there. ArttulOS is uniquely engineered to be the core of Cerborus Linux, our project that runs a full Linux environment directly on top of the Android Hardware Abstraction Layer (HAL).</p>
+        </section>
+        <section class="container">
+            <h2>The Pillars of ArttulOS</h2>
+            <div class="pillars-grid">
+                <div class="pillar-card"><h3>🛡️ Built on Rocky</h3><p>Benefit from 100% bug-for-bug compatibility with Red Hat Enterprise Linux. Get the stability, security features (like SELinux), and vast package ecosystem that powers the world's most demanding IT environments.</p></div>
+                <div class="pillar-card"><h3>📱 Cerborus Foundation</h3><p>ArttulOS is the essential operating system that powers Cerborus Linux. It's the stable, userspace layer running directly on top of the Android HAL, enabling a full, server-grade Linux on mobile chipsets.</p></div>
+                <div class="pillar-card"><h3>📦 Open & Flexible</h3><p>Fully open-source and transparent. We provide the tools and images you need to build your own servers, embedded systems, or experimental devices. Your hardware, your rules.</p></div>
+            </div>
+        </section>
+        <section class="container">
+            <h2>The Architecture</h2><p>ArttulOS holds a unique position. For standard servers, it's a reliable OS. For Cerborus Linux, it's the bridge between hardware and a full Linux experience.</p>
+            <div class="architecture-stack"><div class="stack-layer"><h4>Your Applications / Cerborus Linux</h4></div><div style="text-align:center; color: var(--accent-color);">▼</div><div class="stack-layer arttulos"><h4>ArttulOS (Rocky-based Userspace)</h4><p>The complete and stable operating system.</p></div><div style="text-align:center; color: var(--accent-color);">▼</div><div class="stack-layer"><h4>Linux Kernel / Android HAL</h4></div></div>
+        </section>
+        <section class="container cta-section">
+            <h2>Get Started</h2><p>Ready to build? Download an image, read the documentation, or dive into the source code.</p>
+            <div class="cta-buttons"><a href="#" class="btn btn-primary">Download Images</a><a href="#" class="btn btn-secondary">View on GitHub</a></div>
+        </section>
+        <footer><p>© 2024 ArttulOS Project. <a href="#">Community</a> • <a href="#">Report a Bug</a></p></footer>
+    </main>
+
+    <div id="boot-sequence" style="display: none;">
+        <!-- Boot sequence content remains the same... -->
+        <div class="output info" data-index="0" data-delay="500">[  OK  ] Probing upstream source... [ <span class="highlight">Rocky Linux 9</span> ]</div>
+        <div class="output info" data-index="1" data-delay="100">[  OK  ] Inheriting RHEL ABI compatibility.</div>
+        <div class="output info" data-index="2" data-delay="100">[  OK  ] SELinux security context... ENABLED.</div>
+        <div class="output info" data-index="3" data-delay="400">... Upstream stability confirmed.</div>
+        <div class="output art" data-index="4" data-delay="100"><pre>
+    .--.
+   |o_o |
+   |:_/ |
+  //   \ \
+ (|     | )
+/'\_   _/`\
+\___)=(___/
+            </pre></div>
+        <div class="output info" data-index="5" data-delay="500">[ LOAD ] Linux Kernel 6.x.x-arttulos</div>
+        <div class="output info" data-index="6" data-delay="200">[ LOAD ] Activating <span class="highlight">Cerborus Link Layer</span>... ENABLED.</div>
+        <div class="output info" data-index="7" data-delay="100">[ INFO ] System is now foundation for Android HAL operations.</div>
+        <div class="output info" data-index="8" data-delay="800">... KERNEL LOADED.</div>
+        <div class="output info" data-index="9" data-delay="100">[ INIT ] Starting graphical subsystem...</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Element references
+            const terminalWrapper = document.getElementById('terminal-wrapper');
+            const terminal = document.getElementById('terminal');
+            const outputContainer = document.getElementById('outputContainer');
+            const inputLine = document.getElementById('inputLine');
+            const userInput = document.getElementById('userInput');
+            const mainContent = document.getElementById('main-content');
+            const headerLogo = document.getElementById('header-logo');
+            // NEW: Loader element references
+            const loaderWrapper = document.getElementById('loader-wrapper');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const loaderStatus = document.getElementById('loader-status');
+
+            const bootSequenceTemplates = Array.from(document.querySelectorAll('#boot-sequence .output')).sort((a, b) => 
+                parseInt(a.dataset.index) - parseInt(b.dataset.index)
+            );
+
+            let bootStarted = false;
+
+            userInput.addEventListener('keydown', handleInput);
+            terminal.addEventListener('click', () => userInput.focus());
+
+            function handleInput(e) {
+                if (e.key === 'Enter' && !bootStarted) {
+                    const command = userInput.value.trim().toLowerCase();
+                    if (command === 'boot') {
+                        bootStarted = true;
+                        userInput.value = '';
+                        printToTerminal(`guest@arttulos:~$ ${command}`, 'prompt');
+                        inputLine.style.display = 'none';
+                        runBootSequence();
+                    } else {
+                        printToTerminal(`guest@arttulos:~$ ${command}`, 'prompt');
+                        printToTerminal(`error: system not booted. Please type 'boot' to start.`, 'highlight');
+                    }
+                }
+            }
+            
+            async function runBootSequence() {
+                for (const lineTemplate of bootSequenceTemplates) {
+                    await typeLine(lineTemplate);
+                }
+                
+                // Transition to loader
+                terminal.style.display = 'none';
+                loaderWrapper.style.display = 'flex';
+                await startLoader();
+
+                // Transition to main content
+                terminalWrapper.style.opacity = '0';
+                terminalWrapper.addEventListener('transitionend', () => {
+                    terminalWrapper.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    const tuxArt = document.querySelector('[data-index="4"] pre').cloneNode(true);
+                    headerLogo.appendChild(tuxArt);
+                    setTimeout(() => mainContent.style.opacity = '1', 50);
+                }, { once: true });
+            }
+
+            // NEW: Loader function
+            async function startLoader() {
+                const loadingSteps = [
+                    { message: 'Decompressing kernel modules...', duration: 800 },
+                    { message: 'Mounting virtual file systems...', duration: 600 },
+                    { message: 'Initializing display server...', duration: 1000 },
+                    { message: 'Loading UI components...', duration: 700 },
+                    { message: 'System Ready.', duration: 200 }
+                ];
+
+                let totalDuration = loadingSteps.reduce((acc, step) => acc + step.duration, 0);
+                let elapsedTime = 0;
+
+                for (const step of loadingSteps) {
+                    loaderStatus.textContent = step.message;
+                    await animateProgress(elapsedTime, step.duration, totalDuration);
+                    elapsedTime += step.duration;
+                }
+            }
+            
+            // NEW: Progress bar animation helper
+            function animateProgress(startTime, duration, totalDuration) {
+                return new Promise(resolve => {
+                    let start = null;
+                    function step(timestamp) {
+                        if (!start) start = timestamp;
+                        const progress = timestamp - start;
+                        
+                        const currentElapsedTime = startTime + progress;
+                        const percentage = Math.min(Math.floor((currentElapsedTime / totalDuration) * 100), 100);
+                        
+                        progressText.textContent = `${percentage}%`;
+                        progressBar.style.width = `${percentage}%`;
+
+                        if (progress < duration) {
+                            window.requestAnimationFrame(step);
+                        } else {
+                            // Ensure final state is set correctly before resolving
+                            const finalPercentage = Math.min(Math.floor(((startTime + duration) / totalDuration) * 100), 100);
+                            progressText.textContent = `${finalPercentage}%`;
+                            progressBar.style.width = `${finalPercentage}%`;
+                            resolve();
+                        }
+                    }
+                    window.requestAnimationFrame(step);
+                });
+            }
+
+            // TypeLine and PrintToTerminal functions remain the same
+            function typeLine(lineElement) {
+                return new Promise(resolve => {
+                    const textContent = lineElement.innerHTML;
+                    const delay = parseInt(lineElement.dataset.delay) || 100;
+                    if (lineElement.querySelector('pre')) {
+                        const newLine = document.createElement('div');
+                        newLine.className = lineElement.className;
+                        newLine.innerHTML = textContent;
+                        outputContainer.appendChild(newLine);
+                        terminal.scrollTop = terminal.scrollHeight;
+                        setTimeout(resolve, delay);
+                    } else {
+                        const newLine = document.createElement('div');
+                        newLine.className = lineElement.className;
+                        outputContainer.appendChild(newLine);
+                        let i = 0;
+                        const interval = setInterval(() => {
+                            if (textContent[i] === '<') { const tagEnd = textContent.indexOf('>', i); newLine.innerHTML = textContent.substring(0, tagEnd + 1); i = tagEnd; } else { newLine.innerHTML = textContent.substring(0, i + 1); }
+                            i++;
+                            terminal.scrollTop = terminal.scrollHeight;
+                            if (i >= textContent.length) { clearInterval(interval); setTimeout(resolve, delay); }
+                        }, 10);
+                    }
+                });
+            }
+
+            function printToTerminal(text, className) {
+                const newLine = document.createElement('div');
+                newLine.className = `line ${className}`;
+                newLine.innerHTML = text;
+                outputContainer.appendChild(newLine);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            printToTerminal(`ArttulOS System Shell v1.0\nCopyright (C) 2024 ArttulOS Project.`, 'info');
+            printToTerminal(`Type <span class="command">'boot'</span> and press Enter to start.`, 'info');
+        });
+    </script>
+
+</body>
+</html>
