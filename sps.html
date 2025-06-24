@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPS - Sprungles Private Search Engine</title>
+    <!-- Fonts are loaded dynamically from Bunny Fonts for privacy -->
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700">
+    <style>
+        :root {
+            /* Using the established brand palette */
+            --color-bg: #0A0713;
+            --color-surface: rgba(18, 11, 38, 0.6);
+            --color-glass: rgba(18, 11, 38, 0.4);
+            --color-text: #E0D8FF;
+            --color-text-muted: #8c82a6;
+            --color-accent-pink: #F72585;
+            --color-accent-purple: #9d4edd;
+            --color-accent-cyan: #4cc9f0;
+            --color-border: rgba(114, 9, 183, 0.4);
+            --color-glow: rgba(76, 201, 240, 0.4);
+            --font-display: 'Orbitron', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+        }
+
+        /* --- Global & Base Styles --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            font-size: 18px; line-height: 1.7;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(var(--color-text-muted) 0.5px, transparent 0.5px),
+                radial-gradient(var(--color-text-muted) 0.5px, var(--color-bg) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            animation: pan-background 120s linear infinite;
+        }
+        @keyframes pan-background {
+            from { background-position: 0 0, 10px 10px; }
+            to { background-position: 1200px 1200px, 1210px 1210px; }
+        }
+
+        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 40px; }
+        
+        /* --- Header --- */
+        .main-header { position: sticky; top: 0; left: 0; right: 0; padding: 20px 0; background: var(--color-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-border); z-index: 1000; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; color: var(--color-accent-cyan); }
+        .logo-text { font-family: var(--font-display); font-size: 1.5em; color: #fff; }
+
+        /* --- Search Section --- */
+        .search-section { padding: 60px 0; text-align: center; }
+        h1.main-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--color-glow);
+            min-height: 80px; /* Reserve space to prevent layout shift */
+        }
+        .main-title .cursor {
+            display: inline-block;
+            background-color: var(--color-accent-cyan);
+            margin-left: 8px;
+            width: 4px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .search-form { display: flex; max-width: 700px; margin: 20px auto 0 auto; border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: 0 0 40px rgba(18, 11, 38, 0.8); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .search-form:focus-within { border-color: var(--color-accent-cyan); box-shadow: 0 0 25px var(--color-glow); }
+        .search-input { flex-grow: 1; font-family: var(--font-body); font-size: 1.2em; padding: 18px 25px; border: none; background: transparent; color: var(--color-text); outline: none; }
+        .search-input::placeholder { color: var(--color-text-muted); opacity: 0.7; }
+        .search-button { font-family: var(--font-display); padding: 18px 40px; font-size: 1.2em; border: none; border-left: 1px solid var(--color-border); color: var(--color-accent-cyan); background: transparent; cursor: pointer; animation: pulse-glow 2s infinite ease-in-out; }
+        .search-button:disabled { animation: none; color: var(--color-text-muted); }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px -5px var(--color-accent-cyan); } 50% { box-shadow: 0 0 20px 0px var(--color-accent-cyan); } }
+
+        /* --- Results Section --- */
+        #results-section { padding-bottom: 60px; text-align: left; }
+        .result-fade-in { opacity: 0; animation: fadeIn 0.5s ease-out forwards; }
+        
+        .ai-summary-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-left: 4px solid var(--color-accent-cyan);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 0 20px -5px var(--color-glow);
+        }
+        .summary-title { font-family: var(--font-display); font-size: 1.8em; color: #fff; margin-bottom: 20px; text-shadow: 0 0 8px var(--color-glow); }
+        .summary-text { font-size: 1.1em; line-height: 1.8; color: var(--color-text); }
+        .sources-title { font-family: var(--font-display); font-size: 1.5em; color: #fff; margin-bottom: 20px; border-bottom: 2px solid var(--color-border); padding-bottom: 10px; }
+        .source-item { margin-bottom: 20px; }
+        .source-item a { font-size: 1.1em; font-weight: 700; color: var(--color-accent-cyan); text-decoration: none; transition: color 0.3s; }
+        .source-item a:hover { color: #fff; text-decoration: underline; }
+        .source-item span { display: block; font-size: 0.9em; color: var(--color-text-muted); margin-top: 5px; }
+        .error-message, .info-message { text-align: center; padding: 40px; background: var(--color-surface); border: 1px solid var(--color-accent-pink); color: var(--color-text); }
+        .info-message { border-color: var(--color-border); }
+
+        @media (max-width: 768px) {
+            .search-form { flex-direction: column; }
+            .search-button { border-left: none; border-top: 1px solid var(--color-border); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <a href="Search.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10c0-4.42-2.87-8.17-6.84-9.5c-.5-.1-.96-.6-.96-1.12V1.25C4.24 1.25 1.25 4.24 1.25 8h.13c.48 0 .9.39.9.88v.25c0 .5-.4 1-.88 1H.25a1 1 0 0 0-1 1v.13c0 .48.39.9.88.9h.25c.5 0 1 .4 1 .88v.25a1 1 0 0 0 1 1h.13c.48 0 .9.39.9.88v.25c0 .5-.4 1-.88 1H.25a1 1 0 0 0-1 1v.13c0 .48.39.9.88.9h.25c.5 0 1 .4 1 .88v.25a1 1 0 0 0 1 1h.13a10 10 0 0 0 9.5 6.84c.5.1.96.6.96 1.12v.13a1.25 1.25 0 0 0 1.25 1.25h.13a1 1 0 0 0 1-1v-.25c0-.5.4-.9.88-.9h.25a1 1 0 0 0 1-1v-.13c0-.48-.39-.9-.88-.9h-.25a1 1 0 0 0-1-1v-.25c0-.5.4-.9.88-.9h.25a1 1 0 0 0 1-1v-.13c0-.48-.39-.9-.88-.9h-.25a1 1 0 0 0-1-1v-.25c0-.5.4-.9.88-.9h.25a1 1 0 0 0 1-1v-.13A10 10 0 0 0 12 2Z"/><path d="M12 8a4 4 0 1 0 4 4"/></svg>
+                <span class="logo-text">SPS Engine</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="search-section">
+                <h1 class="main-title" id="main-title"></h1>
+                <form id="sps-form" autocomplete="off">
+                    <input type="text" id="sps-query" class="search-input" placeholder="Initiate query..." autofocus>
+                    <button type="submit" id="sps-button" class="search-button">Generate</button>
+                </form>
+            </section>
+            
+            <section id="results-section"></section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2024 Natalie "Sprungles" Spiva. Instant answers by DuckDuckGo, with Google as a fallback.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchForm = document.getElementById('sps-form');
+            const searchInput = document.getElementById('sps-query');
+            const searchButton = document.getElementById('sps-button');
+            const resultsSection = document.getElementById('results-section');
+            const titleElement = document.getElementById('main-title');
+
+            // --- Aesthetic: Typewriter Effect ---
+            const titleText = "Sprungles Private Search Engine";
+            let i = 0;
+            function typewriter() {
+                if (i < titleText.length) {
+                    titleElement.innerHTML = `${titleText.substring(0, i + 1)}<span class="cursor"> </span>`;
+                    i++;
+                    setTimeout(typewriter, 75);
+                } else {
+                     titleElement.innerHTML = `${titleText}<span class="cursor"> </span>`;
+                }
+            }
+            typewriter();
+
+            // --- Main Search Logic ---
+            searchForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                resultsSection.innerHTML = '';
+                searchButton.disabled = true;
+                searchButton.textContent = "GENERATING...";
+                
+                try {
+                    const apiUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&t=sprunglessearch`;
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error(`Network response was not ok. Status: ${response.status}`);
+                    
+                    const data = await response.json();
+                    
+                    // Check for the "no results" condition
+                    const noResults = !data.AbstractText && (!data.RelatedTopics || data.RelatedTopics.length === 0);
+
+                    if (noResults) {
+                        fallbackToGoogle(query);
+                    } else {
+                        displayAiStyleResults(data);
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching search results:', error);
+                    displayError('Failed to generate a response. The DuckDuckGo API may be temporarily unavailable.');
+                } finally {
+                    searchButton.disabled = false;
+                    searchButton.textContent = "Generate";
+                }
+            });
+            
+            function fallbackToGoogle(query) {
+                displayInfo('No instant answer found. Falling back to Google...');
+                setTimeout(() => {
+                    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                }, 2000); // 2-second delay before redirecting
+            }
+
+            function displayAiStyleResults(data) {
+                resultsSection.innerHTML = '';
+                let animationDelay = 0;
+
+                // Display the main summary card if it exists
+                if (data.AbstractText) {
+                    const summaryCard = document.createElement('div');
+                    summaryCard.className = 'ai-summary-card result-fade-in';
+                    summaryCard.style.animationDelay = `${animationDelay}ms`;
+                    summaryCard.innerHTML = `
+                        <h2 class="summary-title">${data.Heading || 'Summary'}</h2>
+                        <p class="summary-text">${data.AbstractText}</p>
+                    `;
+                    resultsSection.appendChild(summaryCard);
+                    animationDelay += 150;
+                }
+
+                const sources = data.RelatedTopics;
+                if (sources && sources.length > 0) {
+                    const sourcesTitle = document.createElement('h3');
+                    sourcesTitle.className = 'sources-title result-fade-in';
+                    sourcesTitle.style.animationDelay = `${animationDelay}ms`;
+                    sourcesTitle.textContent = 'Sources & Related Topics';
+                    resultsSection.appendChild(sourcesTitle);
+                    animationDelay += 150;
+
+                    sources.forEach(item => {
+                        if (item.Topics) {
+                            item.Topics.forEach(subItem => {
+                                displaySourceItem(subItem, animationDelay);
+                                animationDelay += 100;
+                            });
+                        } else {
+                            displaySourceItem(item, animationDelay);
+                            animationDelay += 100;
+                        }
+                    });
+                }
+            }
+
+            function displaySourceItem(item, delay) {
+                if (!item.FirstURL || !item.Text) return;
+
+                const sourceItem = document.createElement('div');
+                sourceItem.className = 'source-item result-fade-in';
+                sourceItem.style.animationDelay = `${delay}ms`;
+                
+                sourceItem.innerHTML = `
+                    <a href="${item.FirstURL}" target="_blank" rel="noopener noreferrer">${item.Text}</a>
+                    <span>${item.FirstURL}</span>
+                `;
+                resultsSection.appendChild(sourceItem);
+            }
+
+            function displayError(message) {
+                resultsSection.innerHTML = `<div class="error-message result-fade-in">${message}</div>`;
+            }
+            
+            function displayInfo(message) {
+                resultsSection.innerHTML = `<div class="info-message result-fade-in">${message}</div>`;
+            }
+        });
+    </script>
+
+</body>
+</html>
