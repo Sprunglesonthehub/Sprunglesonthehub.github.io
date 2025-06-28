@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Dossier</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700">
+    <style>
+        :root {
+            --color-bg: #0A0713; --color-surface: rgba(18, 11, 38, 0.7);
+            --color-glass: rgba(18, 11, 38, 0.4); --color-text: #E0D8FF;
+            --color-text-muted: #8c82a6; --color-accent-pink: #F72585;
+            --color-accent-purple: #9d4edd; --color-accent-cyan: #4cc9f0;
+            --color-border: rgba(114, 9, 183, 0.4); --border-radius: 8px;
+        }
+        html { scroll-behavior: smooth; background-color: var(--color-bg); }
+        body { color: var(--color-text); font-family: 'Roboto', sans-serif; line-height: 1.7; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .post-container { background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--border-radius); padding: 40px; backdrop-filter: blur(10px); }
+        
+        /* --- STYLED BACK BUTTON --- */
+        .back-button {
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            background-color: var(--color-glass);
+            font-family: 'Orbitron', monospace;
+            color: var(--color-accent-cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .back-button:hover {
+            background-color: var(--color-accent-pink);
+            border-color: var(--color-accent-pink);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+
+        .post-content { font-size: 1.1rem; }
+        .post-content h1, .post-content h2, .post-content h3 { font-family: 'Orbitron', monospace; color: var(--color-accent-cyan); margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; }
+        .post-content p { margin-bottom: 1.2em; }
+        .post-content a { color: var(--color-accent-cyan); font-weight: bold; }
+        .post-content ul { list-style: none; padding-left: 0; }
+        .post-content li { padding-left: 1.5em; position: relative; margin-bottom: 1em; }
+        .post-content li::before { content: '»'; position: absolute; left: 0; color: var(--color-accent-purple); font-weight: bold; }
+        .post-content strong { color: var(--color-accent-pink); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="post-container">
+            <header class="post-header">
+                <!-- This is the new, styled back button -->
+                <a href="../index.html" class="back-button">← Return to Main Dossier</a>
+            </header>
+            <main class="post-content">
+                
+                <h1>Welcome to the Dossier: Initializing Connection</h1>
+                
+                <p>Hello, and thank you for being here. It means a great deal to me that you've taken the time to explore this corner of the internet. This space is a direct reflection of who I am, and I'm glad to share it with you.</p>
+                
+                <p>My name is <strong>Natalie</strong>, though many in the open-source community know me by my alias, <strong>Sprungles</strong>. I am a proud transgender female (MtF), and every project I build is an extension of my journey toward authenticity and self-expression.</p>
+                
+                <h2>My Philosophy</h2>
+                
+                <p>This dossier is more than just a portfolio; it's an open invitation to connect. I am driven by a few core principles:</p>
+                
+                <ul>
+                    <li>
+                        <strong>A Deep Love for Linux & FOSS:</strong> I believe passionately in open, user-controlled systems. The freedom to understand, modify, and control the technology we use every day is the bedrock of my digital philosophy.
+                    </li>
+                    <li>
+                        <strong>An Open and Collaborative Spirit:</strong> I thrive on building things with other passionate people. This is an inclusive space, accepting of all individuals. Great ideas become incredible projects when minds connect.
+                    </li>
+                    <li>
+                        <strong>A Willingness to Engage:</strong> I am always open to connecting with genuine, open-minded individuals for a conversation, a project, or even just a video chat. If you have an idea or just want to talk tech, my door is open.
+                    </li>
+                </ul>
+
+                <p>Thank you again for stopping by. I'm excited to share my work and my journey with you.</p>
+                
+                <p>Stay curious,<br>
+                - Natalie "Sprungles"</p>
+                
+            </main>
+        </div>
+    </div>
+    <script>
+        // This simple script sets the page title from the first H1 tag in your content.
+        document.addEventListener('DOMContentLoaded', () => {
+            const postTitle = document.querySelector('.post-content h1');
+            if (postTitle) {
+                document.title = `${postTitle.textContent} - Dossier`;
+            }
+        });
+    </script>
+</body>
+</html>

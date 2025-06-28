@@ -4,589 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossier: Natalie "Sprungles" Spiva - Digital Artisan</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700">
     <style>
         :root {
             /* Color Palette */
             --color-bg: #0A0713;
-            --color-surface: rgba(18, 11, 38, 0.6);
-            --color-glass: rgba(18, 11, 38, 0.4);
+            --color-surface: rgba(18, 11, 38, 0.75);
+            --color-glass: rgba(18, 11, 38, 0.5);
             --color-text: #E0D8FF;
             --color-text-muted: #8c82a6;
             --color-accent-pink: #F72585;
             --color-accent-purple: #9d4edd;
             --color-accent-cyan: #4cc9f0;
             --color-border: rgba(114, 9, 183, 0.4);
-            --color-glow: rgba(247, 37, 133, 0.5);
-
-            /* Typography (Fallback) */
-            --font-display: 'Courier New', monospace;
-            --font-body: 'Georgia', serif;
-
-            /* Sizing */
-            --hud-width: 280px;
         }
 
-        /* --- THEME DEFINITIONS --- */
-        body[data-theme="terminal-green"] {
-            --color-accent-pink: #00ff41; --color-accent-purple: #00c232;
-            --color-accent-cyan: #39ff14; --color-glow: rgba(0, 255, 65, 0.4);
-        }
-        body[data-theme="blue-archive"] {
-            --color-accent-pink: #00bfff; --color-accent-purple: #0077ff;
-            --color-accent-cyan: #48d1cc; --color-glow: rgba(0, 191, 255, 0.4);
-        }
+        /* --- Global & Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes glitch { 2%,64%{transform:translate(2px,0) skew(0deg)} 4%,60%{transform:translate(-2px,0) skew(0deg)} 62%{transform:translate(0,0) skew(5deg)} }
+        @keyframes hex-pan { from { background-position: 0 0; } to { background-position: 230px 400px; } }
 
-        /* --- Global & Base Styles --- */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; background-color: var(--color-bg); }
         body {
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            font-family: var(--font-body);
-            font-size: 17px; line-height: 1.7;
-            overflow-x: hidden;
-            animation: fadeIn 1s ease-out;
-            background-image:
-                radial-gradient(var(--color-text-muted) 0.5px, transparent 0.5px),
-                radial-gradient(var(--color-text-muted) 0.5px, var(--color-bg) 0.5px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            animation: pan-background 60s linear infinite;
+            color: var(--color-text); font-family: 'Roboto', sans-serif;
+            line-height: 1.7; overflow-x: hidden;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='115' height='200' viewBox='0 0 115 200'%3E%3Cpath d='M57.5 200L0 150V50L57.5 0L115 50v100L57.5 200zM57.5 183.33L100 141.67V58.33L57.5 16.67L15 58.33v83.34L57.5 183.33z' fill='%239d4edd' fill-opacity='0.03'/%3E%3C/svg%3E");
+            animation: hex-pan 60s linear infinite;
         }
-        body.font-loaded { --font-display: 'Orbitron', sans-serif; --font-body: 'Roboto', sans-serif; }
-
-        @keyframes pan-background {
-            from { background-position: 0 0, 10px 10px; }
-            to { background-position: 1200px 1200px, 1210px 1210px; }
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--color-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--color-accent-purple); border-radius: 4px; }
-        
-        /* --- Main Layout --- */
-        .container-wrapper { display: flex; }
-
-        /* --- HUD / Navigation Panel --- */
-        .hud-panel {
-            width: var(--hud-width);
-            flex-shrink: 0;
-            position: fixed; top: 0; left: 0;
-            height: 100vh;
-            background: var(--color-glass);
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .content-section { padding: 80px 0; border-bottom: 1px solid var(--color-border); }
+        .main-nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(10, 7, 19, 0.8);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-right: 1px solid var(--color-border);
-            padding: 40px 25px;
-            display: flex; flex-direction: column;
-            z-index: 100;
-            transition: transform 0.4s ease;
+            border-bottom: 1px solid var(--color-border); padding: 15px 0;
         }
-
-        .hud-header { text-align: center; margin-bottom: 40px; }
-        .hud-logo {
-            width: 90px; height: 90px;
-            margin: 0 auto 20px;
-            color: var(--color-accent-pink);
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-        .hud-logo:hover { transform: rotate(15deg); }
-        .hud-title { font-size: 1.3em; margin-bottom: 2px; font-family: var(--font-display); color: #fff; }
-        .hud-tagline { font-size: 0.9em; color: var(--color-text-muted); }
-
-        .main-nav { list-style: none; }
-        .main-nav li { margin: 8px 0; }
-        .main-nav a {
-            color: var(--color-text-muted);
-            text-decoration: none;
-            padding: 12px 15px;
-            display: block;
-            position: relative;
-            font-family: var(--font-display);
-            font-size: 1em;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .main-nav a::before, .main-nav a::after {
-            content: ''; position: absolute;
-            height: 100%; width: 2px;
-            top: 0;
-            background-color: var(--color-accent-pink);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-        .main-nav a::before { left: 0; }
-        .main-nav a::after { right: 0; }
-        .main-nav a:hover, .main-nav a.is-active {
-            color: #fff;
-            background: rgba(247, 37, 133, 0.1);
-        }
-        .main-nav a:hover::before, .main-nav a:hover::after,
-        .main-nav a.is-active::before, .main-nav a.is-active::after {
-            transform: scaleY(1);
-        }
-        
-        .hud-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--color-border); }
-        .hud-controls { font-size: 0.8em; }
-        .control-group { margin-bottom: 25px; text-align: center; }
-        .control-label { display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-muted); }
-        .theme-switcher { display: flex; justify-content: center; gap: 10px; }
-        .theme-button { width: 22px; height: 22px; border-radius: 50%; border: 2px solid hsla(0,0%,100%,.3); cursor: pointer; transition: all 0.3s ease; }
-        .theme-button.active { border-color: #fff; transform: scale(1.2); }
-        .theme-button[data-theme="cyber-pink"] { background-color: #F72585; }
-        .theme-button[data-theme="terminal-green"] { background-color: #00ff41; }
-        .theme-button[data-theme="blue-archive"] { background-color: #00bfff; }
-
-        .font-toggle-label { display: flex; align-items: center; justify-content: center; user-select: none; cursor: pointer; }
-        .font-toggle-label span { padding: 0 10px; color: var(--color-text-muted); transition: color .3s ease; }
-        #font-toggle:not(:checked) ~ .font-toggle-label .label-foss,
-        #font-toggle:checked ~ .font-toggle-label .label-ggl { color: var(--color-accent-pink); font-weight: bold; }
-        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-accent-purple); transition: .4s; border-radius: 28px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--color-accent-pink); }
-        input:checked + .slider:before { transform: translateX(22px); }
-
-        /* --- Main Content Area --- */
-        .content-area {
-            margin-left: var(--hud-width);
-            flex-grow: 1;
-            padding: 50px 60px;
-        }
-        
-        .hero {
-            min-height: 80vh;
-            display: flex; flex-direction: column; justify-content: center;
-            text-align: left;
-            margin-bottom: 100px;
-        }
-        .hero-name {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            color: #fff;
-            margin-bottom: 0;
-            letter-spacing: 2px;
-        }
-        .hero-name .glitch-text { display: inline-block; }
-        .hero-subtitle {
-            font-family: var(--font-display);
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            color: var(--color-accent-cyan);
-            margin-bottom: 30px;
-            min-height: 1.2em;
-        }
-        .hero-subtitle::after { content: '▋'; animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        .hero p { max-width: 650px; font-size: 1.1em; margin-bottom: 40px; }
-
-        .btn {
-            display: inline-block;
-            font-family: var(--font-display);
-            text-decoration: none;
-            padding: 15px 35px;
-            font-size: 1.1em;
-            border: 2px solid var(--color-accent-pink);
-            color: var(--color-accent-pink);
-            background: transparent;
-            position: relative;
-            overflow: hidden;
-            transition: color 0.4s ease 0.2s;
-            z-index: 1;
-        }
-        .btn::before {
-            content: ''; position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: var(--color-accent-pink);
-            transition: left 0.4s ease;
-            z-index: -1;
-        }
-        .btn:hover { color: var(--color-bg); }
-        .btn:hover::before { left: 0; }
-
-        .content-section { margin-bottom: 120px; }
-        .section-title {
-            font-family: var(--font-display);
-            font-size: 3em;
-            color: #fff;
-            margin-bottom: 40px;
-            position: relative;
-            display: inline-block;
-        }
-        .section-title::after {
-            content:''; position: absolute;
-            left: 0; bottom: -10px;
-            width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--color-accent-pink), var(--color-accent-purple));
-        }
-        
-        p { max-width: 800px; margin-bottom: 20px; }
-        .highlight { color: var(--color-accent-pink); font-weight: bold; }
-        
-        .content-section .list-container a { 
-            color: var(--color-accent-cyan); 
-            font-weight: bold; 
-            text-decoration: none; 
-        }
-        .content-section .list-container a:hover { text-decoration: underline; }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            padding: 30px;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px var(--color-glow);
-            border-color: var(--color-accent-pink);
-        }
-        .card h3 {
-            font-family: var(--font-display);
-            font-size: 1.3em;
-            color: var(--color-accent-pink);
-            margin-bottom: 15px;
-        }
-        .card ul { list-style: none; padding-left: 0; }
-        .card ul li { padding-left: 25px; position: relative; margin-bottom: 8px; }
-        .card ul li::before {
-            content: '»'; position: absolute;
-            left: 0; color: var(--color-accent-purple);
-            font-weight: bold;
-        }
-        
-        .list-item {
-            background-color: transparent;
-            padding: 25px 30px;
-            margin-bottom: 25px;
-            border: 1px solid var(--color-border);
-            border-left-width: 4px;
-            border-left-color: var(--color-accent-purple);
-            transition: all .3s ease;
-            position: relative;
-        }
-        
-        a.list-item {
-            display: block;
-            color: var(--color-text);
-            text-decoration: none;
-        }
-        a.list-item:hover {
-            border-color: var(--color-accent-pink);
-            transform: translateX(10px);
-            background: rgba(247, 37, 133, 0.05);
-        }
-        
-        .list-item strong { 
-            color: var(--color-accent-cyan); 
-            font-size: 1.15em; 
-            display: block; 
-            margin-bottom: 5px; 
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            :root { --hud-width: 240px; }
-            .content-area { padding: 40px; }
-        }
-
-        @media (max-width: 992px) {
-            .container-wrapper { flex-direction: column; }
-            .hud-panel {
-                width: 100%; height: auto;
-                position: static;
-                border-right: none;
-                border-bottom: 1px solid var(--color-border);
-                flex-direction: row;
-                align-items: center;
-                padding: 15px;
-                justify-content: space-between;
-            }
-            .hud-header, .hud-footer { display: none; }
-            .main-nav { display: flex; gap: 5px; }
-            .main-nav a { padding: 8px 12px; font-size: 0.9em; }
-            .content-area { margin-left: 0; }
-            .hero { min-height: 60vh; text-align: center; align-items: center; }
-        }
-
-        @media (max-width: 768px) {
-             .hud-panel {
-                flex-direction: column;
-                padding: 15px;
-             }
-             #mobile-menu-toggle {
-                display: block;
-                background: none; border: none;
-                color: var(--color-text);
-                padding: 15px;
-                font-size: 1.5em;
-                cursor: pointer;
-                width: 100%; text-align: right;
-             }
-             .main-nav {
-                display: none;
-                width: 100%;
-                flex-direction: column;
-                background: var(--color-bg);
-                padding: 0;
-             }
-             body.mobile-menu-open .main-nav { display: flex; }
-             .main-nav a { text-align: center; }
-
-             .section-title { font-size: 2.5em; }
-             .card-grid { grid-template-columns: 1fr; }
-        }
+        .main-nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: #fff; text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { color: var(--color-text-muted); text-decoration: none; font-family: 'Orbitron', monospace; transition: all 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--color-accent-pink); text-shadow: 0 0 5px var(--color-accent-pink); }
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; text-align: center; align-items: center; }
+        .hero-name { font-family: 'Orbitron', monospace; font-size: clamp(3rem, 10vw, 6rem); color: #fff; position: relative; }
+        .hero-name:hover { animation: glitch 1s linear infinite; }
+        .hero-subtitle { font-family: 'Orbitron', monospace; font-size: clamp(1.5rem, 4vw, 2.5rem); color: var(--color-accent-cyan); min-height: 1.2em; }
+        .hero-subtitle::after { content: '▋'; animation: fadeIn 1s step-end infinite; }
+        .hero p { max-width: 600px; margin-top: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
+        .section-title { font-family: 'Orbitron', monospace; font-size: 3rem; color: #fff; text-align: center; margin-bottom: 60px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .card { background: var(--color-surface); border: 1px solid var(--color-border); padding: 30px; transition: all 0.3s ease; animation: fadeIn 1s ease-out; animation-fill-mode: both; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 0 30px rgba(157, 78, 221, 0.3); border-color: var(--color-accent-cyan); }
+        .card h3 { font-family: 'Orbitron', monospace; font-size: 1.4rem; color: var(--color-accent-pink); margin-bottom: 20px; }
+        .post-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+        .post-item-link { display: block; padding: 20px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all 0.3s ease; }
+        .post-item-link:hover { border-color: var(--color-accent-pink); background: var(--color-glass); transform: translateX(10px); }
+        .post-item-link .title { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: var(--color-accent-cyan); margin-bottom: 5px; }
+        .post-item-link .meta { font-size: 0.9rem; color: var(--color-text-muted); }
     </style>
 </head>
 <body>
-    <div class="container-wrapper">
-        <!-- HUD Navigation Panel -->
-        <header class="hud-panel">
-            <div class="hud-header">
-                <svg class="hud-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:var(--color-accent-pink)" />
-                            <stop offset="100%" style="stop-color:var(--color-accent-purple)" />
-                        </linearGradient>
-                    </defs>
-                    <path fill="currentColor" d="M50 0 L100 25 V75 L50 100 L0 75 V25 Z M15 31 L50 12 L85 31 V69 L50 88 L15 69 Z"></path>
-                    <text x="50" y="66" font-family="var(--font-display)" font-size="48" fill="url(#logo-gradient)" text-anchor="middle" font-weight="bold">S</text>
-                </svg>
-                <h1 class="hud-title">Data Dossier</h1>
-                <p class="hud-tagline">Subject: Sprungles</p>
-            </div>
-            
-            <button id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#about" class="is-active">Access: About</a></li>
-                    <li><a href="#skills">Access: Skills</a></li>
-                    <li><a href="#projects">Access: Endeavors</a></li>
-                    <li><a href="#contact">Access: Contact</a></li>
-                </ul>
-            </nav>
+    <nav class="main-nav">
+        <div class="container">
+            <a href="#" class="nav-logo">// N. SPIVA</a>
+            <ul class="nav-links">
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#blog">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
 
-            <div class="hud-footer">
-                <div class="hud-controls">
-                    <div class="control-group">
-                        <label class="control-label">Visual Theme</label>
-                        <div class="theme-switcher">
-                            <button class="theme-button active" data-theme="cyber-pink" title="Cyber Pink"></button>
-                            <button class="theme-button" data-theme="terminal-green" title="Terminal Green"></button>
-                            <button class="theme-button" data-theme="blue-archive" title="Blue Archive"></button>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Asset Source</label>
-                        <input type="checkbox" id="font-toggle" hidden>
-                        <label for="font-toggle" class="font-toggle-label">
-                            <span class="label-foss">FOSS</span>
-                            <div class="switch">
-                                <span class="slider"></span>
-                            </div>
-                            <span class="label-ggl">GGL</span>
-                        </label>
-                    </div>
+    <header id="home" class="hero content-section">
+        <h1 class="hero-name" data-text="Natalie Spiva">Natalie Spiva</h1>
+        <h2 class="hero-subtitle" id="hero-subtitle"></h2>
+        <p>I am a digital artisan, a Linux enthusiast, and a proud transgender female building a more open and expressive corner of the world through technology.</p>
+    </header>
+
+    <main class="container">
+        <section id="profile" class="content-section">
+            <h2 class="section-title">[ Identity & Philosophy ]</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Core Identity</h3>
+                    <p>My name is Natalie, and at 23, I am defined by my passion for technology and my journey of self-discovery. My past name, Johnathan, is a "deadname"—a part of a history that no longer reflects the authentic person I am today. I approach life with a love for who I have become and a passion for the open-source world.</p>
+                </div>
+                <div class="card">
+                    <h3>The Sparchunu Philosophy</h3>
+                    <p>"Sprungles" is the constant in a life of change. It's the collection of my entire journey and the unchanging core of my identity: a love for Linux, for self-expression, and for making the world better by building superior, open alternatives to restrictive standards.</p>
                 </div>
             </div>
-        </header>
-
-        <!-- Main Content Dossier -->
-        <main class="content-area">
-            <section id="about" class="content-section hero">
-                <h1 class="hero-name">
-                    <span class="glitch-text" data-text="Natalie Spiva">Natalie Spiva</span>
-                </h1>
-                <h2 class="hero-subtitle" id="hero-tagline"></h2>
-                <p>Architecting digital sovereignty. I build open, powerful, and user-centric systems designed to give you absolute control over the hardware you own. This is an index of my core projects and capabilities.</p>
-                <a href="arttulos.html" class="btn">Explore ArttulOS Project Hub</a>
-            </section>
-
-            <section id="skills" class="content-section">
-                <h2 class="section-title">Skills & Proficiencies</h2>
-                <div class="card-grid">
-                    <div class="card"><h3>OS & Systems Architecture</h3><ul><li>Architecting ArttulOS (Desktop)</li><li>Building AngusOS (Android Base)</li><li>Developing Cerberus Linux (Mobile)</li><li>System Internals & HAL Integration</li></ul></div>
-                    <div class="card"><h3>Web & Browser Development</h3><ul><li>ArttulCat (Firefox Fork) Maintenance</li><li>WebExtension & API Integration</li><li>Performance Optimization & Profiling</li><li>JavaScript, HTML, CSS Mastery</li></ul></div>
-                    <div class="card"><h3>Android & Mobile</h3><ul><li>Android Open Source Project (AOSP)</li><li>Native App Development (Java/Kotlin)</li><li>System-level Privacy Hardening</li><li>Mobile UI/UX Principles</li></ul></div>
-                    <div class="card"><h3>Network Cartography</h3><ul><li>Internet Protocols (TCP/IP, et al.)</li><li>Network Configuration & Security</li><li>Packet Analysis (Wireshark)</li><li>Diagnostic Acumen</li></ul></div>
-                </div>
-            </section>
-
-            <section id="projects" class="content-section">
-                <h2 class="section-title">Key Endeavors</h2>
-                <p>My work is focused on creating a cohesive ecosystem of open-source software that respects user freedom, from desktop to mobile.</p>
-                <div class="list-container">
-                    
-                    <a href="cerboruslinux.html" class="list-item">
-                        <strong>Cerberus Linux for Mobile →</strong>
-                        <p>A revolutionary project to bring a true Linux environment to Android hardware. By leveraging the AngusOS HAL, Cerberus delivers unparalleled control, breaking the chains of the standard Android environment.</p>
-                    </a>
-                    
-                    <a href="angusos.html" class="list-item">
-                        <strong>AngusOS Foundation →</strong>
-                        <p>The essential Android distribution maintained as a clean, stable hardware interface layer, making the power of Cerberus Linux possible on a wide range of mobile devices.</p>
-                    </a>
-
-                    <a href="arttulcat.html" class="list-item">
-                        <strong>ArttulCat Browser →</strong>
-                        <p>A privacy-focused browser fork that empowers users with greater privacy controls and a more efficient browsing experience, free from unwanted telemetry and bloat.</p>
-                    </a>
-                    
-                    <a href="sps.html" class="list-item">
-                        <strong>Sprungles Private Search (SPS) →</strong>
-                        <p>A privacy-first search engine that delivers unbiased results without tracking your queries or building a user profile. Search the web anonymously.</p>
-                    </a>
-                    
-                    <a href="sprungli.html" class="list-item">
-                        <strong>Sprungli Core →</strong>
-                        <p>If you are in need of searching for documentation, I made a tool to do so. Check it out.</p>
-                    </a>
-
-                </div>
-            </section>
-            
-            <section id="contact" class="content-section">
-                <h2 class="section-title">Contact</h2>
-                <p>For collaboration, inquiries, or technical discussion, I am most readily available through the following secure channels.</p>
-                <div class="list-container">
-                    <div class="list-item"><strong>Matrix:</strong> <a href="https://matrix.to/#/@sprungles:matrix.org" target="_blank">@sprungles:matrix.org</a></div>
-                    <div class="list-item"><strong>Email:</strong> <a href="mailto:sprungles.me@proton.me">sprungles.me@proton.me</a></div>
-                    <div class="list-item"><strong>GitHub:</strong> <a href="https://github.com/sprunglesonthehub" target="_blank">/sprunglesonthehub</a></div>
-                </div>
-            </section>
-        </main>
-    </div>
+        </section>
+        
+        <section id="projects" class="content-section">
+            <h2 class="section-title">[ Project Manifest ]</h2>
+            <div class="post-list">
+                <a href="cerberuslinux.html" class="post-item-link"><div class="title">Cerberus Linux for Mobile <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A true Linux environment for Android hardware.</div></a>
+                <a href="angusos.html" class="post-item-link"><div class="title">AngusOS Foundation <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A clean, stable hardware abstraction layer for mobile Linux.</div></a>
+                <a href="arttulcat.html" class="post-item-link"><div class="title">ArttulCat Browser <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A privacy-focused browser fork free from telemetry and bloat.</div></a>
+                <a href="sps.html" class="post-item-link"><div class="title">Sprungles Private Search (SPS) <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">An anonymous search engine that respects your privacy.</div></a>
+                <a href="sprungli.html" class="post-item-link"><div class="title">Sprungli Core <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">A purpose-built tool for searching technical documentation.</div></a>
+            </div>
+        </section>
+        
+        <section id="blog" class="content-section">
+            <h2 class="section-title">[ Blog Feed ]</h2>
+            <div id="blog-posts-container" class="post-list">
+                <!-- To add a new blog post, copy and paste one of the 'a' tags below -->
+                <!-- and change the href, title, and date. -->
+                <a href="posts/welcome-to-the-dossier.html" class="post-item-link">
+                    <div class="title">Welcome to the Dossier: Initializing Connection</div>
+                    <div class="meta">Posted on: 2025-06-27</div>
+                </a>
+                <a href="posts/the-t2-opensuse-page.html" class="post-item-link">
+                    <div class="title">The T2 OpenSUSE Project</div>
+                    <div class="meta">Posted on: 2026-06-27</div>
+                </a>
+            </div>
+        </section>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- FONT LOADER & SWITCHER ---
-            const fontToggle = document.getElementById('font-toggle');
-            
-            function loadFontAssets(useProprietary) {
-                const existingLink = document.getElementById('dynamic-font-link');
-                if (existingLink) existingLink.remove();
-
-                const fontLink = document.createElement('link');
-                fontLink.id = 'dynamic-font-link';
-                fontLink.rel = 'stylesheet';
-                
-                if (useProprietary) {
-                    // Use proprietary Google Fonts (GGL)
-                    fontLink.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap';
-                } else {
-                    // Use open-source Bunny Fonts (FOSS)
-                    fontLink.href = 'https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700';
-                }
-
-                fontLink.onload = () => document.body.classList.add('font-loaded');
-                document.head.appendChild(fontLink);
-            }
-
-            fontToggle.addEventListener('change', () => {
-                const useProprietary = fontToggle.checked;
-                loadFontAssets(useProprietary);
-                localStorage.setItem('useProprietaryFonts', useProprietary);
-            });
-            
-            // Initialize font choice
-            const useProprietaryFonts = localStorage.getItem('useProprietaryFonts') === 'true';
-            fontToggle.checked = useProprietaryFonts;
-            loadFontAssets(useProprietaryFonts);
-
-            // --- INTERSECTION OBSERVER for active nav links ---
-            const sections = document.querySelectorAll('.content-section');
-            const navLinks = document.querySelectorAll('.main-nav a');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.id;
-                        navLinks.forEach(link => {
-                            link.classList.remove('is-active');
-                            if (link.getAttribute('href') === `#${sectionId}`) {
-                                link.classList.add('is-active');
-                            }
-                        });
+            // Typewriter Effect
+            const subtitleEl = document.getElementById('hero-subtitle');
+            if (subtitleEl) {
+                const text = "Digital Artisan & FOSS Advocate";
+                let i = 0;
+                subtitleEl.innerHTML = '';
+                function type() {
+                    if (i < text.length) {
+                        subtitleEl.innerHTML += text.charAt(i++);
+                        setTimeout(type, 120);
                     }
-                });
-            }, { root: null, threshold: 0.3, rootMargin: "-40% 0px -40% 0px" });
-
-            sections.forEach(section => observer.observe(section));
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    if (document.body.classList.contains('mobile-menu-open')) {
-                        document.body.classList.remove('mobile-menu-open');
-                    }
-                });
-            });
-
-            // --- THEME SWITCHER ---
-            const themeButtons = document.querySelectorAll('.theme-button');
-            themeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const theme = button.dataset.theme;
-                    document.body.setAttribute('data-theme', theme === 'cyber-pink' ? '' : theme);
-                    document.querySelector('.theme-button.active').classList.remove('active');
-                    button.classList.add('active');
-                    localStorage.setItem('userTheme', theme);
-                });
-            });
-
-            const savedTheme = localStorage.getItem('userTheme');
-            if (savedTheme) {
-                document.body.setAttribute('data-theme', savedTheme === 'cyber-pink' ? '' : savedTheme);
-                document.querySelector('.theme-button.active').classList.remove('active');
-                document.querySelector(`.theme-button[data-theme=${savedTheme}]`).classList.add('active');
-            }
-
-            // --- TYPING ANIMATION for hero tagline ---
-            const taglineEl = document.getElementById('hero-tagline');
-            const taglineText = "Digital Artisan";
-            let i = 0;
-            function typeTagline() {
-                if (i < taglineText.length) {
-                    taglineEl.innerHTML += taglineText.charAt(i);
-                    i++;
-                    setTimeout(typeTagline, 100);
                 }
+                type();
             }
-            setTimeout(typeTagline, 500);
-
-            // --- GLITCH TEXT EFFECT ---
-            const glitchElement = document.querySelector('.glitch-text');
-            const originalText = glitchElement.dataset.text;
-            const chars = '!<>-_\\/[]{}—=+*^?#________';
-
-            const randomChar = () => chars[Math.floor(Math.random() * chars.length)];
-            
-            setInterval(() => {
-                let scrambled = '';
-                for (let i = 0; i < originalText.length; i++) {
-                    scrambled += Math.random() > 0.9 ? randomChar() : originalText[i];
-                }
-                glitchElement.textContent = scrambled;
-            }, 100);
-            
-            // --- MOBILE MENU ---
-            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            mobileMenuToggle.addEventListener('click', () => {
-                document.body.classList.toggle('mobile-menu-open');
-            });
         });
     </script>
 </body>

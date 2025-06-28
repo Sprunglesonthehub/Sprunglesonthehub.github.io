@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title> <!-- The title will be set by the H1 tag -->
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700">
+    <style>
+        :root {
+            /* Same CSS variables as index.html */
+            --color-bg: #0A0713; --color-surface: rgba(18, 11, 38, 0.75);
+            --color-glass: rgba(18, 11, 38, 0.5); --color-text: #E0D8FF;
+            --color-text-muted: #8c82a6; --color-accent-pink: #F72585;
+            --color-accent-purple: #9d4edd; --color-accent-cyan: #4cc9f0;
+            --color-border: rgba(114, 9, 183, 0.4);
+        }
+        html { scroll-behavior: smooth; background-color: var(--color-bg); }
+        body { color: var(--color-text); font-family: 'Roboto', sans-serif; line-height: 1.7; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .post-container { background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 40px; backdrop-filter: blur(10px); }
+        .post-header a { font-family: 'Orbitron', monospace; color: var(--color-accent-cyan); text-decoration: none; display: inline-block; margin-bottom: 30px; }
+        .post-content { font-size: 1.1rem; }
+        .post-content h1, .post-content h2, .post-content h3 { font-family: 'Orbitron', monospace; color: var(--color-accent-cyan); margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; }
+        .post-content p { margin-bottom: 1.2em; }
+        .post-content a { color: var(--color-accent-cyan); font-weight: bold; }
+        .post-content code { background: var(--color-glass); padding: 2px 5px; border-radius: 4px; font-family: 'Courier New', monospace; color: var(--color-accent-pink); }
+        .post-content pre { background: var(--color-glass); border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; overflow-x: auto; }
+        .post-content blockquote { border-left: 3px solid var(--color-accent-purple); margin: 1.5em 0; padding-left: 1.5em; color: var(--color-text-muted); font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="post-container">
+            <header class="post-header">
+                <!-- Links back to the main index file -->
+                <a href="../index.html">← Return to Main Dossier</a>
+            </header>
+            <main class="post-content">
+                <!-- 
+                ================================================================
+                === PASTE YOUR BLOG POST CONTENT (AS HTML) IN HERE ===
+                ================================================================
+                
+                Example:
+                
+                <h1>Welcome to the Dossier</h1>
+                <p>Hello, and welcome. If you're reading this, it means you've navigated past the public-facing profile and into the core of my work and thoughts. For that, I am genuinely grateful. Thank you for being here.</p>
+                <p>This is the place where I get to share the "why" behind the code.</p>
+                <blockquote>Let's build something better, together.</blockquote>
+                <p>Stay curious,<br>- Natalie "Sprungles"</p>
+                
+                ================================================================
+                -->
+                
+            </main>
+        </div>
+    </div>
+    <script>
+        // This simple script sets the page title from the first H1 tag in your content.
+        document.addEventListener('DOMContentLoaded', () => {
+            const postTitle = document.querySelector('.post-content h1');
+            if (postTitle) {
+                document.title = `${postTitle.textContent} - Dossier`;
+            }
+        });
+    </script>
+</body>
+</html>
