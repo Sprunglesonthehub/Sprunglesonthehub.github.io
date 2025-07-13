@@ -17,12 +17,20 @@
             --color-accent-purple: #9d4edd;
             --color-accent-cyan: #4cc9f0;
             --color-border: rgba(114, 9, 183, 0.4);
+
+            /* Easing for Bouncy Effects */
+            --ease-out-elastic: cubic-bezier(0.5, 1.5, 0.5, 1);
         }
 
         /* --- Global & Animations --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop-in {
+            0% { opacity: 0; transform: translateY(60px) scale(0.9); }
+            70% { opacity: 1; transform: translateY(-15px) scale(1.05); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
         @keyframes glitch { 2%,64%{transform:translate(2px,0) skew(0deg)} 4%,60%{transform:translate(-2px,0) skew(0deg)} 62%{transform:translate(0,0) skew(5deg)} }
         @keyframes hex-pan { from { background-position: 0 0; } to { background-position: 230px 400px; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; background-color: var(--color-bg); }
@@ -43,8 +51,18 @@
         .main-nav .container { display: flex; justify-content: space-between; align-items: center; }
         .nav-logo { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: #fff; text-decoration: none; }
         .nav-links { list-style: none; display: flex; gap: 30px; }
-        .nav-links a { color: var(--color-text-muted); text-decoration: none; font-family: 'Orbitron', monospace; transition: all 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--color-accent-pink); text-shadow: 0 0 5px var(--color-accent-pink); }
+        .nav-links a {
+            color: var(--color-text-muted); text-decoration: none;
+            font-family: 'Orbitron', monospace; display: inline-block;
+            transition: transform 0.3s var(--ease-out-elastic), color 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--color-accent-pink);
+            text-shadow: 0 0 5px var(--color-accent-pink);
+            transform: translateY(-6px);
+        }
+        .nav-links a:active { transform: translateY(-2px) scale(0.95); }
+
         .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; text-align: center; align-items: center; }
         .hero-name { font-family: 'Orbitron', monospace; font-size: clamp(3rem, 10vw, 6rem); color: #fff; position: relative; }
         .hero-name:hover { animation: glitch 1s linear infinite; }
@@ -53,14 +71,40 @@
         .hero p { max-width: 600px; margin-top: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
         .section-title { font-family: 'Orbitron', monospace; font-size: 3rem; color: #fff; text-align: center; margin-bottom: 60px; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .card { background: var(--color-surface); border: 1px solid var(--color-border); padding: 30px; transition: all 0.3s ease; animation: fadeIn 1s ease-out; animation-fill-mode: both; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 0 30px rgba(157, 78, 221, 0.3); border-color: var(--color-accent-cyan); }
+        .card {
+            background: var(--color-surface); border: 1px solid var(--color-border);
+            padding: 30px;
+            transition: transform 0.3s var(--ease-out-elastic), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-15px) rotate(1.5deg);
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
+            border-color: var(--color-accent-cyan);
+        }
         .card h3 { font-family: 'Orbitron', monospace; font-size: 1.4rem; color: var(--color-accent-pink); margin-bottom: 20px; }
         .post-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
-        .post-item-link { display: block; padding: 20px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all 0.3s ease; }
-        .post-item-link:hover { border-color: var(--color-accent-pink); background: var(--color-glass); transform: translateX(10px); }
+        .post-item-link {
+            display: block; padding: 20px;
+            border: 1px solid var(--color-border);
+            text-decoration: none; color: var(--color-text);
+            transition: transform 0.3s var(--ease-out-elastic), border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .post-item-link:hover {
+            border-color: var(--color-accent-pink);
+            background: var(--color-glass);
+            transform: translateX(20px) skewX(-3deg);
+        }
+        .post-item-link:active { transform: translateX(15px) skewX(-3deg) scale(0.98); }
         .post-item-link .title { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: var(--color-accent-cyan); margin-bottom: 5px; }
         .post-item-link .meta { font-size: 0.9rem; color: var(--color-text-muted); }
+
+        /* Animation Utility for Scroll Trigger */
+        .animate-on-scroll {
+            opacity: 0;
+        }
+        .animate-on-scroll.is-visible {
+            animation: pop-in 0.8s var(--ease-out-elastic) forwards;
+        }
     </style>
 </head>
 <body>
@@ -84,13 +128,13 @@
 
     <main class="container">
         <section id="profile" class="content-section">
-            <h2 class="section-title">[ Identity & Philosophy ]</h2>
+            <h2 class="section-title animate-on-scroll">[ Identity & Philosophy ]</h2>
             <div class="card-grid">
-                <div class="card">
+                <div class="card animate-on-scroll">
                     <h3>Core Identity</h3>
                     <p>My name is Natalie, and at 23, I am defined by my passion for technology and my journey of self-discovery. My past name, Johnathan, is a "deadname"—a part of a history that no longer reflects the authentic person I am today. I approach life with a love for who I have become and a passion for the open-source world.</p>
                 </div>
-                <div class="card">
+                <div class="card animate-on-scroll" style="animation-delay: 0.1s;">
                     <h3>The Sparchunu Philosophy</h3>
                     <p>"Sprungles" is the constant in a life of change. It's the collection of my entire journey and the unchanging core of my identity: a love for Linux, for self-expression, and for making the world better by building superior, open alternatives to restrictive standards.</p>
                 </div>
@@ -98,31 +142,28 @@
         </section>
         
         <section id="projects" class="content-section">
-            <h2 class="section-title">[ Project Manifest ]</h2>
+            <h2 class="section-title animate-on-scroll">[ Project Manifest ]</h2>
             <div class="post-list">
-                <!-- ADDED LINK -->
-                <a href="acreetionos.html" class="post-item-link">
+                <a href="acreetionos.html" class="post-item-link animate-on-scroll">
                     <div class="title">AcreetionOS <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div>
                     <div class="meta">A next-generation, community-driven operating system.</div>
                 </a>
-                <a href="cerberuslinux.html" class="post-item-link"><div class="title">Cerberus Linux for Mobile <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A true Linux environment for Android hardware.</div></a>
-                <a href="angusos.html" class="post-item-link"><div class="title">AngusOS Foundation <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A clean, stable hardware abstraction layer for mobile Linux.</div></a>
-                <a href="arttulcat.html" class="post-item-link"><div class="title">ArttulCat Browser <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A privacy-focused browser fork free from telemetry and bloat.</div></a>
-                <a href="sps.html" class="post-item-link"><div class="title">Sprungles Private Search (SPS) <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">An anonymous search engine that respects your privacy.</div></a>
-                <a href="sprungli.html" class="post-item-link"><div class="title">Sprungli Core <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">A purpose-built tool for searching technical documentation.</div></a>
+                <a href="cerberuslinux.html" class="post-item-link animate-on-scroll"><div class="title">Cerberus Linux for Mobile <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A true Linux environment for Android hardware.</div></a>
+                <a href="angusos.html" class="post-item-link animate-on-scroll"><div class="title">AngusOS Foundation <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A clean, stable hardware abstraction layer for mobile Linux.</div></a>
+                <a href="arttulcat.html" class="post-item-link animate-on-scroll"><div class="title">ArttulCat Browser <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A privacy-focused browser fork free from telemetry and bloat.</div></a>
+                <a href="sps.html" class="post-item-link animate-on-scroll"><div class="title">Sprungles Private Search (SPS) <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">An anonymous search engine that respects your privacy.</div></a>
+                <a href="sprungli.html" class="post-item-link animate-on-scroll"><div class="title">Sprungli Core <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">A purpose-built tool for searching technical documentation.</div></a>
             </div>
         </section>
         
         <section id="blog" class="content-section">
-            <h2 class="section-title">[ Blog Feed ]</h2>
+            <h2 class="section-title animate-on-scroll">[ Blog Feed ]</h2>
             <div id="blog-posts-container" class="post-list">
-                <!-- To add a new blog post, copy and paste one of the 'a' tags below -->
-                <!-- and change the href, title, and date. -->
-                <a href="posts/welcome-to-the-dossier.html" class="post-item-link">
+                <a href="posts/welcome-to-the-dossier.html" class="post-item-link animate-on-scroll">
                     <div class="title">Welcome to the Dossier: Initializing Connection</div>
                     <div class="meta">Posted on: 2025-06-27</div>
                 </a>
-                <a href="posts/the-t2-opensuse-page.html" class="post-item-link">
+                <a href="posts/the-t2-opensuse-page.html" class="post-item-link animate-on-scroll">
                     <div class="title">The T2 OpenSUSE Project</div>
                     <div class="meta">Posted on: 2026-06-27</div>
                 </a>
@@ -132,7 +173,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Typewriter Effect
+            // --- Typewriter Effect ---
             const subtitleEl = document.getElementById('hero-subtitle');
             if (subtitleEl) {
                 const text = "Digital Artisan & FOSS Advocate";
@@ -146,6 +187,44 @@
                 }
                 type();
             }
+
+            // --- Bouncy Scroll Animations ---
+            const scrollElements = document.querySelectorAll(".animate-on-scroll");
+
+            const elementInView = (el, dividend = 1) => {
+                const elementTop = el.getBoundingClientRect().top;
+                return (
+                    elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+                );
+            };
+
+            const displayScrollElement = (element) => {
+                element.classList.add("is-visible");
+            };
+
+            const hideScrollElement = (element) => {
+                element.classList.remove("is-visible");
+            };
+            
+            const handleScrollAnimation = () => {
+                let delay = 0;
+                scrollElements.forEach((el) => {
+                    if (elementInView(el, 1.1)) {
+                        // Apply animation delay for staggered effect
+                        if (!el.style.animationDelay && !el.classList.contains('is-visible')) {
+                           el.style.animationDelay = `${delay}s`;
+                           delay += 0.05;
+                        }
+                        displayScrollElement(el);
+                    }
+                });
+            }
+
+            // Initial check and event listener
+            handleScrollAnimation();
+            window.addEventListener("scroll", () => { 
+                handleScrollAnimation();
+            });
         });
     </script>
 </body>
