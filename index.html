@@ -3,364 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dossier: Natalie "Sprungles" Spiva - Digital Artisan</title>
+    <title>Natalie Spiva - Senior Software Engineer & Linux Systems Architect</title>
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=orbitron:700|roboto:400,700">
-    <style>
-        :root {
-            /* Color Palette */
-            --color-bg: #0A0713;
-            --color-surface: rgba(18, 11, 38, 0.75);
-            --color-glass: rgba(18, 11, 38, 0.5);
-            --color-text: #E0D8FF;
-            --color-text-muted: #8c82a6;
-            --color-accent-pink: #F72585;
-            --color-accent-purple: #9d4edd;
-            --color-accent-cyan: #4cc9f0;
-            --color-border: rgba(114, 9, 183, 0.4);
-
-            /* Easing for Bouncy Effects */
-            --ease-out-elastic: cubic-bezier(0.5, 1.5, 0.5, 1);
-        }
-
-        /* --- Global & Animations --- */
-        @keyframes pop-in {
-            0% { opacity: 0; transform: translateY(60px) scale(0.9); }
-            70% { opacity: 1; transform: translateY(-15px) scale(1.05); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes glitch { 2%,64%{transform:translate(2px,0) skew(0deg)} 4%,60%{transform:translate(-2px,0) skew(0deg)} 62%{transform:translate(0,0) skew(5deg)} }
-        @keyframes hex-pan { from { background-position: 0 0; } to { background-position: 230px 400px; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; background-color: var(--color-bg); }
-        body {
-            color: var(--color-text); font-family: 'Roboto', sans-serif;
-            line-height: 1.7; overflow-x: hidden;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='115' height='200' viewBox='0 0 115 200'%3E%3Cpath d='M57.5 200L0 150V50L57.5 0L115 50v100L57.5 200zM57.5 183.33L100 141.67V58.33L57.5 16.67L15 58.33v83.34L57.5 183.33z' fill='%239d4edd' fill-opacity='0.03'/%3E%3C/svg%3E");
-            animation: hex-pan 60s linear infinite;
-        }
-        body.modal-open {
-            overflow: hidden;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .content-section { padding: 80px 0; border-bottom: 1px solid var(--color-border); }
-        .content-section:last-of-type { border-bottom: none; }
-        .main-nav {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(10, 7, 19, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border); padding: 15px 0;
-        }
-        .main-nav .container { display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: #fff; text-decoration: none; }
-        .nav-links { list-style: none; display: flex; gap: 30px; }
-        .nav-links a {
-            color: var(--color-text-muted); text-decoration: none;
-            font-family: 'Orbitron', monospace; display: inline-block;
-            transition: transform 0.3s var(--ease-out-elastic), color 0.3s ease;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--color-accent-pink);
-            text-shadow: 0 0 5px var(--color-accent-pink);
-            transform: translateY(-6px);
-        }
-        .nav-links a:active { transform: translateY(-2px) scale(0.95); }
-
-        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; text-align: center; align-items: center; }
-        .hero-name { font-family: 'Orbitron', monospace; font-size: clamp(3rem, 10vw, 6rem); color: #fff; position: relative; }
-        .hero-name:hover { animation: glitch 1s linear infinite; }
-        .hero-subtitle { font-family: 'Orbitron', monospace; font-size: clamp(1.5rem, 4vw, 2.5rem); color: var(--color-accent-cyan); min-height: 1.2em; }
-        .hero-subtitle::after { content: '▋'; animation: fadeIn 1s step-end infinite; }
-        .hero p { max-width: 600px; margin-top: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
-        .section-title { font-family: 'Orbitron', monospace; font-size: 3rem; color: #fff; text-align: center; margin-bottom: 60px; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .card {
-            background: var(--color-surface); border: 1px solid var(--color-border);
-            padding: 30px;
-            transition: transform 0.3s var(--ease-out-elastic), box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-15px) rotate(1.5deg);
-            box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
-            border-color: var(--color-accent-cyan);
-        }
-        .card h3 { font-family: 'Orbitron', monospace; font-size: 1.4rem; color: var(--color-accent-pink); margin-bottom: 20px; }
-        .post-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
-        .post-item-link {
-            display: block; padding: 20px;
-            border: 1px solid var(--color-border);
-            text-decoration: none; color: var(--color-text);
-            transition: transform 0.3s var(--ease-out-elastic), border-color 0.3s ease, background-color 0.3s ease;
-            cursor: pointer;
-        }
-        .post-item-link:hover {
-            border-color: var(--color-accent-pink);
-            background: var(--color-glass);
-            transform: translateX(20px) skewX(-3deg);
-        }
-        .post-item-link:active { transform: translateX(15px) skewX(-3deg) scale(0.98); }
-        .post-item-link .title { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: var(--color-accent-cyan); margin-bottom: 5px; }
-        .post-item-link .meta { font-size: 0.9rem; color: var(--color-text-muted); }
-
-        /* --- MODAL STYLES --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 7, 19, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: none; /* Hidden by default */
-            align-items: center; justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-        .modal-container {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            max-width: 800px; width: 100%;
-            max-height: 90vh;
-            display: flex; flex-direction: column;
-            animation: pop-in 0.5s var(--ease-out-elastic) forwards;
-            opacity: 0;
-        }
-        .modal-header {
-            padding: 20px 30px;
-            border-bottom: 1px solid var(--color-border);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .modal-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem; color: var(--color-accent-cyan);
-        }
-        .modal-close-btn {
-            background: transparent; border: none;
-            color: var(--color-text-muted); font-size: 2rem;
-            cursor: pointer; transition: color 0.2s, transform 0.2s;
-        }
-        .modal-close-btn:hover { color: var(--color-accent-pink); transform: rotate(90deg); }
-        .modal-body {
-            padding: 30px;
-            overflow-y: auto;
-        }
-        .modal-body h3 {
-            font-family: 'Orbitron', monospace; color: var(--color-accent-pink);
-            font-size: 1.3rem; margin-top: 1.5em; margin-bottom: 0.5em;
-        }
-        .modal-body p { margin-bottom: 1em; }
-        .modal-body a { color: var(--color-accent-cyan); }
-
-        /* Animation Utility for Scroll Trigger */
-        .animate-on-scroll { opacity: 0; }
-        .animate-on-scroll.is-visible { animation: pop-in 0.8s var(--ease-out-elastic) forwards; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="dark-mode">
 
     <nav class="main-nav">
         <div class="container">
-            <a href="#" class="nav-logo">// N. SPIVA</a>
+            <a href="#" class="nav-logo">Natalie Spiva</a>
             <ul class="nav-links">
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="#about">About</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#blog">Blog</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#accomplishments" id="accomplishments-btn">Accomplishments</a></li>
+                <li><a href="#more-about-me" id="more-about-me-btn">More About Me</a></li>
             </ul>
+            <div class="theme-switcher">
+                <button data-theme="dark-mode" class="active">Dark</button>
+                <button data-theme="light-mode">Light</button>
+                <button data-theme="assisted-reading-mode">Assisted</button>
+            </div>
         </div>
     </nav>
 
     <header id="home" class="hero content-section">
-        <h1 class="hero-name" data-text="Natalie Spiva">Natalie Spiva</h1>
-        <h2 class="hero-subtitle" id="hero-subtitle"></h2>
-        <p>I am a digital artisan, a Linux enthusiast, and a proud transgender female building a more open and expressive corner of the world through technology.</p>
+        <!-- Accomplishments pane (slides in from left) -->
+        <div id="accomplishments-pane" class="side-pane left">
+            <button class="close-pane-btn">&times;</button>
+            <div class="pane-content">
+                <h2 class="section-title">Accomplishments & Goals</h2>
+
+                <section class="pane-section">
+                    <h3>Selected Accomplishments</h3>
+                    <p>Architected and maintained production Linux systems; led development of a community-driven distribution; built privacy-focused tooling and a technical search tool to help developers find docs faster.</p>
+                </section>
+
+                <section class="pane-section">
+                    <h3>Future Goals</h3>
+                    <p>Use my expertise to help others — publish practical guides, mentor engineers, and create systems that improve people's lives. Provide stability for my family and shape a sustainable career tailored to my needs.</p>
+                </section>
+
+                <section class="pane-section">
+                    <h3>Why I Care</h3>
+                    <p>I want to demonstrate that disabled people are capable, driven, and ready to lead. By sharing work, mentoring, and providing open resources, I aim to reduce barriers and inspire inclusive opportunities in tech.</p>
+                </section>
+            </div>
+        </div>
+        <h1 class="hero-name">Natalie Spiva</h1>
+        <h2 class="hero-subtitle" id="hero-subtitle">Senior Software Engineer & Linux Systems Architect</h2>
+        <p>Leveraging over 16 years of expertise in Linux system architecture, DevOps, and full-stack infrastructure, I build and scale robust, high-availability systems that drive innovation.</p>
+        <a href="#projects" class="btn">View My Work</a>
     </header>
 
     <main class="container">
-        <section id="profile" class="content-section">
-            <h2 class="section-title animate-on-scroll">[ Identity & Philosophy ]</h2>
-            <div class="card-grid">
-                <div class="card animate-on-scroll">
-                    <h3>Core Identity</h3>
-                    <p>My name is Natalie, and at 23, I am defined by my passion for technology and my journey of self-discovery. My past name, Johnathan, is a "deadname"—a part of a history that no longer reflects the authentic person I am today. I approach life with a love for who I have become and a passion for the open-source world.</p>
-                </div>
-                <div class="card animate-on-scroll" style="animation-delay: 0.1s;">
-                    <h3>The Sprungles Philosophy</h3>
-                    <p>"Sprungles" is the constant in a life of change. It's the collection of my entire journey and the unchanging core of my identity: a love for Linux, for self-expression, and for making the world better by building superior, open alternatives to restrictive standards.</p>
+        <section id="about" class="content-section">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <img src="Sprungles.png" alt="Natalie Spiva" class="about-image">
+                <div class="about-text">
+                    <p>I am Natalie Spiva, a dedicated Senior Software Engineer and Linux Systems Architect. My journey in technology, spanning over 16 years, has been shaped by a profound passion for building and scaling robust, high-availability systems. As a proud transgender woman, I embrace my past experiences, which have uniquely contributed to my perspective and resilience. I am committed to fostering an open and expressive technological world, and I bring this dedication, along with my extensive expertise, to every project.</p>
                 </div>
             </div>
         </section>
         
         <section id="projects" class="content-section">
-            <h2 class="section-title animate-on-scroll">[ Project Manifest ]</h2>
-            <div class="post-list">
-                <a href="acreetionos.html" class="post-item-link animate-on-scroll">
-                    <div class="title">AcreetionOS <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div>
-                    <div class="meta">A next-generation, community-driven operating system.</div>
-                </a>
-                <a href="cerberuslinux.html" class="post-item-link animate-on-scroll"><div class="title">Cerberus Linux for Mobile <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A true Linux environment for Android hardware.</div></a>
-                <a href="angusos.html" class="post-item-link animate-on-scroll"><div class="title">AngusOS Foundation <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A clean, stable hardware abstraction layer for mobile Linux.</div></a>
-                <a href="arttulcat.html" class="post-item-link animate-on-scroll"><div class="title">ArttulCat Browser <span style="color:var(--color-accent-pink)">[ACTIVE DEV]</span></div><div class="meta">A privacy-focused browser fork free from telemetry and bloat.</div></a>
-                <a href="sps.html" class="post-item-link animate-on-scroll"><div class="title">Sprungles Private Search (SPS) <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">An anonymous search engine that respects your privacy.</div></a>
-                <a href="sprungli.html" class="post-item-link animate-on-scroll"><div class="title">Sprungli Core <span style="color:var(--color-accent-cyan)">[ONLINE]</span></div><div class="meta">A purpose-built tool for searching technical documentation.</div></a>
+            <h2 class="section-title">Projects</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>AcreetionOS</h3>
+                    <p>A next-generation, community-driven operating system. I architected, built, and currently lead this public Linux distribution. It is officially validated and mirrored by the Oregon State University Open Source Lab (OSUOSL).</p>
+                    <a href="acreetionos.html" class="btn">Learn More</a>
+                </div>
+                <div class="card">
+                    <h3>Sprungles Private Search (SPS)</h3>
+                    <p>An anonymous search engine that respects your privacy. SPS is a demonstration of my commitment to building open, privacy-focused alternatives to restrictive standards.</p>
+                    <a href="sps.html" class="btn">Try It Now</a>
+                </div>
+                <div class="card">
+                    <h3>Sprungli Core</h3>
+                    <p>A purpose-built tool for searching technical documentation. Sprungli Core is designed to help developers find the information they need quickly and efficiently.</p>
+                    <a href="sprungli.html" class="btn">Explore the Docs</a>
+                </div>
             </div>
         </section>
         
-        <section id="blog" class="content-section">
-            <h2 class="section-title animate-on-scroll">[ Blog Feed ]</h2>
-            <div id="blog-posts-container" class="post-list">
-                 <div class="post-item-link animate-on-scroll" data-post-id="acreetionos-gnome">
-                    <div class="title">AcreetionOS GNOME: An Exit Ramp for Mac Users</div>
-                    <div class="meta">Posted on: 2026-07-15</div>
-                </div>
-                <div class="post-item-link animate-on-scroll" data-post-id="acreetionos-t2">
-                    <div class="title">Project Spotlight: Taming the T2 with AcreetionOS T2</div>
-                    <div class="meta">Posted on: 2026-07-10</div>
-                </div>
-                <div class="post-item-link animate-on-scroll" data-post-id="t2-opensuse">
-                    <div class="title">The T2 OpenSUSE Project</div>
-                    <div class="meta">Posted on: 2026-06-27</div>
-                </div>
-                 <div class="post-item-link animate-on-scroll" data-post-id="welcome-dossier">
-                    <div class="title">Welcome to the Dossier: Initializing Connection</div>
-                    <div class="meta">Posted on: 2025-06-27</div>
-                </div>
-            </div>
-        </section>
+        <!-- Blog section removed -->
     </main>
 
-    <!-- MODAL STRUCTURE (Initially Hidden) -->
-    <div id="blog-modal" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2 id="modal-title" class="modal-title"></h2>
-                <button id="modal-close-btn" class="modal-close-btn" title="Close article">×</button>
-            </div>
-            <div id="modal-body" class="modal-body">
-                <!-- Article content will be injected here by JavaScript -->
-            </div>
+    <div id="more-about-me-pane" class="side-pane">
+        <button class="close-pane-btn">&times;</button>
+        <div class="pane-content">
+            <h2 class="section-title">If you want to know more about me</h2>
+
+            <section class="pane-section">
+                <h3>Embracing My Identity and Values</h3>
+                <img src="Girl.jpg" alt="Natalie Spiva" class="pane-image">
+                <p>As a woman, I believe in embracing my true self, which allows me to be more creative, productive, and authentic in my work. I am committed to dressing appropriately for all professional and social settings, and I deeply respect others' opinions about my choices, decisions, and preferences. My journey has shaped who I am today, and I am proud of the person I have become. I am a dedicated professional who brings a unique perspective and a wealth of experience to every project.</p>
+            </section>
+
+            <section class="pane-section">
+                <h3>My Journey with DeMolay</h3>
+                <p>My involvement with DeMolay International was a pivotal experience that profoundly shaped the person I am today. Through its emphasis on leadership, civic duty, and personal growth, DeMolay instilled in me values of integrity, respect, and service. It taught me the importance of brotherhood, public speaking, and critical thinking, skills that have been invaluable throughout my career and personal life. The challenges and triumphs within DeMolay helped me develop resilience, a strong moral compass, and a deep commitment to making a positive impact on the world.</p>
+            </section>
+
+            <section class="pane-section">
+                <h3>The Pillars of My Life: Family</h3>
+                <img src="Boy.png" alt="Natalie Spiva's Past Self" class="pane-image">
+                <p>My adoptive dad taught me everything I know about technology, problem-solving, and perseverance. His unwavering support and guidance laid the foundation for my passion in software engineering and Linux systems architecture. My mom, whom I love dearly, has been my constant source of support and encouragement throughout my entire life, always believing in me and my dreams. My brother is the reason I keep pushing forward; his strength and spirit inspire me daily to strive for excellence. In 2024, I had the incredible opportunity to meet my biological dad. He has been incredibly accepting of me and who I am, and I am grateful to now be collaborating with him on various projects, including this website. My family, in all its forms, is my greatest strength and motivation.</p>
+            </section>
         </div>
     </div>
 
+    <script src="js/main.js"></script>
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Natalie Spiva. All rights reserved.</p>
+        </div>
+    </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // =================================================================
-            // EDIT YOUR BLOG POSTS HERE
-            // =================================================================
-            const blogPosts = {
-                "acreetionos-gnome": {
-                    title: "AcreetionOS GNOME: An Exit Ramp for Mac Users",
-                    content: `
-                        <p>For too long, users of Apple's x86_64 hardware have been tethered to macOS, an operating system that increasingly prioritizes its "walled garden" philosophy over user freedom. We believe you should own the hardware you paid for, and that means having the right to run the software you choose.</p>
-                        <p><strong>AcreetionOS GNOME</strong> is our answer. It's a meticulously crafted distribution aimed directly at Mac users who are ready to explore the power and freedom of Linux. By using the modern, intuitive, and gesture-driven GNOME desktop environment, we provide a transition that feels comfortable and natural, without sacrificing the immense power of the underlying Arch Linux base.</p>
-                        <h3>Why GNOME?</h3>
-                        <p>The choice of GNOME is deliberate. Its focus on workspaces, keyboard-driven navigation, and a clean, minimalist aesthetic provides a workflow that Mac users can adapt to quickly. We've pre-configured it with sensible defaults and added tooling to make tasks like Wi-Fi and display management seamless, addressing common pain points for Linux on Mac hardware.</p>
-                        <p>This isn't just about replacing macOS; it's about upgrading your freedom. Welcome to AcreetionOS GNOME.</p>
-                    `
-                },
-                "acreetionos-t2": {
-                    title: "Project Spotlight: Taming the T2 with AcreetionOS T2",
-                    content: `
-                        <p>Apple's T2 Security Chip represents a significant challenge to the open-source community. This co-processor integrates critical system functions, including the SSD controller, audio controller, and secure boot processes, making it notoriously difficult to run alternative operating systems. But a challenge is just an invitation for innovation.</p>
-                        <p><strong>AcreetionOS T2</strong> is a specialized, bleeding-edge variant dedicated to solving this exact problem. Our mission is to provide a fully featured, stable Linux experience on MacBooks equipped with the T2 chip.</p>
-                        <h3>The Battle for Hardware Control</h3>
-                        <p>This project involves reverse-engineering hardware protocols, developing custom kernel modules, and integrating patches from a wide community of developers who believe in hardware freedom. We are currently focusing on:</p>
-                        <ul>
-                            <li>Reliable keyboard and trackpad drivers.</li>
-                            <li>Full audio support through a custom driver stack.</li>
-                            <li>NVMe SSD performance and stability patches.</li>
-                            <li>Streamlining the installation process to work around Secure Boot limitations.</li>
-                        </ul>
-                        <p>AcreetionOS T2 is more than an OS; it's a declaration that no hardware should be off-limits. The project is under heavy development, and we invite anyone interested in the technical challenge to join our efforts.</p>
-                    `
-                },
-                "t2-opensuse": {
-                    title: "The T2 OpenSUSE Project",
-                    content: "<p>This is the full article content for the T2 OpenSUSE Project. You can write the full post here using HTML tags like <p>, <h3>, <ul>, etc.</p>"
-                },
-                "welcome-dossier": {
-                    title: "Welcome to the Dossier: Initializing Connection",
-                    content: "<p>This is where the full text for the 'Welcome to the Dossier' article would go. Edit this section in the script to build out the full post.</p>"
-                }
-            };
-            // =================================================================
-            // END OF BLOG POST EDITING AREA
-            // =================================================================
-
-
-            // --- Typewriter Effect ---
-            const subtitleEl = document.getElementById('hero-subtitle');
-            if (subtitleEl) {
-                const text = "Digital Artisan & FOSS Advocate";
-                let i = 0;
-                subtitleEl.innerHTML = '';
-                function type() {
-                    if (i < text.length) {
-                        subtitleEl.innerHTML += text.charAt(i++);
-                        setTimeout(type, 120);
-                    }
-                }
-                type();
-            }
-
-            // --- Bouncy Scroll Animations ---
-            const scrollElements = document.querySelectorAll(".animate-on-scroll");
-            const elementInView = (el, dividend = 1) => {
-                const elementTop = el.getBoundingClientRect().top;
-                return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
-            };
-            const displayScrollElement = (element) => { element.classList.add("is-visible"); };
-            const handleScrollAnimation = () => {
-                let delay = 0;
-                scrollElements.forEach((el) => {
-                    if (elementInView(el, 1.1)) {
-                        if (!el.style.animationDelay && !el.classList.contains('is-visible')) {
-                           el.style.animationDelay = `${delay}s`;
-                           delay += 0.05;
-                        }
-                        displayScrollElement(el);
-                    }
-                });
-            }
-            handleScrollAnimation();
-            window.addEventListener("scroll", handleScrollAnimation);
-
-            // --- Modal Logic ---
-            const modal = document.getElementById('blog-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalBody = document.getElementById('modal-body');
-            const closeModalBtn = document.getElementById('modal-close-btn');
-            const postTriggers = document.querySelectorAll('.post-item-link[data-post-id]');
-
-            const openModal = (postId) => {
-                const post = blogPosts[postId];
-                if (!post) {
-                    console.error("Blog post not found for ID:", postId);
-                    return;
-                }
-                modalTitle.textContent = post.title;
-                modalBody.innerHTML = post.content;
-                modal.style.display = 'flex';
-                document.body.classList.add('modal-open');
-            };
-
-            const closeModal = () => {
-                modal.style.display = 'none';
-                document.body.classList.remove('modal-open');
-            };
-
-            postTriggers.forEach(trigger => {
-                trigger.addEventListener('click', () => {
-                    openModal(trigger.dataset.postId);
-                });
-            });
-
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-        });
-    </script>
+    <audio id="background-music" autoplay playsinline loop controls style="display: block; margin: 20px auto; width: 80%; max-width: 400px;">
+        <source src="calm.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 </body>
 </html>
