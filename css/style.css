@@ -546,6 +546,22 @@ body.dark-mode .close-pane-btn {
     margin: 0 auto;
 }
 
+/* Accomplishments list styling inside side pane */
+.accomplishments-list {
+    list-style: disc;
+    text-align: left;
+    max-width: 420px;
+    margin: 0 auto;
+    padding-left: 1.2rem;
+}
+.accomplishments-list li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+.accomplishments-list strong {
+    color: var(--color-primary);
+}
+
 @media (max-width: 480px) {
     .side-pane {
         width: 100%; /* Full width on small screens */

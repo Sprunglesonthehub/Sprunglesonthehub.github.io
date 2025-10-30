@@ -96,7 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Side Pane Functionality ---
     const moreAboutMeBtn = document.getElementById('more-about-me-btn');
     const sidePane = document.getElementById('more-about-me-pane');
-    const closePaneBtn = sidePane.querySelector('.close-pane-btn');
+    // Guard access in case this script runs on pages that don't include the pane
+    const closePaneBtn = sidePane ? sidePane.querySelector('.close-pane-btn') : null;
 
     if (moreAboutMeBtn && sidePane && closePaneBtn) {
         moreAboutMeBtn.addEventListener('click', (e) => {
